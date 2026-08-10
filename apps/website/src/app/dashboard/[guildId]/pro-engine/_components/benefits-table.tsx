@@ -166,30 +166,7 @@ const benefits = [
     type: "feature",
     category: "Auto-Moderation",
   },
-  {
-    name: "Custom Commands",
-    free: false,
-    pro: true,
-    tooltip: "Create custom slash commands with buttons and menus",
-    type: "feature",
-    category: "Custom Commands",
-  },
-  {
-    name: "Command Responses",
-    free: false,
-    pro: true,
-    tooltip: "Configure custom text, embed, or button responses",
-    type: "feature",
-    category: "Custom Commands",
-  },
-  {
-    name: "Select Menus",
-    free: false,
-    pro: true,
-    tooltip: "Add interactive select menus to custom commands",
-    type: "feature",
-    category: "Custom Commands",
-  },
+
 ];
 
 const categoryStyles: Record<
@@ -226,11 +203,7 @@ const categoryStyles: Record<
     badge: "text-red-400",
     badgeBg: "bg-red-500/20",
   },
-  "Custom Commands": {
-    bg: "bg-blue-500/5",
-    badge: "text-blue-400",
-    badgeBg: "bg-blue-500/20",
-  },
+
 };
 
 function BenefitRow({

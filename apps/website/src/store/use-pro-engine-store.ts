@@ -17,7 +17,10 @@ interface ProEngineState {
 
   // Actions
   fetchSettings: (guildId: string, force?: boolean) => Promise<void>;
-  updateLocalSettings: (settings: Partial<ProEngineSettings>, guildId?: string) => void;
+  updateLocalSettings: (
+    settings: Partial<ProEngineSettings>,
+    guildId?: string
+  ) => void;
   clearCache: (guildId?: string) => void;
 }
 

@@ -271,7 +271,12 @@ export function ProEngineTrialAlert({
   corePeriod = "week",
 }: ProEngineTrialAlertProps) {
   const daysRemaining = trialEndsAt
-    ? Math.max(0, Math.ceil((new Date(trialEndsAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24)))
+    ? Math.max(
+        0,
+        Math.ceil(
+          (new Date(trialEndsAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
+        )
+      )
     : 0;
 
   return (

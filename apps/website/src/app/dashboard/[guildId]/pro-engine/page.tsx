@@ -57,7 +57,9 @@ export default function ProEnginePage() {
   const isPremium = premiumStatus?.isPremium?.pro || false;
   const isCancelled = premiumStatus?.subscription?.cancelled || false;
   const isTrialing = premiumStatus?.subscription?.isTrial || false;
-  const trialEndsAt = premiumStatus?.subscription?.trialEndsAt || premiumStatus?.subscription?.expiresAt;
+  const trialEndsAt =
+    premiumStatus?.subscription?.trialEndsAt ||
+    premiumStatus?.subscription?.expiresAt;
   const trialUsed = premiumStatus?.subscription?.trialUsed || false;
 
   // Show loading when no cached data for THIS guild, or user not loaded yet
@@ -92,19 +94,22 @@ export default function ProEnginePage() {
         const expiresAt = new Date(now);
         expiresAt.setDate(expiresAt.getDate() + 7); // 7 days from now
 
-        updateLocalSettings({
-          isPremium: { pro: true },
-          premiumConfig: premiumStatus?.premiumConfig,
-          subscription: {
-            cancelled: false,
-            autoRenew: true,
-            expiresAt: expiresAt.toISOString(),
-            activatedAt: now.toISOString(),
-            cost: premiumStatus?.premiumConfig?.PRO?.cost ?? 20,
-            period: premiumStatus?.premiumConfig?.PRO?.period ?? "week",
-            lastDeductionDate: now.toISOString(),
+        updateLocalSettings(
+          {
+            isPremium: { pro: true },
+            premiumConfig: premiumStatus?.premiumConfig,
+            subscription: {
+              cancelled: false,
+              autoRenew: true,
+              expiresAt: expiresAt.toISOString(),
+              activatedAt: now.toISOString(),
+              cost: premiumStatus?.premiumConfig?.PRO?.cost ?? 20,
+              period: premiumStatus?.premiumConfig?.PRO?.period ?? "week",
+              lastDeductionDate: now.toISOString(),
+            },
           },
-        }, guildId);
+          guildId
+        );
 
         // Refresh from server in background (won't break UI if it fails)
         fetchSettings(guildId, true);
@@ -144,22 +149,25 @@ export default function ProEnginePage() {
         const trialEndsAt = new Date(now);
         trialEndsAt.setDate(trialEndsAt.getDate() + 7);
 
-        updateLocalSettings({
-          isPremium: { pro: true },
-          premiumConfig: premiumStatus?.premiumConfig,
-          subscription: {
-            cancelled: false,
-            autoRenew: false,
-            expiresAt: trialEndsAt.toISOString(),
-            activatedAt: now.toISOString(),
-            cost: 0,
-            period: "trial",
-            lastDeductionDate: now.toISOString(),
-            isTrial: true,
-            trialEndsAt: trialEndsAt.toISOString(),
-            trialUsed: true,
+        updateLocalSettings(
+          {
+            isPremium: { pro: true },
+            premiumConfig: premiumStatus?.premiumConfig,
+            subscription: {
+              cancelled: false,
+              autoRenew: false,
+              expiresAt: trialEndsAt.toISOString(),
+              activatedAt: now.toISOString(),
+              cost: 0,
+              period: "trial",
+              lastDeductionDate: now.toISOString(),
+              isTrial: true,
+              trialEndsAt: trialEndsAt.toISOString(),
+              trialUsed: true,
+            },
           },
-        }, guildId);
+          guildId
+        );
 
         // Refresh from server
         fetchSettings(guildId, true);
@@ -272,9 +280,9 @@ export default function ProEnginePage() {
           </>
         ) : (
           <>
-                    <ProEngineLockedAlert
-                      onUnlock={() => setShowActivationModal(true)}
-                    />
+            <ProEngineLockedAlert
+              onUnlock={() => setShowActivationModal(true)}
+            />
             <ProEngineBenefits />
           </>
         )}
