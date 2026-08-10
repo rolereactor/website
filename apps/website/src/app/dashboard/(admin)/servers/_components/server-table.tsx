@@ -174,7 +174,10 @@ export function ServerTable({
                     {getGuildIconUrl(guild.guildId, guild.icon) ? (
                       <Avatar className="size-9">
                         <AvatarImage
-                          src={getGuildIconUrl(guild.guildId, guild.icon) || undefined}
+                          src={
+                            getGuildIconUrl(guild.guildId, guild.icon) ||
+                            undefined
+                          }
                           alt={guild.name}
                         />
                         <AvatarFallback className="rounded-lg bg-zinc-800 border border-white/5 text-[10px] text-zinc-500">

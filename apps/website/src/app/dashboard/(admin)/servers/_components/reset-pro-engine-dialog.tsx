@@ -1,13 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  AlertTriangle,
-  Loader2,
-  Check,
-  X,
-  RefreshCw,
-} from "lucide-react";
+import { AlertTriangle, Loader2, Check, X, RefreshCw } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -41,12 +35,9 @@ export function ResetProEngineDialog({
     setErrorMsg("");
 
     try {
-      const response = await fetch(
-        `/api/guilds/${guildId}/premium/reset`,
-        {
-          method: "POST",
-        }
-      );
+      const response = await fetch(`/api/guilds/${guildId}/premium/reset`, {
+        method: "POST",
+      });
 
       const data = await response.json();
 

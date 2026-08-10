@@ -99,9 +99,12 @@ async function getCommandUsage() {
 
 async function getActiveUsers() {
   try {
-    return await botFetchJson<{ activeUsers: ActiveUsers }>("/stats/active-users", {
-      next: { revalidate: 300 }, // Cache for 5 minutes
-    });
+    return await botFetchJson<{ activeUsers: ActiveUsers }>(
+      "/stats/active-users",
+      {
+        next: { revalidate: 300 }, // Cache for 5 minutes
+      }
+    );
   } catch (error) {
     console.error("Failed to fetch active users:", error);
     return null;
@@ -149,17 +152,11 @@ async function StatsContent() {
   const history = guildCountHistory?.history || [];
   const guildTrend =
     history.length >= 2
-      ? calcTrend(
-          history[history.length - 1].guilds,
-          history[0].guilds,
-        )
+      ? calcTrend(history[history.length - 1].guilds, history[0].guilds)
       : null;
   const userTrend =
     history.length >= 2
-      ? calcTrend(
-          history[history.length - 1].users,
-          history[0].users,
-        )
+      ? calcTrend(history[history.length - 1].users, history[0].users)
       : null;
 
   if (!stats) {

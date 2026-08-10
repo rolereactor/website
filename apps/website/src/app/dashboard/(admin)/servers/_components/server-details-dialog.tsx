@@ -264,12 +264,14 @@ export function ServerDetailsDialog({
                         </span>
                         <Avatar className="size-6">
                           <AvatarImage
-                            src={getDiscordImageUrl(
-                              "avatars",
-                              member.userId,
-                              member.avatar,
-                              32
-                            ) || undefined}
+                            src={
+                              getDiscordImageUrl(
+                                "avatars",
+                                member.userId,
+                                member.avatar,
+                                32
+                              ) || undefined
+                            }
                             alt={member.username}
                           />
                           <AvatarFallback className="bg-zinc-800 text-[8px]">
@@ -343,9 +345,7 @@ function StatCard({
         </span>
       </div>
       <p className="text-lg font-mono font-bold">{value.toLocaleString()}</p>
-      {sub && (
-        <p className="text-[9px] text-zinc-600 font-mono">{sub}</p>
-      )}
+      {sub && <p className="text-[9px] text-zinc-600 font-mono">{sub}</p>}
     </div>
   );
 }
