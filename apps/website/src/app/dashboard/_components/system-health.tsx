@@ -181,11 +181,7 @@ export function SystemHealth() {
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          <HealthItem
-            label="DISCORD GATEWAY"
-            status="OFFLINE"
-            color="red"
-          />
+          <HealthItem label="DISCORD GATEWAY" status="OFFLINE" color="red" />
           <HealthItem
             label="DATABASE CLUSTER"
             status="UNREACHABLE"

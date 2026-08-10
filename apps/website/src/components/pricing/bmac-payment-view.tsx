@@ -34,11 +34,11 @@ interface BmacData {
  * Rate card tiers matching the bot's calculateCores() function
  * Base rate: 15 cores/$, bonuses increase with donation amount
  */
-const BASE_RATE = 15;
 const rateCard = [
   { min: 5, max: 9, rate: 15, bonus: 0 },
   { min: 10, max: 24, rate: 16.5, bonus: 10 },
-  { min: 25, max: 99, rate: 17.4, bonus: 16 },
+  { min: 25, max: 49, rate: 17.4, bonus: 16 },
+  { min: 50, max: 99, rate: 18, bonus: 20 },
   { min: 100, max: Infinity, rate: 22, bonus: 47 },
 ];
 
@@ -159,33 +159,28 @@ export function BmacPaymentView({ onBack, onComplete }: BmacPaymentViewProps) {
           <span className="text-[10px] font-black text-zinc-400 tracking-widest uppercase">
             Rate Card
           </span>
-          <div className="bg-zinc-950/40 rounded-xl border border-white/5 p-3">
-            <div className="text-[9px] text-zinc-500 mb-2 font-bold">
-              Base rate: {BASE_RATE} cores/$
-            </div>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-2">
-              {rateCard.map((tier, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col gap-0.5"
-                >
-                  <span className="text-[10px] text-zinc-500">
-                    ${tier.min}
-                    {tier.max !== Infinity ? `-${tier.max}` : "+"}
+          <div className="bg-zinc-950/40 rounded-xl border border-white/5 p-3 space-y-2">
+            {rateCard.map((tier, index) => (
+              <div
+                key={index}
+                className="flex items-center justify-between"
+              >
+                <span className="text-[11px] text-zinc-400 font-medium">
+                  ${tier.min}
+                  {tier.max !== Infinity ? `–${tier.max}` : '+'}
+                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-bold text-cyan-400">
+                    {tier.rate} cores/$
                   </span>
-                  <div className="flex items-baseline gap-1.5">
-                    <span className="text-lg font-bold text-cyan-400 whitespace-nowrap">
-                      {tier.rate}
+                  {tier.bonus > 0 && (
+                    <span className="text-[9px] text-emerald-400 font-bold bg-emerald-400/10 px-1.5 py-0.5 rounded-full">
+                      +{tier.bonus}%
                     </span>
-                    {tier.bonus > 0 && (
-                      <span className="text-[10px] text-emerald-400 font-bold whitespace-nowrap">
-                        +{tier.bonus}%
-                      </span>
-                    )}
-                  </div>
+                  )}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
 

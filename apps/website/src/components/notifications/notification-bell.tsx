@@ -220,7 +220,7 @@ export function NotificationBell() {
         >
           <Bell className="h-4 w-4 text-zinc-400 group-hover:text-cyan-400 transition-colors" />
           {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] flex items-center justify-center text-[10px] font-bold rounded-full bg-cyan-500 text-black shadow-[0_0_10px_rgba(6,182,212,0.6)] px-1">
+            <span className="absolute -top-1 -right-1 min-w-4.5 h-4.5 flex items-center justify-center text-[10px] font-bold rounded-full bg-cyan-500 text-black shadow-[0_0_10px_rgba(6,182,212,0.6)] px-1">
               {unreadCount > 99 ? "99+" : unreadCount}
             </span>
           )}
@@ -228,7 +228,7 @@ export function NotificationBell() {
       </SheetTrigger>
       <SheetContent
         side="right"
-        className="w-full sm:w-[400px] bg-zinc-950 border-l border-white/5 p-0 flex flex-col"
+        className="w-full sm:w-100 bg-zinc-950 border-l border-white/5 p-0 flex flex-col"
       >
         {/* Header */}
         <SheetHeader className="px-5 pt-5 pb-4 border-b border-white/5">
@@ -298,7 +298,7 @@ export function NotificationBell() {
               <h3 className="text-base font-bold text-white mb-1">
                 All Caught Up!
               </h3>
-              <p className="text-sm text-zinc-500 max-w-[250px]">
+              <p className="text-sm text-zinc-500 max-w-62.5">
                 You're all caught up! Notifications about your Core balance,
                 purchases, and Pro Engine will appear here.
               </p>

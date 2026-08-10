@@ -23,11 +23,11 @@ interface BmacData {
   expiresAt: string;
 }
 
-const BASE_RATE = 15;
 const rateCard = [
   { min: 5, max: 9, rate: 15, bonus: 0 },
   { min: 10, max: 24, rate: 16.5, bonus: 10 },
-  { min: 25, max: 99, rate: 17.4, bonus: 16 },
+  { min: 25, max: 49, rate: 17.4, bonus: 16 },
+  { min: 50, max: 99, rate: 18, bonus: 20 },
   { min: 100, max: Infinity, rate: 22, bonus: 47 },
 ];
 
@@ -266,30 +266,27 @@ export default function DonatePage() {
 
           {/* Rate Card */}
           <div className="bg-gray-900/50 backdrop-blur-sm rounded-lg p-4 sm:p-6 border border-gray-800 mb-6">
-            <h2 className="text-sm font-black text-zinc-400 tracking-widest uppercase mb-2">
+            <h2 className="text-sm font-black text-zinc-400 tracking-widest uppercase mb-3">
               Rate Card
             </h2>
-            <p className="text-[10px] text-zinc-500 mb-4 font-bold">
-              Base rate: {BASE_RATE} cores/$
-            </p>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="space-y-2">
               {rateCard.map((tier, index) => (
                 <div
                   key={index}
-                  className="bg-gray-800/50 rounded-lg p-3 border border-gray-700"
+                  className="flex items-center justify-between py-2 border-b border-gray-800 last:border-0"
                 >
-                  <div className="text-xs text-zinc-500 mb-1">
+                  <span className="text-sm text-zinc-400 font-medium">
                     ${tier.min}
-                    {tier.max !== Infinity ? `-${tier.max}` : "+"}
-                  </div>
-                  <div className="flex items-baseline gap-1.5">
-                    <div className="text-lg font-bold text-cyan-400 whitespace-nowrap">
-                      {tier.rate}
-                    </div>
+                    {tier.max !== Infinity ? `–${tier.max}` : '+'}
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-base font-bold text-cyan-400">
+                      {tier.rate} cores/$
+                    </span>
                     {tier.bonus > 0 && (
-                      <div className="text-[10px] text-emerald-400 font-bold whitespace-nowrap">
+                      <span className="text-[10px] text-emerald-400 font-bold bg-emerald-400/10 px-2 py-0.5 rounded-full">
                         +{tier.bonus}%
-                      </div>
+                      </span>
                     )}
                   </div>
                 </div>
@@ -381,6 +378,7 @@ export default function DonatePage() {
                     alt="Step 1: Click Donate"
                     width={400}
                     height={200}
+                    draggable={false}
                     className="drop-shadow-lg w-full h-full object-cover"
                   />
                 </div>
@@ -405,6 +403,7 @@ export default function DonatePage() {
                     alt="Step 2: Choose coffees"
                     width={400}
                     height={200}
+                    draggable={false}
                     className="drop-shadow-lg w-full h-full object-cover"
                   />
                 </div>
@@ -431,6 +430,7 @@ export default function DonatePage() {
                     alt="Step 3: Paste Discord name"
                     width={400}
                     height={200}
+                    draggable={false}
                     className="drop-shadow-lg w-full h-full object-cover"
                   />
                 </div>
@@ -457,6 +457,7 @@ export default function DonatePage() {
                     alt="Step 4: Paste unique code"
                     width={400}
                     height={200}
+                    draggable={false}
                     className="drop-shadow-lg w-full h-full object-cover"
                   />
                 </div>

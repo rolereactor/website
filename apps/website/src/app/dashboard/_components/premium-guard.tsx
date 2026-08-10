@@ -9,7 +9,14 @@ import {
   DialogDescription,
   DialogHeader,
 } from "@/components/ui/dialog";
-import { Crown, CheckCircle2, Loader2, Zap, ExternalLink, Clock } from "lucide-react";
+import {
+  Crown,
+  CheckCircle2,
+  Loader2,
+  Zap,
+  ExternalLink,
+  Clock,
+} from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { CyberpunkBackground } from "@/components/common/cyberpunk-background";

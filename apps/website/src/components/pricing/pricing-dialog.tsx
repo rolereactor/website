@@ -33,9 +33,9 @@ export function PricingDialog({
   const { data: session } = useSession();
   const { playConfirm, playSwitch } = useUiSound();
   const [internalOpen, setInternalOpen] = useState(false);
-  const [view, setView] = useState<
-    "packages" | "payment" | "payment_pending"
-  >("packages");
+  const [view, setView] = useState<"packages" | "payment" | "payment_pending">(
+    "packages"
+  );
 
   const isOpen = controlledOpen ?? internalOpen;
   const setOpen = setControlledOpen ?? setInternalOpen;
@@ -214,7 +214,7 @@ export function PricingDialog({
         )}
         <DialogContent
           variant="glitch"
-          className="max-w-[420px]"
+          className="max-w-105"
           innerClassName="flex flex-col"
           hideClose={view !== "packages"}
           aria-describedby={undefined}

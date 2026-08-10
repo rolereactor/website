@@ -205,7 +205,10 @@ export default function AnalyticsPage({ params }: AnalyticsPageProps) {
           day.roleReactions ?? 0,
         ]);
 
-        content = [headers.join(","), ...rows.map((row: (string | number)[]) => row.join(","))].join("\n");
+        content = [
+          headers.join(","),
+          ...rows.map((row: (string | number)[]) => row.join(",")),
+        ].join("\n");
         type = "text/csv;charset=utf-8;";
       } else if (format === "json") {
         const payload = {

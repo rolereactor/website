@@ -9,11 +9,11 @@ export function MobileNavClose() {
       const toggleBtn = document.querySelector(
         'button[aria-label="Toggle Menu"]'
       ) as HTMLButtonElement | null;
-      
+
       if (toggleBtn) {
         // Check if the menu is actually open by looking at data attributes
         const isOpen = toggleBtn.getAttribute("data-state") === "open";
-        
+
         if (isOpen) {
           toggleBtn.click();
         }
@@ -35,7 +35,8 @@ export function MobileNavClose() {
     };
 
     window.addEventListener("close-mobile-nav", handleCloseMobileNav);
-    return () => window.removeEventListener("close-mobile-nav", handleCloseMobileNav);
+    return () =>
+      window.removeEventListener("close-mobile-nav", handleCloseMobileNav);
   }, []);
 
   return null;
