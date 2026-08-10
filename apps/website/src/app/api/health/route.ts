@@ -34,7 +34,7 @@ export async function GET() {
     const discordResponse = await fetch("https://discord.com/api/v10/gateway", {
       method: "GET",
       headers: {
-          "User-Agent": `RoleReactorWebsite (${process.env.NEXT_PUBLIC_WEBSITE_URL || "https://rolereactor.xyz"}, 1.0.0)`,
+        "User-Agent": `RoleReactorWebsite (${process.env.NEXT_PUBLIC_WEBSITE_URL || "https://rolereactor.xyz"}, 1.0.0)`,
       },
     });
     const discordLatency = Date.now() - discordStart;
@@ -58,7 +58,7 @@ export async function GET() {
       const botResponse = await fetch(`${botApiUrl}/health`, {
         method: "GET",
         headers: {
-        "User-Agent": `RoleReactorWebsite (${process.env.NEXT_PUBLIC_WEBSITE_URL || "https://rolereactor.xyz"}, 1.0.0)`,
+          "User-Agent": `RoleReactorWebsite (${process.env.NEXT_PUBLIC_WEBSITE_URL || "https://rolereactor.xyz"}, 1.0.0)`,
         },
       });
       const botLatency = Date.now() - botApiStart;

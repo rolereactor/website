@@ -29,7 +29,10 @@ export async function POST(_request: NextRequest) {
       const errorMessage =
         botData.message || botData.error || "Failed to generate code";
       return NextResponse.json(
-        { success: false, error: { message: errorMessage, code: botResponse.status } },
+        {
+          success: false,
+          error: { message: errorMessage, code: botResponse.status },
+        },
         { status: botResponse.status }
       );
     }

@@ -24,9 +24,7 @@ export async function GET() {
         {
           success: false,
           error:
-            errorData.message ||
-            errorData.error ||
-            "Failed to fetch guilds",
+            errorData.message || errorData.error || "Failed to fetch guilds",
         },
         { status: response.status }
       );

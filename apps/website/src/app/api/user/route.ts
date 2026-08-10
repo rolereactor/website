@@ -29,7 +29,10 @@ export async function GET(request: Request) {
   const { allowed, headers } = rateLimiters.api.middleware(ip);
 
   if (!allowed) {
-    return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429, headers });
+    return NextResponse.json(
+      { error: "Rate limit exceeded" },
+      { status: 429, headers }
+    );
   }
 
   try {

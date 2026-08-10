@@ -18,11 +18,14 @@ export async function POST(
     }
 
     const userId = session.user?.id;
-    const response = await botFetch(`/guilds/${guildId}/premium/activate-trial`, {
-      method: "POST",
-      body: JSON.stringify({}),
-      userId,
-    });
+    const response = await botFetch(
+      `/guilds/${guildId}/premium/activate-trial`,
+      {
+        method: "POST",
+        body: JSON.stringify({}),
+        userId,
+      }
+    );
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
@@ -30,9 +33,7 @@ export async function POST(
         {
           success: false,
           error:
-            errorData.message ||
-            errorData.error ||
-            "Failed to activate trial",
+            errorData.message || errorData.error || "Failed to activate trial",
         },
         { status: response.status }
       );

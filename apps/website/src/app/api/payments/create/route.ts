@@ -20,7 +20,10 @@ export async function POST(request: NextRequest) {
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json(
-        { success: false, error: { message: "Authentication required", code: 401 } },
+        {
+          success: false,
+          error: { message: "Authentication required", code: 401 },
+        },
         { status: 401 }
       );
     }
@@ -34,7 +37,13 @@ export async function POST(request: NextRequest) {
 
     if (!amount || typeof amount !== "number" || amount < MINIMUM_PAYMENT) {
       return NextResponse.json(
-        { success: false, error: { message: `Amount must be at least $${MINIMUM_PAYMENT}`, code: 400 } },
+        {
+          success: false,
+          error: {
+            message: `Amount must be at least $${MINIMUM_PAYMENT}`,
+            code: 400,
+          },
+        },
         { status: 400 }
       );
     }
@@ -64,7 +73,10 @@ export async function POST(request: NextRequest) {
       }
 
       return NextResponse.json(
-        { success: false, error: { message: errorMessage, code: botResponse.status } },
+        {
+          success: false,
+          error: { message: errorMessage, code: botResponse.status },
+        },
         { status: botResponse.status }
       );
     }
@@ -76,7 +88,10 @@ export async function POST(request: NextRequest) {
 
     if (!isSuccess || !invoiceUrl) {
       return NextResponse.json(
-        { success: false, error: { message: "Failed to create payment invoice", code: 500 } },
+        {
+          success: false,
+          error: { message: "Failed to create payment invoice", code: 500 },
+        },
         { status: 500 }
       );
     }
@@ -90,14 +105,21 @@ export async function POST(request: NextRequest) {
         amount: responseData.amount || amount,
         currency: responseData.currency || "USD",
         packageId: responseData.packageId || packageId,
-        user: responseData.user || { discordId: userId, username, emailPrefilled: true },
+        user: responseData.user || {
+          discordId: userId,
+          username,
+          emailPrefilled: true,
+        },
         message: responseData.message,
       },
       timestamp: new Date().toISOString(),
     });
   } catch {
     return NextResponse.json(
-      { success: false, error: { message: "Failed to create payment", code: 500 } },
+      {
+        success: false,
+        error: { message: "Failed to create payment", code: 500 },
+      },
       { status: 500 }
     );
   }

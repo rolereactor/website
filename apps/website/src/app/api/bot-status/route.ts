@@ -19,11 +19,14 @@ export async function GET() {
     const data = await response.json();
     const online = data?.bot?.online ?? false;
 
-    return NextResponse.json({ online }, {
-      headers: {
-        "Cache-Control": "public, s-maxage=30, stale-while-revalidate=60",
-      },
-    });
+    return NextResponse.json(
+      { online },
+      {
+        headers: {
+          "Cache-Control": "public, s-maxage=30, stale-while-revalidate=60",
+        },
+      }
+    );
   } catch {
     return NextResponse.json({ online: false }, { status: 200 });
   }

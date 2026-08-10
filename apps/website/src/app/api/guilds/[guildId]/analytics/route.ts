@@ -43,7 +43,10 @@ export async function GET(
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       return NextResponse.json(
-        { success: false, error: errorData.message || "Failed to fetch analytics from bot" },
+        {
+          success: false,
+          error: errorData.message || "Failed to fetch analytics from bot",
+        },
         { status: response.status }
       );
     }
