@@ -72,10 +72,8 @@ export function ComparisonSlider({
 
   // Keyboard support
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === "ArrowLeft")
-      setSliderPosition((p) => Math.max(0, p - 2));
-    if (e.key === "ArrowRight")
-      setSliderPosition((p) => Math.min(100, p + 2));
+    if (e.key === "ArrowLeft") setSliderPosition((p) => Math.max(0, p - 2));
+    if (e.key === "ArrowRight") setSliderPosition((p) => Math.min(100, p + 2));
   }, []);
 
   // Fade labels near edges to avoid overlapping the handle
@@ -124,7 +122,9 @@ export function ComparisonSlider({
         >
           <div
             className="absolute top-1/2 left-1/2 flex h-9 w-9 items-center justify-center rounded-full bg-white shadow-[0_4px_24px_rgba(0,0,0,0.35)] transition-transform duration-75"
-            style={{ transform: `translate(-50%, -50%) scale(${isDragging ? 1.1 : 1})` }}
+            style={{
+              transform: `translate(-50%, -50%) scale(${isDragging ? 1.1 : 1})`,
+            }}
           >
             <ChevronsLeftRight className="h-4 w-4 text-gray-500" />
           </div>

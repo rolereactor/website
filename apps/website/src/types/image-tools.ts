@@ -1,7 +1,12 @@
 import { z } from "zod";
 
 // Tool names
-export const ImageToolName = z.enum(["resize", "compress", "convert", "upscale"]);
+export const ImageToolName = z.enum([
+  "resize",
+  "compress",
+  "convert",
+  "upscale",
+]);
 export type ImageToolName = z.infer<typeof ImageToolName>;
 
 // Resize options

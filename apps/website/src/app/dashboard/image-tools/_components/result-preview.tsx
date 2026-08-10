@@ -94,8 +94,12 @@ export function ResultPreview({
       <div className="flex min-h-[320px] flex-col items-center justify-center gap-4 rounded-2xl border border-white/10 bg-white/[0.03]">
         <Loader2 className="h-10 w-10 animate-spin text-cyan-400" />
         <div className="text-center">
-          <p className="text-sm font-medium text-white/60">Processing your image…</p>
-          <p className="mt-1 text-xs text-white/30">This may take a few seconds</p>
+          <p className="text-sm font-medium text-white/60">
+            Processing your image…
+          </p>
+          <p className="mt-1 text-xs text-white/30">
+            This may take a few seconds
+          </p>
         </div>
       </div>
     );
@@ -106,10 +110,13 @@ export function ResultPreview({
     return (
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-medium text-white/50">Selected image</span>
+          <span className="text-xs font-medium text-white/50">
+            Selected image
+          </span>
           <span className="text-xs text-white/30">
             {formatSize(originalFile.size)}
-            {originalMeta.width && ` · ${originalMeta.width}×${originalMeta.height}px`}
+            {originalMeta.width &&
+              ` · ${originalMeta.width}×${originalMeta.height}px`}
             {originalMeta.format && ` · ${originalMeta.format}`}
           </span>
         </div>
@@ -125,7 +132,6 @@ export function ResultPreview({
             />
           )}
         </div>
-
       </div>
     );
   }
@@ -133,13 +139,9 @@ export function ResultPreview({
   // ─── Result Ready ───────────────────────────────────────────────────────────
   return (
     <div className="space-y-4">
-
       {/* ── Stats bar ─────────────────────────────────────────────────────── */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <StatCard
-          label="Original size"
-          value={formatSize(originalFile.size)}
-        />
+        <StatCard label="Original size" value={formatSize(originalFile.size)} />
         <StatCard
           label="Result size"
           value={formatSize(resultBlob!.size)}
@@ -198,25 +200,29 @@ export function ResultPreview({
 
       {/* ── Comparison ────────────────────────────────────────────────────── */}
       {viewMode === "slider" ? (
-        <ComparisonSlider
-          originalUrl={originalUrl!}
-          resultUrl={resultUrl}
-        />
+        <ComparisonSlider originalUrl={originalUrl!} resultUrl={resultUrl} />
       ) : (
         <div className="grid grid-cols-2 gap-4">
           {/* Original */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-white/50">Original</span>
+              <span className="text-xs font-medium text-white/50">
+                Original
+              </span>
               <span className="text-xs text-white/30">
                 {formatSize(originalFile.size)}
-                {originalMeta.width && ` · ${originalMeta.width}×${originalMeta.height}`}
+                {originalMeta.width &&
+                  ` · ${originalMeta.width}×${originalMeta.height}`}
               </span>
             </div>
             <div className="overflow-hidden rounded-xl border border-white/10 bg-white/5">
               {originalUrl && (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={originalUrl} alt="Original" className="w-full h-auto block" />
+                <img
+                  src={originalUrl}
+                  alt="Original"
+                  className="w-full h-auto block"
+                />
               )}
             </div>
           </div>
@@ -227,12 +233,17 @@ export function ResultPreview({
               <span className="text-xs font-medium text-white/50">Result</span>
               <span className="text-xs text-white/30">
                 {formatSize(resultBlob!.size)}
-                {resultMeta.width && ` · ${resultMeta.width}×${resultMeta.height}`}
+                {resultMeta.width &&
+                  ` · ${resultMeta.width}×${resultMeta.height}`}
               </span>
             </div>
             <div className="overflow-hidden rounded-xl border border-white/10 bg-white/5">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={resultUrl} alt="Result" className="w-full h-auto block" />
+              <img
+                src={resultUrl}
+                alt="Result"
+                className="w-full h-auto block"
+              />
             </div>
           </div>
         </div>
@@ -270,8 +281,15 @@ function StatCard({
 
   return (
     <div className="rounded-xl border border-white/8 bg-white/[0.03] px-3 py-3">
-      <p className="text-[10px] font-medium uppercase tracking-wide text-white/30">{label}</p>
-      <p className={cn("mt-1 flex items-center gap-1 text-sm font-semibold", valueColor)}>
+      <p className="text-[10px] font-medium uppercase tracking-wide text-white/30">
+        {label}
+      </p>
+      <p
+        className={cn(
+          "mt-1 flex items-center gap-1 text-sm font-semibold",
+          valueColor
+        )}
+      >
         {Icon && <Icon className="h-3.5 w-3.5 shrink-0" />}
         {value}
       </p>

@@ -144,7 +144,10 @@ function ResizeOptions({
             max={1000}
             value={(options.percentage as number) || ""}
             onChange={(e) =>
-              onChange({ ...options, percentage: parseInt(e.target.value) || 0 })
+              onChange({
+                ...options,
+                percentage: parseInt(e.target.value) || 0,
+              })
             }
             disabled={disabled}
             className="h-9 bg-white/5 text-white border-white/10 focus:border-cyan-500/50"
@@ -222,7 +225,9 @@ function CompressOptions({
               : "bg-white/5 text-white/50 hover:bg-white/8 hover:text-white/70"
           )}
         >
-          <span className="text-[10px] tracking-widest opacity-60">{l.icon}</span>
+          <span className="text-[10px] tracking-widest opacity-60">
+            {l.icon}
+          </span>
           <span className="text-sm font-semibold">{l.label}</span>
           <span className="text-[10px] text-white/30">{l.desc}</span>
         </button>

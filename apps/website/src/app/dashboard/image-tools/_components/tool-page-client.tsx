@@ -1,7 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Loader2, Coins, Download, RotateCcw, FileImage, AlertTriangle, Clock } from "lucide-react";
+import {
+  Loader2,
+  Coins,
+  Download,
+  RotateCcw,
+  FileImage,
+  AlertTriangle,
+  Clock,
+} from "lucide-react";
 import { toast } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -56,8 +64,12 @@ export function ToolPageClient({ tool }: ToolPageClientProps) {
   const [error, setError] = useState<string | null>(null);
   const [userBalance, setUserBalance] = useState<number | null>(null);
   const [isLoadingBalance, setIsLoadingBalance] = useState(true);
-  const [toolInfo, setToolInfo] = useState<Record<string, { cost: number; freeDaily: boolean }>>({});
-  const [freeQuotaRemaining, setFreeQuotaRemaining] = useState<number | null>(null);
+  const [toolInfo, setToolInfo] = useState<
+    Record<string, { cost: number; freeDaily: boolean }>
+  >({});
+  const [freeQuotaRemaining, setFreeQuotaRemaining] = useState<number | null>(
+    null
+  );
   const [freeQuotaTotal, setFreeQuotaTotal] = useState<number | null>(null);
   const [isLoadingCosts, setIsLoadingCosts] = useState(true);
 
@@ -80,9 +92,12 @@ export function ToolPageClient({ tool }: ToolPageClientProps) {
 
         if (configRes.ok) {
           const data = await configRes.json();
-          const tools = data?.tools as Record<string, { userCores: number; freeDaily: boolean }> | undefined;
+          const tools = data?.tools as
+            | Record<string, { userCores: number; freeDaily: boolean }>
+            | undefined;
           if (tools) {
-            const info: Record<string, { cost: number; freeDaily: boolean }> = {};
+            const info: Record<string, { cost: number; freeDaily: boolean }> =
+              {};
             for (const [key, val] of Object.entries(tools)) {
               info[key] = { cost: val.userCores, freeDaily: val.freeDaily };
             }
@@ -208,10 +223,14 @@ export function ToolPageClient({ tool }: ToolPageClientProps) {
     URL.revokeObjectURL(url);
   };
 
-  const info = toolInfo[tool] ?? { cost: TOOL_COST_FALLBACK[tool], freeDaily: false };
+  const info = toolInfo[tool] ?? {
+    cost: TOOL_COST_FALLBACK[tool],
+    freeDaily: false,
+  };
   const cost = info.cost;
   const isFreeEligible = info.freeDaily;
-  const isCurrentlyFree = isFreeEligible && freeQuotaRemaining !== null && freeQuotaRemaining > 0;
+  const isCurrentlyFree =
+    isFreeEligible && freeQuotaRemaining !== null && freeQuotaRemaining > 0;
   const isUpscale = tool === "upscale";
 
   // Fix #1: Check if balance is sufficient (only if it's not currently free)
@@ -219,14 +238,19 @@ export function ToolPageClient({ tool }: ToolPageClientProps) {
     !isCurrentlyFree && userBalance !== null && userBalance < cost;
 
   // Process button is disabled if: no file, processing, or insufficient balance
-  const isProcessDisabled = isProcessing || !selectedFile || hasInsufficientBalance;
+  const isProcessDisabled =
+    isProcessing || !selectedFile || hasInsufficientBalance;
 
   return (
     <div className="grid gap-6 xl:grid-cols-[1fr_340px]">
       {/* ── Main content ────────────────────────────────────────────────── */}
       <div className="min-w-0 space-y-4">
         {!selectedFile ? (
-          <UploadZone onFileSelect={handleFileSelect} disabled={isProcessing} tool={tool} />
+          <UploadZone
+            onFileSelect={handleFileSelect}
+            disabled={isProcessing}
+            tool={tool}
+          />
         ) : (
           <ResultPreview
             originalFile={selectedFile}
@@ -277,7 +301,8 @@ export function ToolPageClient({ tool }: ToolPageClientProps) {
               <span className="text-white/40">Cost per image</span>
               {isCurrentlyFree ? (
                 <span className="font-semibold text-emerald-400">
-                  Free ({freeQuotaRemaining}{freeQuotaTotal ? `/${freeQuotaTotal}` : ""} remaining today)
+                  Free ({freeQuotaRemaining}
+                  {freeQuotaTotal ? `/${freeQuotaTotal}` : ""} remaining today)
                 </span>
               ) : (
                 <span
@@ -298,8 +323,8 @@ export function ToolPageClient({ tool }: ToolPageClientProps) {
               <AlertTriangle className="h-3.5 w-3.5 mt-0.5 shrink-0" />
               <span>
                 Insufficient balance. You need{" "}
-                <span className="font-semibold">{cost} cores</span> but only have{" "}
-                <span className="font-semibold">{userBalance}</span>.
+                <span className="font-semibold">{cost} cores</span> but only
+                have <span className="font-semibold">{userBalance}</span>.
               </span>
             </div>
           )}
@@ -317,8 +342,12 @@ export function ToolPageClient({ tool }: ToolPageClientProps) {
             <div className="flex items-center gap-2 rounded-lg border border-white/8 bg-white/[0.03] px-3 py-2 text-xs">
               <FileImage className="h-3.5 w-3.5 shrink-0 text-white/30" />
               <div className="min-w-0 flex-1">
-                <p className="truncate font-medium text-white/60">{selectedFile.name}</p>
-                <p className="text-white/30">{formatBytes(selectedFile.size)}</p>
+                <p className="truncate font-medium text-white/60">
+                  {selectedFile.name}
+                </p>
+                <p className="text-white/30">
+                  {formatBytes(selectedFile.size)}
+                </p>
               </div>
             </div>
           )}

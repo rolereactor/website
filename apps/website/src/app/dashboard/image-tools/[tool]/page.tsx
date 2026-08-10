@@ -36,7 +36,9 @@ interface PageProps {
   params: Promise<{ tool: string }>;
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const { tool } = await params;
   const meta = TOOL_META[tool as keyof typeof TOOL_META];
   if (!meta) return { title: "Image Tools" };

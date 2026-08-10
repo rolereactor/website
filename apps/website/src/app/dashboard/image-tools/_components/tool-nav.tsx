@@ -1,12 +1,7 @@
 "use client";
 
 import { useRouter, usePathname } from "next/navigation";
-import {
-  Expand,
-  Shrink,
-  ArrowRightLeft,
-  ImageUpscale,
-} from "lucide-react";
+import { Expand, Shrink, ArrowRightLeft, ImageUpscale } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -26,7 +21,13 @@ const TOOLS: {
   { tool: "resize", label: "Resize Image", icon: Expand, cost: 0.5 },
   { tool: "compress", label: "Compress Image", icon: Shrink, cost: 0.5 },
   { tool: "convert", label: "Convert Image", icon: ArrowRightLeft, cost: 0.5 },
-  { tool: "upscale", label: "Upscale Image", icon: ImageUpscale, cost: 5, premium: true },
+  {
+    tool: "upscale",
+    label: "Upscale Image",
+    icon: ImageUpscale,
+    cost: 5,
+    premium: true,
+  },
 ];
 
 export function ToolNav() {
@@ -34,7 +35,8 @@ export function ToolNav() {
   const pathname = usePathname();
 
   const currentTool =
-    TOOLS.find((t) => pathname.endsWith(`/image-tools/${t.tool}`))?.tool ?? "resize";
+    TOOLS.find((t) => pathname.endsWith(`/image-tools/${t.tool}`))?.tool ??
+    "resize";
   const current = TOOLS.find((t) => t.tool === currentTool)!;
 
   const handleChange = (tool: string) => {

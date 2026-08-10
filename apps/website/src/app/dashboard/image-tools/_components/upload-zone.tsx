@@ -5,16 +5,37 @@ import { Upload, X, ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
-const ACCEPTED_TYPES_ALL = ["image/jpeg", "image/png", "image/gif", "image/webp"];
+const ACCEPTED_TYPES_ALL = [
+  "image/jpeg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+];
 
 const TOOL_CONFIG: Record<
   string,
   { maxFileSizeMB: number; acceptedTypes: string[]; formats: string[] }
 > = {
-  resize:   { maxFileSizeMB: 20, acceptedTypes: ACCEPTED_TYPES_ALL, formats: ["JPG", "PNG", "GIF", "WebP"] },
-  compress: { maxFileSizeMB: 20, acceptedTypes: ["image/jpeg", "image/png", "image/webp"], formats: ["JPG", "PNG", "WebP"] },
-  convert:  { maxFileSizeMB: 20, acceptedTypes: ACCEPTED_TYPES_ALL, formats: ["JPG", "PNG", "GIF", "WebP"] },
-  upscale:  { maxFileSizeMB: 10, acceptedTypes: ["image/jpeg", "image/png", "image/webp"], formats: ["JPG", "PNG", "WebP"] },
+  resize: {
+    maxFileSizeMB: 20,
+    acceptedTypes: ACCEPTED_TYPES_ALL,
+    formats: ["JPG", "PNG", "GIF", "WebP"],
+  },
+  compress: {
+    maxFileSizeMB: 20,
+    acceptedTypes: ["image/jpeg", "image/png", "image/webp"],
+    formats: ["JPG", "PNG", "WebP"],
+  },
+  convert: {
+    maxFileSizeMB: 20,
+    acceptedTypes: ACCEPTED_TYPES_ALL,
+    formats: ["JPG", "PNG", "GIF", "WebP"],
+  },
+  upscale: {
+    maxFileSizeMB: 10,
+    acceptedTypes: ["image/jpeg", "image/png", "image/webp"],
+    formats: ["JPG", "PNG", "WebP"],
+  },
 };
 
 interface UploadZoneProps {
@@ -23,7 +44,11 @@ interface UploadZoneProps {
   tool?: string;
 }
 
-export function UploadZone({ onFileSelect, disabled, tool = "resize" }: UploadZoneProps) {
+export function UploadZone({
+  onFileSelect,
+  disabled,
+  tool = "resize",
+}: UploadZoneProps) {
   const [isDragOver, setIsDragOver] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -31,21 +56,24 @@ export function UploadZone({ onFileSelect, disabled, tool = "resize" }: UploadZo
   const config = TOOL_CONFIG[tool] ?? TOOL_CONFIG.resize;
   const MAX_FILE_SIZE = config.maxFileSizeMB * 1024 * 1024;
 
-  const validateFile = useCallback((file: File): boolean => {
-    setError(null);
+  const validateFile = useCallback(
+    (file: File): boolean => {
+      setError(null);
 
-    if (!config.acceptedTypes.includes(file.type)) {
-      setError(`Invalid file type. Upload ${config.formats.join(", ")}.`);
-      return false;
-    }
+      if (!config.acceptedTypes.includes(file.type)) {
+        setError(`Invalid file type. Upload ${config.formats.join(", ")}.`);
+        return false;
+      }
 
-    if (file.size > MAX_FILE_SIZE) {
-      setError(`File too large. Maximum size is ${config.maxFileSizeMB}MB.`);
-      return false;
-    }
+      if (file.size > MAX_FILE_SIZE) {
+        setError(`File too large. Maximum size is ${config.maxFileSizeMB}MB.`);
+        return false;
+      }
 
-    return true;
-  }, [config, MAX_FILE_SIZE]);
+      return true;
+    },
+    [config, MAX_FILE_SIZE]
+  );
 
   const handleFile = useCallback(
     (file: File) => {
@@ -139,8 +167,8 @@ export function UploadZone({ onFileSelect, disabled, tool = "resize" }: UploadZo
               <span className="text-cyan-400">Drop your image here</span>
             ) : (
               <>
-                <span className="text-cyan-400">Click to upload</span>
-                {" "}or drag and drop
+                <span className="text-cyan-400">Click to upload</span> or drag
+                and drop
               </>
             )}
           </p>
