@@ -18,7 +18,10 @@ function getXpForLevel(level: number): number {
 }
 
 /** XP earned within the current level (i.e. totalXP mod level bucket) */
-function getLevelProgress(totalXP: number, level: number): {
+function getLevelProgress(
+  totalXP: number,
+  level: number
+): {
   currentXP: number;
   neededXP: number;
   progressPct: number;
@@ -173,16 +176,20 @@ function LeaderboardRow({
     entry.totalXP,
     entry.level
   );
-  
+
   const displayXP = (() => {
     switch (period) {
-      case "daily": return entry.dailyXP || 0;
-      case "weekly": return entry.weeklyXP || 0;
-      case "monthly": return entry.monthlyXP || 0;
-      default: return entry.totalXP;
+      case "daily":
+        return entry.dailyXP || 0;
+      case "weekly":
+        return entry.weeklyXP || 0;
+      case "monthly":
+        return entry.monthlyXP || 0;
+      default:
+        return entry.totalXP;
     }
   })();
-  
+
   const xpToNext = neededXP - currentXP;
 
   return (
@@ -204,7 +211,9 @@ function LeaderboardRow({
             rank === 3 &&
               "text-orange-400 border-orange-500/40 bg-orange-500/20",
             rank > 3 && "text-zinc-500 border-white/10 bg-zinc-900",
-            isCurrentUser && rank > 3 && "border-cyan-500/40 text-cyan-400 bg-cyan-500/10",
+            isCurrentUser &&
+              rank > 3 &&
+              "border-cyan-500/40 text-cyan-400 bg-cyan-500/10",
             audiowide.className
           )}
         >
@@ -258,7 +267,9 @@ function LeaderboardRow({
             <span
               className={cn(
                 "font-black text-sm uppercase truncate transition-colors",
-                isTop3 ? "text-cyan-400" : "text-zinc-400 group-hover:text-white",
+                isTop3
+                  ? "text-cyan-400"
+                  : "text-zinc-400 group-hover:text-white",
                 isCurrentUser && !isTop3 && "text-cyan-300",
                 audiowide.className
               )}
@@ -349,7 +360,11 @@ function CurrentUserBanner({
   rank: number;
   entry: LeaderboardEntry;
 }) {
-  const { xpToNext: _xpToNext, currentXP, neededXP } = (() => {
+  const {
+    xpToNext: _xpToNext,
+    currentXP,
+    neededXP,
+  } = (() => {
     const nx = getXpForLevel(entry.level);
     const cx = entry.totalXP % nx;
     return { xpToNext: nx - cx, currentXP: cx, neededXP: nx };

@@ -246,7 +246,12 @@ export default async function LeaderboardsPage() {
         {/* Guild Grid */}
         <div className="space-y-3 pt-4 relative z-10 w-full">
           <div className="flex items-center justify-between">
-            <p className={cn("text-[10px] uppercase tracking-widest font-black text-zinc-600", audiowide.className)}>
+            <p
+              className={cn(
+                "text-[10px] uppercase tracking-widest font-black text-zinc-600",
+                audiowide.className
+              )}
+            >
               Ranked by total XP
             </p>
             <p className="text-[10px] uppercase tracking-widest font-black text-zinc-700">
@@ -254,114 +259,114 @@ export default async function LeaderboardsPage() {
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {guilds.length > 0 ? (
-            guilds.map((guild) => {
-              const rank = guild.rank || 0;
-              const styles = getRankStyles(rank);
-              const isTop3 = rank > 0 && rank <= 3;
+            {guilds.length > 0 ? (
+              guilds.map((guild) => {
+                const rank = guild.rank || 0;
+                const styles = getRankStyles(rank);
+                const isTop3 = rank > 0 && rank <= 3;
 
-              return (
-                <Link
-                  href={`/leaderboards/${guild.id}`}
-                  key={guild.id}
-                  className="block group"
-                  prefetch={false}
-                >
-                  <div
-                    className={cn(
-                      "flex items-center p-4 rounded-2xl border bg-zinc-950/40 backdrop-blur-md hover:bg-zinc-900/80 hover:shadow-[0_0_20px_rgba(16,185,129,0.1)] transition-all duration-300 gap-4 overflow-hidden relative h-full",
-                      isTop3
-                        ? "border-amber-500/30 hover:border-amber-500/40"
-                        : "border-white/5 hover:border-emerald-500/30"
-                    )}
+                return (
+                  <Link
+                    href={`/leaderboards/${guild.id}`}
+                    key={guild.id}
+                    className="block group"
+                    prefetch={false}
                   >
-                    {/* Subtle Spotlight */}
                     <div
                       className={cn(
-                        "absolute top-1/2 -translate-y-1/2 left-6 w-20 h-20 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700",
-                        styles.glow
-                      )}
-                    />
-                    <div className="absolute inset-0 bg-linear-to-r from-transparent to-zinc-950/80 pointer-events-none rounded-2xl" />
-
-                    {/* Avatar */}
-                    <Avatar
-                      className={cn(
-                        "h-14 w-14 rounded-xl ring-1 transition-all duration-300 shadow-md relative z-10 shrink-0 bg-zinc-900",
-                        styles.avatar
+                        "flex items-center p-4 rounded-2xl border bg-zinc-950/40 backdrop-blur-md hover:bg-zinc-900/80 hover:shadow-[0_0_20px_rgba(16,185,129,0.1)] transition-all duration-300 gap-4 overflow-hidden relative h-full",
+                        isTop3
+                          ? "border-amber-500/30 hover:border-amber-500/40"
+                          : "border-white/5 hover:border-emerald-500/30"
                       )}
                     >
-                      <AvatarImage
-                        src={guild.icon || undefined}
-                        alt={guild.name}
-                        className="object-cover"
+                      {/* Subtle Spotlight */}
+                      <div
+                        className={cn(
+                          "absolute top-1/2 -translate-y-1/2 left-6 w-20 h-20 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700",
+                          styles.glow
+                        )}
                       />
-                      <AvatarFallback className="bg-zinc-900 text-zinc-400 text-sm font-bold rounded-xl uppercase">
-                        {guild.name.substring(0, 2)}
-                      </AvatarFallback>
-                    </Avatar>
+                      <div className="absolute inset-0 bg-linear-to-r from-transparent to-zinc-950/80 pointer-events-none rounded-2xl" />
 
-                    {/* Info */}
-                    <div className="flex flex-col relative z-10 min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <h3
-                          className={cn(
-                            "text-white text-base font-bold truncate transition-colors leading-snug",
-                            styles.text,
-                            audiowide.className
-                          )}
-                          title={guild.name}
-                        >
-                          {guild.name}
-                        </h3>
-                        <span
-                          className={cn(
-                            "text-xs font-black px-2 py-0.5 rounded-xl border uppercase tracking-wider shrink-0 ml-auto",
-                            styles.badge,
-                            audiowide.className
-                          )}
-                        >
-                          #{rank}
-                        </span>
-                      </div>
+                      {/* Avatar */}
+                      <Avatar
+                        className={cn(
+                          "h-14 w-14 rounded-xl ring-1 transition-all duration-300 shadow-md relative z-10 shrink-0 bg-zinc-900",
+                          styles.avatar
+                        )}
+                      >
+                        <AvatarImage
+                          src={guild.icon || undefined}
+                          alt={guild.name}
+                          className="object-cover"
+                        />
+                        <AvatarFallback className="bg-zinc-900 text-zinc-400 text-sm font-bold rounded-xl uppercase">
+                          {guild.name.substring(0, 2)}
+                        </AvatarFallback>
+                      </Avatar>
 
-                      <div className="mt-1 flex items-center gap-3">
-                        <span className="inline-flex items-center gap-1 text-[10px] text-zinc-400 font-bold tracking-tighter uppercase whitespace-nowrap">
-                          <Users className="w-3 h-3 text-emerald-500/60" />
-                          {guild.memberCount.toLocaleString()}
-                        </span>
-                        {guild.rankedCount !== undefined && (
+                      {/* Info */}
+                      <div className="flex flex-col relative z-10 min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <h3
+                            className={cn(
+                              "text-white text-base font-bold truncate transition-colors leading-snug",
+                              styles.text,
+                              audiowide.className
+                            )}
+                            title={guild.name}
+                          >
+                            {guild.name}
+                          </h3>
+                          <span
+                            className={cn(
+                              "text-xs font-black px-2 py-0.5 rounded-xl border uppercase tracking-wider shrink-0 ml-auto",
+                              styles.badge,
+                              audiowide.className
+                            )}
+                          >
+                            #{rank}
+                          </span>
+                        </div>
+
+                        <div className="mt-1 flex items-center gap-3">
                           <span className="inline-flex items-center gap-1 text-[10px] text-zinc-400 font-bold tracking-tighter uppercase whitespace-nowrap">
-                            <Trophy className="w-3 h-3 text-emerald-500/60" />
-                            {guild.rankedCount} ranked
+                            <Users className="w-3 h-3 text-emerald-500/60" />
+                            {guild.memberCount.toLocaleString()}
                           </span>
-                        )}
-                        {guild.totalXP !== undefined && (
-                          <span className="inline-flex items-center gap-1 text-[10px] text-zinc-400 font-bold tracking-tighter uppercase whitespace-nowrap bg-emerald-500/10 px-1.5 py-0.5 rounded-md">
-                            {formatCompactNumber(guild.totalXP)} XP
-                          </span>
-                        )}
+                          {guild.rankedCount !== undefined && (
+                            <span className="inline-flex items-center gap-1 text-[10px] text-zinc-400 font-bold tracking-tighter uppercase whitespace-nowrap">
+                              <Trophy className="w-3 h-3 text-emerald-500/60" />
+                              {guild.rankedCount} ranked
+                            </span>
+                          )}
+                          {guild.totalXP !== undefined && (
+                            <span className="inline-flex items-center gap-1 text-[10px] text-zinc-400 font-bold tracking-tighter uppercase whitespace-nowrap bg-emerald-500/10 px-1.5 py-0.5 rounded-md">
+                              {formatCompactNumber(guild.totalXP)} XP
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Link>
-              );
-            })
-          ) : (
-            <div className="col-span-full py-24 text-center text-zinc-500 font-medium bg-zinc-950/40 backdrop-blur-sm rounded-4xl border border-white/5 flex flex-col items-center justify-center gap-6">
-              <div className="w-20 h-20 bg-zinc-900/80 rounded-full flex items-center justify-center border border-white/5">
-                <ShieldCheck className="w-10 h-10 text-emerald-500/30" />
+                  </Link>
+                );
+              })
+            ) : (
+              <div className="col-span-full py-24 text-center text-zinc-500 font-medium bg-zinc-950/40 backdrop-blur-sm rounded-4xl border border-white/5 flex flex-col items-center justify-center gap-6">
+                <div className="w-20 h-20 bg-zinc-900/80 rounded-full flex items-center justify-center border border-white/5">
+                  <ShieldCheck className="w-10 h-10 text-emerald-500/30" />
+                </div>
+                <div className="space-y-2">
+                  <p className="text-xl text-zinc-300">
+                    No public leaderboards found yet
+                  </p>
+                  <p className="text-sm text-zinc-500 font-normal">
+                    Enable the XP system in your server to appear here!
+                  </p>
+                </div>
               </div>
-              <div className="space-y-2">
-                <p className="text-xl text-zinc-300">
-                  No public leaderboards found yet
-                </p>
-                <p className="text-sm text-zinc-500 font-normal">
-                  Enable the XP system in your server to appear here!
-                </p>
-              </div>
-            </div>
-          )}
+            )}
           </div>
         </div>
 

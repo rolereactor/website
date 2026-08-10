@@ -84,9 +84,12 @@ async function fetchLeaderboardData(guildId: string, period: string = "all") {
   }
 
   try {
-    const res = await botFetch(`/guilds/${guildId}/leaderboard?limit=50&period=${period}`, {
-      cache: "no-store",
-    });
+    const res = await botFetch(
+      `/guilds/${guildId}/leaderboard?limit=50&period=${period}`,
+      {
+        cache: "no-store",
+      }
+    );
 
     if (!res.ok) {
       isError = true;
@@ -177,9 +180,18 @@ export default async function PublicLeaderboardPage({
   const { guildId } = await params;
   const sp = await searchParams;
   const period = typeof sp.period === "string" ? sp.period : "all";
-  
+
   const [
-    { leaderboard, isError, isPrivate, isPremium, isOffline, serverInfo, total, stats },
+    {
+      leaderboard,
+      isError,
+      isPrivate,
+      isPremium,
+      isOffline,
+      serverInfo,
+      total,
+      stats,
+    },
     session,
   ] = await Promise.all([fetchLeaderboardData(guildId, period), auth()]);
   const currentUserId = session?.user?.id ?? undefined;
@@ -218,8 +230,8 @@ export default async function PublicLeaderboardPage({
             Service Unavailable
           </h1>
           <p className="text-zinc-500 max-w-md">
-            The bot service is currently offline. This leaderboard is temporarily
-            unavailable. Please try again in a few minutes.
+            The bot service is currently offline. This leaderboard is
+            temporarily unavailable. Please try again in a few minutes.
           </p>
           <Link
             href="/leaderboards"
@@ -356,8 +368,11 @@ export default async function PublicLeaderboardPage({
           hide={isPremium}
         />
 
-
-        <LeaderboardTable leaderboard={leaderboard} currentUserId={currentUserId} period={period} />
+        <LeaderboardTable
+          leaderboard={leaderboard}
+          currentUserId={currentUserId}
+          period={period}
+        />
 
         <ConditionalAdBlock
           zoneId={
