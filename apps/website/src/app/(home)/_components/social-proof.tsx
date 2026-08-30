@@ -5,8 +5,8 @@ import { Server, TrendingUp, Shield, Terminal } from "lucide-react";
 
 function formatExecutions(count: number): string {
   if (count >= 1_000_000) return `${(count / 1_000_000).toFixed(1)}M+`;
-  if (count >= 1_000) return `${(count / 1_000).toFixed(0)}k+`;
-  return "100k+";
+  if (count >= 1_000) return `${(count / 1_000).toFixed(1)}k+`;
+  return count.toLocaleString();
 }
 
 interface SocialProofProps {
@@ -17,7 +17,7 @@ interface SocialProofProps {
 
 function formatGuilds(count: number): string {
   if (count >= 1000) return `${(count / 1000).toFixed(1)}k+`;
-  return count.toString();
+  return count.toLocaleString();
 }
 
 export function SocialProof({
@@ -27,14 +27,13 @@ export function SocialProof({
 }: SocialProofProps) {
   const stats = [
     {
-      value: totalGuilds >= 1 ? formatGuilds(totalGuilds) : "1k+",
+      value: formatGuilds(totalGuilds),
       label: "Servers",
       icon: Server,
       color: "text-indigo-400",
     },
     {
-      value:
-        totalExecutions >= 1000 ? formatExecutions(totalExecutions) : "100k+",
+      value: formatExecutions(totalExecutions),
       label: "Commands Run",
       icon: TrendingUp,
       color: "text-emerald-400",
@@ -46,7 +45,7 @@ export function SocialProof({
       color: "text-cyan-400",
     },
     {
-      value: `${totalCommands}+`,
+      value: totalCommands > 0 ? `${totalCommands}+` : "25+",
       label: "Commands",
       icon: Terminal,
       color: "text-purple-400",

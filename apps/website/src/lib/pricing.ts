@@ -131,9 +131,18 @@ export async function fetchSponsorsFromBMC(): Promise<Sponsor[]> {
 }
 */
 
-// For now, return mock data
+// Fetch real sponsors from the bot API via /api/supporters
 export async function getSponsors(): Promise<Sponsor[]> {
-  // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 100));
-  return mockSponsors;
+  try {
+    const res = await fetch("/api/supporters");
+    if (res.ok) {
+      const json = await res.json();
+      if (json.success && Array.isArray(json.data?.supporters)) {
+        return json.data.supporters;
+      }
+    }
+  } catch (error) {
+    console.error("Failed to fetch real sponsors:", error);
+  }
+  return [];
 }

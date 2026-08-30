@@ -13,8 +13,29 @@ import {
 } from "@/components/ui/card";
 import { BarChart3, Zap, Terminal, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+
+import { botFetchJson } from "@/lib/bot-fetch";
+import { formatCompactNumber } from "@/lib/utils";
+import { TerminalLogsPreview } from "@/app/dashboard/_components/terminal-logs-preview";
+
+interface BotStats {
+  statistics?: {
+    guilds?: number;
+  };
+}
+
+interface CommandUsage {
+  summary?: {
+    totalExecutions?: number;
+  };
+}
+
+interface RevenueStats {
+  summary?: {
+    totalRevenue?: number;
+  };
+}
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -26,6 +47,27 @@ export default async function DashboardPage() {
 
   // 2. Developer/Admin View Fast-Pass
   if (isDeveloper(session.user)) {
+    let guildsCount = 0;
+    let totalExecutions = 0;
+    let totalRevenue = 0;
+
+    try {
+      const [statsData, usageData, revenueData] = await Promise.all([
+        botFetchJson<BotStats>("/stats", { next: { revalidate: 60 }, silent: true }),
+        botFetchJson<CommandUsage>("/commands/usage", { userId: session.user.id, next: { revalidate: 60 }, silent: true }),
+        botFetchJson<RevenueStats>("/payments/stats", { userId: session.user.id, next: { revalidate: 60 }, silent: true }),
+      ]);
+      guildsCount = statsData?.statistics?.guilds || 0;
+      totalExecutions = usageData?.summary?.totalExecutions || 0;
+      totalRevenue = revenueData?.summary?.totalRevenue || 0;
+    } catch {
+      // Fallback if bot API is offline
+    }
+
+    const guildsStatText = guildsCount > 0 ? `${formatCompactNumber(guildsCount)} GUILDS` : "LIVE METRICS";
+    const revenueStatText = totalRevenue > 0 ? `$${formatCompactNumber(totalRevenue)} TOTAL` : "$0 TOTAL";
+    const usesStatText = totalExecutions > 0 ? `${formatCompactNumber(totalExecutions)} USES` : "0 USES";
+
     return (
       <div className="space-y-6 w-full">
         {/* Hero Grid */}
@@ -36,7 +78,7 @@ export default async function DashboardPage() {
             href="/dashboard/stats"
             icon={BarChart3}
             color="cyan"
-            stats="2.4k GUILDS"
+            stats={guildsStatText}
           />
           <OverviewNavCard
             title="Revenue & Billing"
@@ -44,7 +86,7 @@ export default async function DashboardPage() {
             href="/dashboard/revenue"
             icon={Zap}
             color="emerald"
-            stats="$12.5k TOTAL"
+            stats={revenueStatText}
           />
           <OverviewNavCard
             title="System Analytics"
@@ -52,7 +94,7 @@ export default async function DashboardPage() {
             href="/dashboard/commands"
             icon={Terminal}
             color="fuchsia"
-            stats="450k USES"
+            stats={usesStatText}
           />
         </div>
 
@@ -61,51 +103,7 @@ export default async function DashboardPage() {
           <SystemHealth />
 
           {/* Console Logs Preview */}
-          <Card
-            variant="cyberpunk"
-            className="bg-black/60 border-white/5 font-mono"
-          >
-            <CardHeader className="border-b border-white/5 pb-4">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-black uppercase tracking-widest text-zinc-500 flex items-center gap-2">
-                  <Terminal className="size-4" />
-                  Terminal Logs
-                </CardTitle>
-                <Badge
-                  variant="outline"
-                  className="text-[10px] border-cyan-500/30 text-cyan-400"
-                >
-                  LIVE_FEED
-                </Badge>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-4 space-y-2 text-[11px] leading-tight">
-              <p className="text-emerald-500/80">
-                [12:51:22] <span className="text-zinc-500">INFO:</span> Gateway
-                connection established @ shard 0
-              </p>
-              <p className="text-cyan-500/80">
-                [12:51:24] <span className="text-zinc-500">INFO:</span> Syncing
-                42 application commands...
-              </p>
-              <p className="text-emerald-500/80">
-                [12:52:05] <span className="text-zinc-500">INFO:</span> Payment
-                validated // TX: knot_7f8a9...
-              </p>
-              <p className="text-cyan-500/80">
-                [12:53:11] <span className="text-zinc-500">INFO:</span> AI
-                processing complete for request ID 235088...
-              </p>
-              <p className="text-cyan-500/80">
-                [12:54:42] <span className="text-zinc-500">INFO:</span>{" "}
-                Calculated stats for 2,412 guilds in 142ms
-              </p>
-              <div className="flex items-center gap-1 animate-pulse text-cyan-500 mt-4">
-                <div className="w-1.5 h-3 bg-current" />
-                <span>_</span>
-              </div>
-            </CardContent>
-          </Card>
+          <TerminalLogsPreview />
         </div>
       </div>
     );

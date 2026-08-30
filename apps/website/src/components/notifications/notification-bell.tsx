@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import {
   Bell,
@@ -13,6 +13,8 @@ import {
   Wrench,
   Gift,
   Sparkles,
+  ThumbsUp,
+  ExternalLink,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,6 +30,7 @@ import {
   useNotificationStore,
   type Notification,
 } from "@/store/use-notification-store";
+import { useVoteStatus } from "@/hooks/use-vote-status";
 
 function getTimeAgo(dateString: string): string {
   const date = new Date(dateString);
@@ -155,16 +158,20 @@ export function NotificationBell() {
     notifications,
     unreadCount,
     isLoading,
-    isOpen,
-    setOpen,
+    fetchNotifications,
     fetchUnreadCount,
     markAsRead,
     markAllAsRead,
   } = useNotificationStore();
+  const { canVote } = useVoteStatus();
+
+  const [isOpen, setIsOpen] = useState(false);
 
   // Smart Polling: dynamically back off when user is AFK to aggressively save serverless/DB costs
   useEffect(() => {
     if (!session?.user?.id) return;
+
+    fetchNotifications();
 
     let lastActivityTime = Date.now();
     let lastPollTime = Date.now();
@@ -210,7 +217,7 @@ export function NotificationBell() {
   if (!session?.user) return null;
 
   return (
-    <Sheet open={isOpen} onOpenChange={setOpen}>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
         <Button
           variant="ghost"
@@ -219,11 +226,23 @@ export function NotificationBell() {
           aria-label="Notifications"
         >
           <Bell className="h-4 w-4 text-zinc-400 group-hover:text-cyan-400 transition-colors" />
-          {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 min-w-4.5 h-4.5 flex items-center justify-center text-[10px] font-bold rounded-full bg-cyan-500 text-black shadow-[0_0_10px_rgba(6,182,212,0.6)] px-1">
+          {unreadCount > 0 ? (
+            <span
+              className={`absolute -top-1 -right-1 min-w-4.5 h-4.5 flex items-center justify-center text-[10px] font-bold rounded-full bg-cyan-500 text-black px-1 ${
+                canVote
+                  ? "ring-2 ring-purple-500 shadow-[0_0_12px_rgba(168,85,247,0.8)]"
+                  : "shadow-[0_0_10px_rgba(6,182,212,0.6)]"
+              }`}
+              title={canVote ? `${unreadCount} unread notifications • +1 Core Vote Available` : undefined}
+            >
               {unreadCount > 99 ? "99+" : unreadCount}
             </span>
-          )}
+          ) : canVote ? (
+            <span className="absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-purple-500" />
+            </span>
+          ) : null}
         </Button>
       </SheetTrigger>
       <SheetContent
@@ -254,7 +273,7 @@ export function NotificationBell() {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => setOpen(false)}
+                onClick={() => setIsOpen(false)}
                 className="h-8 w-8 text-zinc-500 hover:text-white"
               >
                 <X className="w-4 h-4" />
@@ -273,6 +292,40 @@ export function NotificationBell() {
 
         {/* Notification List */}
         <div className="flex-1 overflow-y-auto px-4 py-3 space-y-2">
+          {/* Featured Top.gg Vote Reminder Banner */}
+          {canVote && (
+            <a
+              href="https://top.gg/bot/1392714201558159431/vote"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mb-3 block p-3.5 rounded-xl bg-purple-500/10 border border-purple-500/30 hover:border-purple-500/50 hover:bg-purple-500/15 transition-all group relative overflow-hidden shadow-[0_0_15px_rgba(168,85,247,0.1)]"
+            >
+              <div className="flex items-start gap-3">
+                <div className="p-2 rounded-lg bg-purple-500/20 border border-purple-500/40 text-purple-300 group-hover:scale-105 transition-transform shrink-0 mt-0.5">
+                  <ThumbsUp className="w-4 h-4 text-purple-300" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1.5 mb-0.5">
+                    <span className="font-bold text-xs text-purple-200 group-hover:text-white transition-colors">
+                      🎁 +1 Free Core Available!
+                    </span>
+                    <span className="flex h-2 w-2 relative">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75" />
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500" />
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-purple-300/80 leading-snug">
+                    Vote for Role Reactor on Top.gg to claim your free Core credit.
+                  </p>
+                  <div className="mt-2 flex items-center gap-1 text-[10px] font-mono font-bold text-purple-300 group-hover:text-purple-100">
+                    <span>Vote Now on Top.gg</span>
+                    <ExternalLink className="w-3 h-3 ml-0.5" />
+                  </div>
+                </div>
+              </div>
+            </a>
+          )}
+
           {isLoading ? (
             <div className="space-y-3 py-4">
               {Array.from({ length: 4 }).map((_, i) => (
@@ -290,7 +343,7 @@ export function NotificationBell() {
                 onMarkAsRead={markAsRead}
               />
             ))
-          ) : (
+          ) : !canVote ? (
             <div className="flex flex-col items-center justify-center py-16 text-center">
               <div className="p-4 bg-zinc-900 rounded-full mb-4 border border-white/5">
                 <Bell className="w-8 h-8 text-zinc-600" />
@@ -303,7 +356,7 @@ export function NotificationBell() {
                 purchases, and Pro Engine will appear here.
               </p>
             </div>
-          )}
+          ) : null}
         </div>
 
         {/* Footer gradient */}

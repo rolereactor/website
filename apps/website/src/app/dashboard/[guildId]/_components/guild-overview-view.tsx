@@ -16,6 +16,12 @@ import {
   Ticket,
   Zap,
   Gift,
+  ShieldCheck,
+  UserPlus,
+  Radio,
+  Image as ImageIcon,
+  Terminal,
+  Layers,
 } from "lucide-react";
 
 import Link from "next/link";
@@ -27,15 +33,19 @@ import { audiowide } from "@/lib/fonts";
 import { CyberpunkBackground } from "@/components/common/cyberpunk-background";
 import dynamic from "next/dynamic";
 
-const DEFAULT_GROWTH_DATA = [
-  { label: "Day 1", joins: 0, leaves: 0 },
-  { label: "Day 2", joins: 0, leaves: 0 },
-  { label: "Day 3", joins: 0, leaves: 0 },
-  { label: "Day 4", joins: 0, leaves: 0 },
-  { label: "Day 5", joins: 0, leaves: 0 },
-  { label: "Day 6", joins: 0, leaves: 0 },
-  { label: "Day 7", joins: 0, leaves: 0 },
-];
+function getPast7Days() {
+  const dates = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    dates.push({
+      label: d.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+      joins: 0,
+      leaves: 0,
+    });
+  }
+  return dates;
+}
 
 import { GuildStats, GuildSettings } from "@/types/discord";
 
@@ -88,7 +98,7 @@ export function GuildOverviewView({
   const growthData =
     guildStats?.growthHistory?.length > 0
       ? guildStats.growthHistory
-      : DEFAULT_GROWTH_DATA;
+      : getPast7Days();
 
   const onlineCount =
     guildStats?.onlineCount ??
@@ -459,6 +469,62 @@ export function GuildOverviewView({
         ))}
       </div>
 
+      {/* Server Tools & Modules Grid */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-bold text-white flex items-center gap-2">
+            <Layers className="text-cyan-400 w-5 h-5" /> Server Control Modules
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <QuickModuleCard
+            title="Image Tools"
+            description="Resize, compress, convert & upscale server images"
+            icon={ImageIcon}
+            href="/dashboard/image-tools"
+            color="cyan"
+            badge="UTILITY"
+          />
+          <QuickModuleCard
+            title="Reaction Roles"
+            description="Configure interactive button & emoji role assignment"
+            icon={ShieldCheck}
+            href={`/dashboard/${guildId}/roles`}
+            color="cyan"
+          />
+          <QuickModuleCard
+            title="Welcome System"
+            description="Automatic greeting messages & onboarding"
+            icon={UserPlus}
+            href={`/dashboard/${guildId}/welcome`}
+            color="emerald"
+          />
+          <QuickModuleCard
+            title="Live Reactor"
+            description="Twitch stream alerts, notifications & chat bot"
+            icon={Radio}
+            href={`/dashboard/${guildId}/live-reactor`}
+            color="fuchsia"
+            badge="PRO"
+          />
+          <QuickModuleCard
+            title="Command Settings"
+            description="Manage bot custom prefix & command toggles"
+            icon={Terminal}
+            href={`/dashboard/${guildId}/commands`}
+            color="amber"
+          />
+          <QuickModuleCard
+            title="Pro Engine"
+            description="Advanced automation & high-speed engines"
+            icon={Zap}
+            href={`/dashboard/${guildId}/pro-engine`}
+            color="yellow"
+            badge={isPremium ? "ACTIVE" : "UPGRADE"}
+          />
+        </div>
+      </div>
+
       {/* Main Content Area */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
@@ -548,5 +614,68 @@ function DashboardBenefit({
         <span className="text-[9px] text-zinc-500 truncate">{sub}</span>
       </div>
     </div>
+  );
+}
+
+function QuickModuleCard({
+  title,
+  description,
+  icon: Icon,
+  href,
+  color = "cyan",
+  badge,
+}: {
+  title: string;
+  description: string;
+  icon: React.ElementType;
+  href: string;
+  color?: "cyan" | "emerald" | "fuchsia" | "amber" | "yellow";
+  badge?: string;
+}) {
+  return (
+    <Link href={href} className="block group">
+      <Card
+        variant="cyberpunk"
+        className="p-5 h-full transition-all duration-300 hover:scale-[1.02] border-white/5 hover:border-cyan-500/40 relative overflow-hidden"
+      >
+        <div className="flex items-start justify-between mb-3 relative z-10">
+          <div
+            className={cn(
+              "p-2.5 rounded-xl border border-white/10 transition-colors",
+              color === "cyan" &&
+                "bg-cyan-500/10 text-cyan-400 border-cyan-500/30 group-hover:bg-cyan-500/20",
+              color === "emerald" &&
+                "bg-emerald-500/10 text-emerald-400 border-emerald-500/30 group-hover:bg-emerald-500/20",
+              color === "fuchsia" &&
+                "bg-fuchsia-500/10 text-fuchsia-400 border-fuchsia-500/30 group-hover:bg-fuchsia-500/20",
+              color === "amber" &&
+                "bg-amber-500/10 text-amber-400 border-amber-500/30 group-hover:bg-amber-500/20",
+              color === "yellow" &&
+                "bg-yellow-500/10 text-yellow-400 border-yellow-500/30 group-hover:bg-yellow-500/20"
+            )}
+          >
+            <Icon className="w-5 h-5" />
+          </div>
+          {badge && (
+            <Badge
+              variant={
+                badge === "PRO" || badge === "ACTIVE" ? "accent" : "outline"
+              }
+              className="text-[9px] font-mono tracking-wider"
+            >
+              {badge}
+            </Badge>
+          )}
+        </div>
+        <div className="space-y-1 relative z-10">
+          <h3 className="text-sm font-black text-white group-hover:text-cyan-300 transition-colors">
+            {title}
+          </h3>
+          <p className="text-xs text-zinc-400 leading-relaxed line-clamp-2">
+            {description}
+          </p>
+        </div>
+      </Card>
+    </Link>
   );
 }
