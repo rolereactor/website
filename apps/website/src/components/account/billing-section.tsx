@@ -281,7 +281,7 @@ export function BillingSection() {
                 <AlertCircle className="w-4 h-4 text-cyan-400 mt-0.5 shrink-0" />
                 <div className="text-xs text-zinc-400 space-y-0.5">
                   <p>
-                    <strong className="text-cyan-300">Cores 🔮</strong> are transferable energy credits for Pro Engine &amp; custom branding. <strong className="text-amber-300">Sparks ⚡</strong> are earned via voting &amp; daily streaks for personal rewards.
+                    <strong className="text-cyan-300">Cores 🔮</strong> are transferable energy credits for Pro Engine &amp; custom branding. <strong className="text-amber-300">Sparks ⚡</strong> are earned via Top.gg voting &amp; referral gifts for personal rewards.
                   </p>
                 </div>
               </div>
