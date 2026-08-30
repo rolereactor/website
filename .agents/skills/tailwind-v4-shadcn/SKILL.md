@@ -391,6 +391,14 @@ body {
 | Build fails | `tailwind.config.ts` exists | Delete file |
 | Animation errors | Using `tailwindcss-animate` | Install `tw-animate-css` |
 
+### Tailwind v4 Utility Class Migrations
+
+- `break-words` → `wrap-break-word`
+- `bg-gradient-to-*` → `bg-linear-to-*` (e.g., `bg-linear-to-r`, `bg-linear-to-br`)
+- `bg-white/[0.02]` → `bg-white/2` (Use percentage numbers directly for opacities)
+- `flex-shrink-0` → `shrink-0`
+- `flex-grow` → `grow`
+
 ---
 
 ## What's New in Tailwind v4
