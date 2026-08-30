@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Server } from "lucide-react";
+import { Server, RefreshCw, AlertTriangle } from "lucide-react";
 import { ServerTable } from "./_components/server-table";
 import { ServerDetailsDialog } from "./_components/server-details-dialog";
 import { ResetProEngineDialog } from "./_components/reset-pro-engine-dialog";
 import { PageHeader } from "@/app/dashboard/_components/page-header";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 interface GuildData {
   guildId: string;
@@ -39,13 +40,21 @@ export default function ServersPage() {
     setError(null);
     try {
       const response = await fetch("/api/guilds/history");
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to fetch guilds");
+      const text = await response.text();
+      let data: Record<string, unknown> | null = null;
+      try {
+        data = text ? (JSON.parse(text) as Record<string, unknown>) : null;
+      } catch {
+        data = null;
       }
 
-      setGuilds(data.data || []);
+      if (!response.ok) {
+        throw new Error(
+          (data?.error as string) || (data?.message as string) || "Failed to fetch guilds"
+        );
+      }
+
+      setGuilds((data?.data as GuildData[]) || []);
     } catch (err) {
       console.error("Failed to fetch guilds:", err);
       setError(err instanceof Error ? err.message : "Unknown error");
@@ -84,16 +93,40 @@ export default function ServersPage() {
       <Card variant="cyberpunk" className="border-white/5 bg-zinc-950/40">
         <CardContent className="p-0">
           {error ? (
-            <div className="p-12 text-center">
-              <p className="font-mono text-xs text-red-500 uppercase tracking-widest mb-4">
-                {error}
-              </p>
-              <button
+            <div className="p-8 sm:p-12 text-center flex flex-col items-center justify-center space-y-6">
+              <div className="relative">
+                <div className="absolute -inset-2 bg-red-500/20 blur-xl rounded-full animate-pulse" />
+                <div className="relative h-16 w-16 rounded-2xl bg-red-500/10 border border-red-500/30 flex items-center justify-center shadow-[0_0_25px_-5px_rgba(239,68,68,0.4)]">
+                  <AlertTriangle className="w-8 h-8 text-red-500" />
+                </div>
+              </div>
+
+              <div className="space-y-2 max-w-md">
+                <h3 className="font-audiowide text-xl font-black text-white uppercase tracking-wider">
+                  Server History Unavailable
+                </h3>
+                <p className="text-xs text-zinc-400 font-medium leading-relaxed">
+                  {error}
+                </p>
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-500/10 rounded-full border border-red-500/20 mt-2">
+                  <span className="text-[10px] text-red-400/70 font-mono uppercase tracking-widest">
+                    STATUS:
+                  </span>
+                  <span className="text-[10px] text-red-400 font-mono font-bold uppercase">
+                    {error.replace(/\s+/g, "_")}
+                  </span>
+                </div>
+              </div>
+
+              <Button
+                variant="cyber"
+                size="lg"
                 onClick={fetchGuilds}
-                className="font-mono text-xs text-cyan-500 hover:text-cyan-400 uppercase tracking-widest"
+                className="h-10 px-6 font-black uppercase tracking-widest text-[11px]"
               >
-                Retry
-              </button>
+                <RefreshCw className="w-3.5 h-3.5 mr-2" />
+                Retry Uplink
+              </Button>
             </div>
           ) : (
             <ServerTable

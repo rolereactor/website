@@ -158,12 +158,28 @@ export async function generateMetadata({
     // Fallback to generic name
   }
 
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://rolereactor.app";
+
   return {
     title: `${serverName} Leaderboard | Role Reactor`,
     description: `View the top members and XP rankings for ${serverName}. See who's the most active in the community!`,
     openGraph: {
       title: `${serverName} — XP Leaderboard`,
       description: `Check out the most active members in ${serverName}, ranked by experience points.`,
+      images: [
+        {
+          url: `${baseUrl}/og.png`,
+          width: 1200,
+          height: 630,
+          alt: `${serverName} XP Leaderboard`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${serverName} — XP Leaderboard | Role Reactor`,
+      description: `Check out the most active members in ${serverName}, ranked by experience points.`,
+      images: [`${baseUrl}/og.png`],
     },
   };
 }

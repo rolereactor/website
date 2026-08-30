@@ -10,8 +10,8 @@ const audiowide = Audiowide({
 });
 
 interface PageHeaderProps {
-  category: string;
-  categoryIcon: LucideIcon;
+  category?: string;
+  categoryIcon?: LucideIcon;
   title: string;
   description: string;
   badge?: {
@@ -52,10 +52,12 @@ export function PageHeader({
       )}
     >
       <div className="space-y-2 flex-1">
-        <div className="flex items-center gap-2 text-cyan-400 font-bold text-xs uppercase tracking-widest">
-          <CategoryIcon className="w-4 h-4" />
-          {category}
-        </div>
+        {category && (
+          <div className="flex items-center gap-2 text-cyan-400 font-bold text-xs uppercase tracking-widest">
+            {CategoryIcon && <CategoryIcon className="w-4 h-4" />}
+            {category}
+          </div>
+        )}
         <h1
           className={cn(
             "text-3xl md:text-5xl font-black text-white tracking-tight flex flex-wrap items-center gap-3 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]",

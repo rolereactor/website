@@ -1,491 +1,194 @@
 ---
 name: native-data-fetching
-description: Use when implementing or debugging ANY network request, API call, or data fetching. Covers fetch API, axios, React Query, SWR, error handling, caching strategies, offline support.
-version: 1.0.0
+description: Use when implementing or debugging ANY network request, API call, or data fetching in Next.js. Covers fetch API, API route proxies, defensive response parsing, error handling, caching, and microservice error recovery.
+version: 2.0.0
 license: MIT
 ---
 
-# Expo Networking
+# Web & Next.js Data Fetching Guidelines
 
-**You MUST use this skill for ANY networking work including API requests, data fetching, caching, or network debugging.**
+**Use this skill for ANY networking work in this Next.js codebase including API routes, proxy handlers, client stores, error handling, and microservice connectivity.**
 
-## When to Use
+## Core Principles
 
-Use this router when:
+1. **Defensive Response Parsing**:
+   - Always read `response.text()` before calling `JSON.parse()` in client stores and proxy handlers.
+   - Never invoke `.json()` directly on raw fetch response objects without try/catch protection to prevent `SyntaxError` crashes when backend error responses return non-JSON HTML (404/500/503).
 
-- Implementing API requests
-- Setting up data fetching (React Query, SWR)
-- Debugging network failures
-- Implementing caching strategies
-- Handling offline scenarios
-- Authentication/token management
-- Configuring API URLs and environment variables
+2. **Upstream Microservice Unreachability Handling (`ECONNREFUSED`)**:
+   - In Next.js API proxy routes, catch Node.js fetch failures (`code: 'ECONNREFUSED'` / `"fetch failed"`).
+   - Return HTTP 503 (`"Bot service unreachable"`) instead of leaking raw unhandled exceptions or returning generic 500 status codes.
 
-## Preferences
-
-- Avoid axios, prefer expo/fetch
-
-## Common Issues & Solutions
-
-### 1. Basic Fetch Usage
-
-**Simple GET request**:
-
-```tsx
-const fetchUser = async (userId: string) => {
-  const response = await fetch(`https://api.example.com/users/${userId}`);
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  return response.json();
-};
-```
-
-**POST request with body**:
-
-```tsx
-const createUser = async (userData: UserData) => {
-  const response = await fetch("https://api.example.com/users", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(userData),
-  });
-
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message);
-  }
-
-  return response.json();
-};
-```
+3. **Avoid Third-Party Wrapper Libraries**:
+   - Prefer native `fetch` over `axios`. Next.js extends native `fetch` with caching, revalidation, and server-side request deduplication out-of-the-box.
 
 ---
 
-### 2. React Query (TanStack Query)
+## Code Patterns & Examples
 
-**Setup**:
+### 1. Defensive Client-Side Fetch (Zustand / Helper)
 
-```tsx
-// app/_layout.tsx
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+```ts
+async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
+  const res = await fetch(url, options);
+  const text = await res.text();
+  let data: Record<string, unknown> | null = null;
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 5, // 5 minutes
-      retry: 2,
-    },
-  },
-});
-
-export default function RootLayout() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <Stack />
-    </QueryClientProvider>
-  );
-}
-```
-
-**Fetching data**:
-
-```tsx
-import { useQuery } from "@tanstack/react-query";
-
-function UserProfile({ userId }: { userId: string }) {
-  const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["user", userId],
-    queryFn: () => fetchUser(userId),
-  });
-
-  if (isLoading) return <Loading />;
-  if (error) return <Error message={error.message} />;
-
-  return <Profile user={data} />;
-}
-```
-
-**Mutations**:
-
-```tsx
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-function CreateUserForm() {
-  const queryClient = useQueryClient();
-
-  const mutation = useMutation({
-    mutationFn: createUser,
-    onSuccess: () => {
-      // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ["users"] });
-    },
-  });
-
-  const handleSubmit = (data: UserData) => {
-    mutation.mutate(data);
-  };
-
-  return <Form onSubmit={handleSubmit} isLoading={mutation.isPending} />;
-}
-```
-
----
-
-### 3. Error Handling
-
-**Comprehensive error handling**:
-
-```tsx
-class ApiError extends Error {
-  constructor(message: string, public status: number, public code?: string) {
-    super(message);
-    this.name = "ApiError";
-  }
-}
-
-const fetchWithErrorHandling = async (url: string, options?: RequestInit) => {
   try {
-    const response = await fetch(url, options);
+    data = text ? (JSON.parse(text) as Record<string, unknown>) : null;
+  } catch {
+    data = null;
+  }
 
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({}));
-      throw new ApiError(
-        error.message || "Request failed",
-        response.status,
-        error.code
+  if (!res.ok || (data && (data.status === "error" || data.success === false))) {
+    const errorMsg =
+      (data?.error as string) || (data?.message as string) || `Request failed (${res.status})`;
+    throw new Error(errorMsg);
+  }
+
+  if (!data) {
+    throw new Error("Empty or invalid response from server");
+  }
+
+  return data as T;
+}
+```
+
+---
+
+### 2. Next.js API Proxy Route Handler
+
+```ts
+import { NextResponse } from "next/server";
+import { auth } from "@/auth";
+import { botFetch } from "@/lib/bot-fetch";
+
+export async function streamProxy(
+  method: string,
+  guildId: string,
+  botPath: string,
+  body?: unknown
+) {
+  try {
+    const session = await auth();
+    if (!session) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
       );
     }
 
-    return response.json();
-  } catch (error) {
-    if (error instanceof ApiError) {
-      throw error;
+    const userId = session.user?.id;
+    const fetchOptions: RequestInit = { method };
+    if (body) {
+      fetchOptions.headers = { "Content-Type": "application/json" };
+      fetchOptions.body = JSON.stringify(body);
     }
-    // Network error (no internet, timeout, etc.)
-    throw new ApiError("Network error", 0, "NETWORK_ERROR");
-  }
-};
-```
 
-**Retry logic**:
-
-```tsx
-const fetchWithRetry = async (
-  url: string,
-  options?: RequestInit,
-  retries = 3
-) => {
-  for (let i = 0; i < retries; i++) {
+    const response = await botFetch(botPath, { ...fetchOptions, userId });
+    
+    // Read text safely to prevent JSON.parse crashes
+    const text = await response.text();
+    let data: unknown = null;
     try {
-      return await fetchWithErrorHandling(url, options);
-    } catch (error) {
-      if (i === retries - 1) throw error;
-      // Exponential backoff
-      await new Promise((r) => setTimeout(r, Math.pow(2, i) * 1000));
+      data = text ? JSON.parse(text) : null;
+    } catch {
+      data = null;
     }
+
+    if (!response.ok) {
+      const message =
+        data && typeof data === "object" && "message" in data
+          ? String((data as Record<string, unknown>).message)
+          : `Bot returned ${response.status}`;
+      return NextResponse.json(
+        { success: false, error: message },
+        { status: response.status }
+      );
+    }
+
+    return NextResponse.json(data ?? { success: true });
+  } catch (error) {
+    console.error(`Stream proxy error [${method} ${botPath}]:`, error);
+    
+    // Detect upstream ECONNREFUSED
+    const isUnreachable =
+      error instanceof Error &&
+      (error.message.includes("fetch failed") ||
+        (error as { cause?: { code?: string } }).cause?.code === "ECONNREFUSED");
+
+    const message = isUnreachable
+      ? "Bot service unreachable"
+      : error instanceof Error
+        ? error.message
+        : "Unknown error";
+
+    return NextResponse.json(
+      { success: false, error: message },
+      { status: isUnreachable ? 503 : 500 }
+    );
   }
-};
+}
 ```
 
 ---
 
-### 4. Authentication
+### 3. Server Component Data Fetching
 
-**Token management**:
+```ts
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
-```tsx
-import * as SecureStore from "expo-secure-store";
+export async function getManageableGuilds() {
+  const session = await auth();
+  if (!session?.accessToken) {
+    redirect("/api/auth/signin");
+  }
 
-const TOKEN_KEY = "auth_token";
-
-export const auth = {
-  getToken: () => SecureStore.getItemAsync(TOKEN_KEY),
-  setToken: (token: string) => SecureStore.setItemAsync(TOKEN_KEY, token),
-  removeToken: () => SecureStore.deleteItemAsync(TOKEN_KEY),
-};
-
-// Authenticated fetch wrapper
-const authFetch = async (url: string, options: RequestInit = {}) => {
-  const token = await auth.getToken();
-
-  return fetch(url, {
-    ...options,
+  const res = await fetch("https://discord.com/api/v10/users/@me/guilds", {
     headers: {
-      ...options.headers,
-      Authorization: token ? `Bearer ${token}` : "",
+      Authorization: `Bearer ${session.accessToken}`,
     },
+    next: { revalidate: 300 }, // Cache for 5 minutes
   });
-};
-```
 
-**Token refresh**:
-
-```tsx
-let isRefreshing = false;
-let refreshPromise: Promise<string> | null = null;
-
-const getValidToken = async (): Promise<string> => {
-  const token = await auth.getToken();
-
-  if (!token || isTokenExpired(token)) {
-    if (!isRefreshing) {
-      isRefreshing = true;
-      refreshPromise = refreshToken().finally(() => {
-        isRefreshing = false;
-        refreshPromise = null;
-      });
-    }
-    return refreshPromise!;
+  if (!res.ok) {
+    throw new Error(`Discord API error: ${res.status}`);
   }
 
-  return token;
-};
-```
-
----
-
-### 5. Offline Support
-
-**Check network status**:
-
-```tsx
-import NetInfo from "@react-native-community/netinfo";
-
-// Hook for network status
-function useNetworkStatus() {
-  const [isOnline, setIsOnline] = useState(true);
-
-  useEffect(() => {
-    return NetInfo.addEventListener((state) => {
-      setIsOnline(state.isConnected ?? true);
-    });
-  }, []);
-
-  return isOnline;
+  const text = await res.text();
+  return text ? JSON.parse(text) : [];
 }
 ```
 
-**Offline-first with React Query**:
-
-```tsx
-import { onlineManager } from "@tanstack/react-query";
-import NetInfo from "@react-native-community/netinfo";
-
-// Sync React Query with network status
-onlineManager.setEventListener((setOnline) => {
-  return NetInfo.addEventListener((state) => {
-    setOnline(state.isConnected ?? true);
-  });
-});
-
-// Queries will pause when offline and resume when online
-```
-
 ---
 
-### 6. Environment Variables
+## Common Pitfalls to Avoid
 
-**Using environment variables for API configuration**:
-
-Expo supports environment variables with the `EXPO_PUBLIC_` prefix. These are inlined at build time and available in your JavaScript code.
-
-```tsx
-// .env
-EXPO_PUBLIC_API_URL=https://api.example.com
-EXPO_PUBLIC_API_VERSION=v1
-
-// Usage in code
-const API_URL = process.env.EXPO_PUBLIC_API_URL;
-
-const fetchUsers = async () => {
-  const response = await fetch(`${API_URL}/users`);
-  return response.json();
-};
-```
-
-**Environment-specific configuration**:
-
-```tsx
-// .env.development
-EXPO_PUBLIC_API_URL=http://localhost:3000
-
-// .env.production
-EXPO_PUBLIC_API_URL=https://api.production.com
-```
-
-**Creating an API client with environment config**:
-
-```tsx
-// api/client.ts
-const BASE_URL = process.env.EXPO_PUBLIC_API_URL;
-
-if (!BASE_URL) {
-  throw new Error("EXPO_PUBLIC_API_URL is not defined");
-}
-
-export const apiClient = {
-  get: async <T,>(path: string): Promise<T> => {
-    const response = await fetch(`${BASE_URL}${path}`);
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    return response.json();
-  },
-
-  post: async <T,>(path: string, body: unknown): Promise<T> => {
-    const response = await fetch(`${BASE_URL}${path}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    return response.json();
-  },
-};
-```
-
-**Important notes**:
-
-- Only variables prefixed with `EXPO_PUBLIC_` are exposed to the client bundle
-- Never put secrets (API keys with write access, database passwords) in `EXPO_PUBLIC_` variables—they're visible in the built app
-- Environment variables are inlined at **build time**, not runtime
-- Restart the dev server after changing `.env` files
-- For server-side secrets in API routes, use variables without the `EXPO_PUBLIC_` prefix
-
-**TypeScript support**:
-
-```tsx
-// types/env.d.ts
-declare global {
-  namespace NodeJS {
-    interface ProcessEnv {
-      EXPO_PUBLIC_API_URL: string;
-      EXPO_PUBLIC_API_VERSION?: string;
-    }
-  }
-}
-
-export {};
-```
-
----
-
-### 7. Request Cancellation
-
-**Cancel on unmount**:
-
-```tsx
-useEffect(() => {
-  const controller = new AbortController();
-
-  fetch(url, { signal: controller.signal })
-    .then((response) => response.json())
-    .then(setData)
-    .catch((error) => {
-      if (error.name !== "AbortError") {
-        setError(error);
-      }
-    });
-
-  return () => controller.abort();
-}, [url]);
-```
-
-**With React Query** (automatic):
-
-```tsx
-// React Query automatically cancels requests when queries are invalidated
-// or components unmount
-```
-
----
-
-## Decision Tree
-
-```
-User asks about networking
-  |-- Basic fetch?
-  |   \-- Use fetch API with error handling
-  |
-  |-- Need caching/state management?
-  |   |-- Complex app -> React Query (TanStack Query)
-  |   \-- Simpler needs -> SWR or custom hooks
-  |
-  |-- Authentication?
-  |   |-- Token storage -> expo-secure-store
-  |   \-- Token refresh -> Implement refresh flow
-  |
-  |-- Error handling?
-  |   |-- Network errors -> Check connectivity first
-  |   |-- HTTP errors -> Parse response, throw typed errors
-  |   \-- Retries -> Exponential backoff
-  |
-  |-- Offline support?
-  |   |-- Check status -> NetInfo
-  |   \-- Queue requests -> React Query persistence
-  |
-  |-- Environment/API config?
-  |   |-- Client-side URLs -> EXPO_PUBLIC_ prefix in .env
-  |   |-- Server secrets -> Non-prefixed env vars (API routes only)
-  |   \-- Multiple environments -> .env.development, .env.production
-  |
-  \-- Performance?
-      |-- Caching -> React Query with staleTime
-      |-- Deduplication -> React Query handles this
-      \-- Cancellation -> AbortController or React Query
-```
-
-## Common Mistakes
-
-**Wrong: No error handling**
-
-```tsx
-const data = await fetch(url).then((r) => r.json());
-```
-
-**Right: Check response status**
-
-```tsx
-const response = await fetch(url);
-if (!response.ok) throw new Error(`HTTP ${response.status}`);
+❌ **Direct `.json()` without try/catch**:
+```ts
+// Bad: crashes with SyntaxError if endpoint returns 502/504 HTML page
 const data = await response.json();
 ```
 
-**Wrong: Storing tokens in AsyncStorage**
-
-```tsx
-await AsyncStorage.setItem("token", token); // Not secure!
+✅ **Read `.text()` first**:
+```ts
+// Good: handles empty/HTML responses safely
+const text = await response.text();
+const data = text ? JSON.parse(text) : null;
 ```
 
-**Right: Use SecureStore for sensitive data**
-
-```tsx
-await SecureStore.setItemAsync("token", token);
+❌ **Swallowing connection refusal**:
+```ts
+// Bad: returns generic 500 error, leaving user confused
+catch (err) { return NextResponse.json({ error: "Internal Error" }, { status: 500 }); }
 ```
 
-## Example Invocations
-
-User: "How do I make API calls in React Native?"
--> Use fetch, wrap with error handling
-
-User: "Should I use React Query or SWR?"
--> React Query for complex apps, SWR for simpler needs
-
-User: "My app needs to work offline"
--> Use NetInfo for status, React Query persistence for caching
-
-User: "How do I handle authentication tokens?"
--> Store in expo-secure-store, implement refresh flow
-
-User: "API calls are slow"
--> Check caching strategy, use React Query staleTime
-
-User: "How do I configure different API URLs for dev and prod?"
--> Use EXPO*PUBLIC* env vars with .env.development and .env.production files
-
-User: "Where should I put my API key?"
--> Client-safe keys: EXPO*PUBLIC* in .env. Secret keys: non-prefixed env vars in API routes only
+✅ **Classify ECONNREFUSED**:
+```ts
+// Good: gives actionable feedback when local backend service is offline
+catch (err) {
+  const isOffline = err.message.includes("fetch failed");
+  return NextResponse.json({ error: isOffline ? "Bot service unreachable" : err.message }, { status: isOffline ? 503 : 500 });
+}
+```

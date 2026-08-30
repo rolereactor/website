@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     template: "%s | Role Reactor",
   },
   description:
-    "Role Reactor is a powerful Discord bot for automated role management. Set up reaction roles instantly, manage permissions, and enhance your Discord server with the most effective role assignment system.",
+    "Role Reactor — Discord bot for reaction roles, XP levels, welcome system, temp roles & server automation. Free, powerful & easy to set up.",
   keywords: [
     "role reactor",
     "role reactor bot",
@@ -58,6 +58,27 @@ export const metadata: Metadata = {
     "discord role bot",
     "free discord bot",
     "discord bot list",
+    "discord xp bot",
+    "discord leveling bot",
+    "discord level bot",
+    "discord xp leveling system",
+    "discord rank card bot",
+    "discord leaderboard bot",
+    "discord welcome bot",
+    "discord welcome message bot",
+    "discord goodbye message",
+    "discord temporary roles",
+    "temp roles discord",
+    "discord scheduled roles",
+    "discord poll bot",
+    "discord polls",
+    "discord voice roles",
+    "discord live reactor",
+    "twitch discord bot",
+    "twitch stream alerts discord",
+    "discord image bot",
+    "discord rank card",
+    "discord community bot",
   ],
   authors: [{ name: "rolereactor" }],
   creator: "rolereactor",
@@ -151,6 +172,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         <PWAProvider />
         <SessionProvider>
           <RootProvider
+            search={{ enabled: false }}
             theme={{
               defaultTheme: "dark",
               forcedTheme: "dark",

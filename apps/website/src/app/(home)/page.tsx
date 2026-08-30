@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Hero } from "@/app/(home)/_components/hero";
 import { Features } from "@/app/(home)/_components/features";
 import { SocialProof } from "@/app/(home)/_components/social-proof";
@@ -5,6 +6,31 @@ import { FooterCTA } from "@/app/(home)/_components/footer-cta";
 import { ConditionalAdBlock } from "@/components/propellerads";
 import { links } from "@/constants/links";
 import { botFetchJson } from "@/lib/bot-fetch";
+
+export const metadata: Metadata = {
+  title:
+    "Role Reactor — Discord Bot for Reaction Roles, XP Levels & Server Automation",
+  description:
+    "Role Reactor is the #1 Discord bot for reaction roles, XP leveling, welcome systems, temp roles, polls, and stream alerts. Free & easy to set up.",
+  alternates: {
+    canonical: links.home,
+  },
+  openGraph: {
+    title:
+      "Role Reactor — Reaction Roles, XP Levels & Discord Automation Bot",
+    description:
+      "Set up reaction roles, XP leaderboards, welcome messages, temp roles, polls & Twitch stream alerts on your Discord server. Free Discord bot.",
+    type: "website",
+    url: links.home,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Role Reactor — Reaction Roles & Discord Automation Bot",
+    description:
+      "Set up reaction roles, XP levels, welcome systems & more. The all-in-one Discord bot for server management.",
+  },
+};
+
 
 interface UsageData {
   summary?: {

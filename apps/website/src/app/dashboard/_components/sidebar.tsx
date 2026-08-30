@@ -127,11 +127,6 @@ export function DashboardSidebar({ user }: { user: User }) {
       href: contextId ? `/dashboard/${contextId}` : "/dashboard",
       icon: LayoutDashboard,
     },
-    {
-      title: "Image Tools",
-      href: "/dashboard/image-tools",
-      icon: Image,
-    },
     ...(contextId
       ? [
           {
@@ -142,9 +137,9 @@ export function DashboardSidebar({ user }: { user: User }) {
             badgeActive: isPremium,
           },
           {
-            title: "Reaction Roles",
-            href: getHref("/dashboard/roles", true),
-            icon: ShieldCheck,
+            title: "Analytics",
+            href: getHref("/dashboard/analytics", true),
+            icon: BarChart3,
           },
         ]
       : []),
@@ -154,9 +149,9 @@ export function DashboardSidebar({ user }: { user: User }) {
     contextId
       ? [
           {
-            title: "XP & Levels",
-            href: getHref("/dashboard/xp", true),
-            icon: Trophy,
+            title: "Reaction Roles",
+            href: getHref("/dashboard/roles", true),
+            icon: ShieldCheck,
           },
           {
             title: "Welcome System",
@@ -164,22 +159,34 @@ export function DashboardSidebar({ user }: { user: User }) {
             icon: UserPlus,
           },
           {
+            title: "XP & Levels",
+            href: getHref("/dashboard/xp", true),
+            icon: Trophy,
+          },
+          {
             title: "Live Reactor",
             href: getHref("/dashboard/live-reactor", true),
             icon: Radio,
           },
+        ]
+      : [];
+
+  const getToolItems = () => [
+    ...(contextId
+      ? [
           {
             title: "Command Settings",
             href: getHref("/dashboard/commands", true),
             icon: Terminal,
           },
-          {
-            title: "Analytics",
-            href: getHref("/dashboard/analytics", true),
-            icon: BarChart3,
-          },
         ]
-      : [];
+      : []),
+    {
+      title: "Image Tools",
+      href: "/dashboard/image-tools",
+      icon: Image,
+    },
+  ];
 
   const getDeveloperItems = () => [
     {
@@ -526,8 +533,9 @@ export function DashboardSidebar({ user }: { user: User }) {
           </>
         ) : (
           <>
-            <NavGroup label="General" items={getCoreItems()} />
+            <NavGroup label="Core" items={getCoreItems()} />
             <NavGroup label="Engagement" items={getEngagementItems()} />
+            <NavGroup label="Tools & Config" items={getToolItems()} />
             {isDeveloper(user) && !contextId && (
               <NavGroup label="Developer" items={getDeveloperItems()} />
             )}

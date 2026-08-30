@@ -116,9 +116,19 @@ export function SystemHealth() {
       try {
         const res = await fetch("/api/proxy/health");
         if (res.ok) {
-          const data = await res.json();
-          setHealth(data);
-          setFetchFailed(false);
+          const text = await res.text();
+          let data: HealthData | null = null;
+          try {
+            data = text ? (JSON.parse(text) as HealthData) : null;
+          } catch {
+            data = null;
+          }
+          if (data) {
+            setHealth(data);
+            setFetchFailed(false);
+          } else {
+            setFetchFailed(true);
+          }
         } else {
           setFetchFailed(true);
         }

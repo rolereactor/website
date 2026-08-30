@@ -43,3 +43,20 @@ Always use standard Tailwind CSS v4 syntax in this codebase:
 11. **Arbitrary Pixel Dimensions to Numeric Scale**:
     - Convert arbitrary pixel bracket dimensions `-[Npx]` to standard Tailwind v4 numeric scale `N/4` for sizing and spacing (`w-`, `h-`, `min-w-`, `max-w-`, `min-h-`, `max-h-`, `top-`, `bottom-`, `left-`, `right-`, `p-`, `m-`, `gap-`, etc.).
     - Examples: `xl:w-[336px]` -> `xl:w-84`, `min-h-[450px]` -> `min-h-112.5`, `max-w-[200px]` -> `max-w-50`, `sm:max-w-[425px]` -> `sm:max-w-106.25`, `h-[58px]` -> `h-14.5`, `w-[500px]` -> `w-125`.
+
+## API & Data Fetching Rules
+
+1. **Defensive Response Parsing**:
+   - Always read `response.text()` before `JSON.parse()` when consuming API responses in stores or proxy routes. Never call `.json()` directly on raw response objects without try/catch protection to prevent crashes when backend error responses return HTML.
+
+2. **Upstream Microservice Unreachability**:
+   - In Next.js API proxy handlers (e.g. `streamProxy`), intercept Node `ECONNREFUSED` / `fetch failed` errors and return HTTP 503 with `"Bot service unreachable"` instead of leaking unhandled exceptions.
+
+## Mobile Navigation Rules
+
+1. **Page Sub-Section Navigation on Mobile**:
+   - For feature pages with 5+ sub-sections (e.g. Live Reactor), use a compact **Cyberpunk Select Dropdown** on mobile screens (`lg:hidden`).
+   - The dropdown button displays the active section icon, title, status badge, and rotating chevron arrow.
+   - The menu overlay uses glassmorphism (`bg-zinc-950/95 backdrop-blur-2xl border border-cyan-500/30`), status badges, and outside-click dismiss logic.
+
+

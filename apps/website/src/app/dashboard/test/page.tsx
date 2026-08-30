@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { PageHeader } from "@/app/dashboard/_components/page-header";
 import {
   AlertTriangle,
@@ -68,7 +69,7 @@ export default function IndexesPage() {
         <h2 className="text-xl font-bold text-white">Components</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {components.map((item) => (
-            <a
+            <Link
               key={item.href}
               href={item.href}
               className="p-4 rounded-2xl border border-white/5 bg-zinc-950/40 backdrop-blur-md hover:bg-white/5 hover:border-cyan-500/30 transition-all group flex flex-col gap-3 items-center justify-center text-center h-32 relative overflow-hidden shadow-2xl"
@@ -78,7 +79,7 @@ export default function IndexesPage() {
               <span className="font-bold text-zinc-400 group-hover:text-white transition-colors z-10 font-mono text-xs uppercase tracking-widest">
                 {item.title}
               </span>
-            </a>
+            </Link>
           ))}
         </div>
       </div>

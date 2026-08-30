@@ -48,19 +48,18 @@ export default function NotFound() {
           className="mb-6"
         >
           <h1
-            className={`text-8xl md:text-9xl font-black tracking-tighter mb-4 bg-linear-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent ${audiowide.className}`}
+            className={`text-8xl md:text-9xl font-black tracking-tighter mb-4 bg-linear-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent ${audiowide.className}`}
           >
             404
           </h1>
           <div className="flex items-center justify-center gap-2 mb-2">
-            <Search className="w-5 h-5 text-zinc-500" />
+            <Search className="w-5 h-5 text-cyan-400" />
             <h2 className="text-2xl md:text-3xl font-bold text-white">
               Page Not Found
             </h2>
           </div>
           <p className="text-zinc-400 text-base md:text-lg max-w-md mx-auto leading-relaxed">
-            The page you're looking for doesn't exist or has been moved to
-            another location.
+            The page you're looking for doesn't exist or has been moved to another location.
           </p>
         </motion.div>
 
@@ -72,12 +71,13 @@ export default function NotFound() {
         >
           <Button
             asChild
+            variant="cyber"
             size="lg"
-            className="bg-[#5865F2] hover:bg-[#4752C4] text-white font-bold rounded-xl shadow-lg shadow-[#5865F2]/20 transition-all group"
+            className="h-11 px-8 font-black uppercase tracking-widest text-[11px]"
           >
             <Link href="/" className="flex items-center gap-2">
-              <Home className="w-4 h-4" />
-              Back to Home
+              <Home className="w-4 h-4 mr-1" />
+              Return to Mainframe
             </Link>
           </Button>
         </motion.div>

@@ -65,17 +65,17 @@ export function PackagesView({
         <div className="mt-4">
           <button
             onClick={onBMACPayment}
-            className="flex items-center justify-center gap-3 w-full rounded-xl py-3 px-4 bg-zinc-900 border border-white/5 hover:border-[#FFDD00]/30 transition-all group cursor-pointer"
+            className="flex items-center justify-center gap-3 w-full rounded-xl py-3 px-4 bg-zinc-900 border border-white/5 hover:border-amber-400/30 transition-all group cursor-pointer"
           >
-            <div className="w-8 h-8 shrink-0 rounded-full flex items-center justify-center bg-[#FFDD00]">
-              <Coffee className="w-4 h-4 text-black" />
+            <div className="w-8 h-8 shrink-0 rounded-full flex items-center justify-center bg-amber-400/10 border border-amber-400/20 text-amber-400">
+              <Coffee className="w-4 h-4" />
             </div>
             <div className="flex flex-col items-start">
-              <span className="text-xs font-bold text-zinc-300 group-hover:text-white transition-colors">
+              <span className="text-xs font-bold text-zinc-300 group-hover:text-amber-400 transition-colors">
                 Buy Me a Coffee
               </span>
-              <span className="text-[10px] text-zinc-600">
-                Donate any amount
+              <span className="text-[10px] text-zinc-500">
+                Support creator / Donate
               </span>
             </div>
           </button>

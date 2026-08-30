@@ -59,6 +59,29 @@ export async function GET(request: Request) {
       { userId, silent: true }
     );
 
+    if (data?.users && Array.isArray(data.users)) {
+      const limitNum = parseInt(limit, 10) || 10;
+      const rawCount = data.users.length;
+
+      const seen = new Set<string>();
+      const uniqueUsers = data.users.filter((u) => {
+        if (!u.id || seen.has(u.id)) return false;
+        seen.add(u.id);
+        return true;
+      });
+
+      // Check if backend injected an extra user beyond limit
+      const hasInjectedUser = rawCount > limitNum || uniqueUsers.length > limitNum;
+      data.users = uniqueUsers.slice(0, limitNum);
+
+      // Normalize pagination metadata so total count is accurate
+      if (data.pagination && hasInjectedUser && data.pagination.total > 0) {
+        const realTotal = data.pagination.total - 1;
+        data.pagination.total = realTotal;
+        data.pagination.pages = Math.ceil(realTotal / limitNum);
+      }
+    }
+
     return NextResponse.json(data);
   } catch {
     return NextResponse.json({

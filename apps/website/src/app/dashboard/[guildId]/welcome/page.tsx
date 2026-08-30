@@ -50,12 +50,18 @@ export default function WelcomePage({ params }: WelcomePageProps) {
       const response = await fetch(`/api/guilds/${guildId}/welcome/test`, {
         method: "POST",
       });
-      const data = await response.json();
-      if (data.status === "success") {
+      const text = await response.text();
+      let data: Record<string, unknown> | null = null;
+      try {
+        data = text ? (JSON.parse(text) as Record<string, unknown>) : null;
+      } catch {
+        data = null;
+      }
+      if (data && data.status === "success") {
         toast.success("Test message sent to the welcome channel!");
       } else {
         toast.error(
-          data.message || data.error || "Failed to send test message"
+          (data?.message as string) || (data?.error as string) || "Failed to send test message"
         );
       }
     } catch {

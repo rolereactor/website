@@ -12,6 +12,8 @@ import {
   Mic,
   BarChart3,
   ArrowUpRight,
+  Radio,
+  ImageIcon,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
@@ -72,6 +74,21 @@ const features = [
       "Create interactive polls with emoji reactions and track results in real-time.",
     color: "green",
   },
+  {
+    icon: Radio,
+    title: "Live Reactor",
+    description:
+      "Twitch stream alerts, live notifications, and a real-time chat bot for your community.",
+    color: "rose",
+    pro: true,
+  },
+  {
+    icon: ImageIcon,
+    title: "Image Tools",
+    description:
+      "Generate welcome banners, rank cards, memes, and upscale images — directly in Discord.",
+    color: "sky",
+  },
 ];
 
 const colorMap: Record<
@@ -126,6 +143,18 @@ const colorMap: Record<
     border: "hover:border-green-500/30",
     glow: "hover:shadow-[0_0_30px_-8px_rgba(34,197,94,0.25)]",
   },
+  rose: {
+    bg: "bg-rose-500/10",
+    text: "text-rose-400",
+    border: "hover:border-rose-500/30",
+    glow: "hover:shadow-[0_0_30px_-8px_rgba(244,63,94,0.25)]",
+  },
+  sky: {
+    bg: "bg-sky-500/10",
+    text: "text-sky-400",
+    border: "hover:border-sky-500/30",
+    glow: "hover:shadow-[0_0_30px_-8px_rgba(14,165,233,0.25)]",
+  },
 };
 
 export function Features() {
@@ -169,10 +198,17 @@ export function Features() {
                 transition={{ duration: 0.4, delay: index * 0.05 }}
                 className={`group relative p-5 rounded-xl border border-white/6 bg-white/2 backdrop-blur-sm transition-all duration-300 hover:bg-white/4 hover:border-white/12 ${colors.border} ${colors.glow}`}
               >
-                <div
-                  className={`w-10 h-10 ${colors.bg} rounded-lg flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110`}
-                >
-                  <feature.icon className={`w-5 h-5 ${colors.text}`} />
+                <div className="flex items-start justify-between mb-4">
+                  <div
+                    className={`w-10 h-10 ${colors.bg} rounded-lg flex items-center justify-center transition-transform duration-300 group-hover:scale-110`}
+                  >
+                    <feature.icon className={`w-5 h-5 ${colors.text}`} />
+                  </div>
+                  {feature.pro && (
+                    <span className="text-[9px] font-black px-1.5 py-0.5 rounded-md bg-rose-500/15 text-rose-400 border border-rose-500/25 uppercase tracking-widest">
+                      PRO
+                    </span>
+                  )}
                 </div>
                 <h3 className="text-sm font-semibold text-white mb-1.5 flex items-center gap-1.5">
                   {feature.title}

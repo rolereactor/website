@@ -12,7 +12,9 @@ import {
   ArrowUpDown,
   MoreHorizontal,
   Copy,
+  ServerOff,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
@@ -229,9 +231,9 @@ export function ServerTable({
                 <td className="p-4 px-4 text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <button className="p-2 hover:bg-zinc-800 rounded-lg text-zinc-500 hover:text-white transition-all border border-transparent hover:border-white/5 group/btn cursor-pointer">
-                        <MoreHorizontal className="size-4 group-hover/btn:scale-110 transition-transform" />
-                      </button>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-white">
+                        <MoreHorizontal className="size-4" />
+                      </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
                       align="end"
@@ -276,10 +278,23 @@ export function ServerTable({
 
       {/* Empty State */}
       {paginatedGuilds.length === 0 && (
-        <div className="p-12 text-center">
-          <p className="font-mono text-xs text-zinc-600 uppercase tracking-widest">
-            No servers found matching current query
-          </p>
+        <div className="py-16 px-8 flex flex-col items-center justify-center gap-5 text-center">
+          <div className="relative">
+            <div className="absolute -inset-3 bg-cyan-500/10 blur-xl rounded-full" />
+            <div className="relative h-14 w-14 rounded-2xl bg-zinc-900 border border-white/10 flex items-center justify-center">
+              <ServerOff className="size-6 text-zinc-500" />
+            </div>
+          </div>
+          <div className="space-y-1.5 max-w-xs">
+            <p className="font-mono text-sm font-bold text-zinc-300 uppercase tracking-wider">
+              No Servers Found
+            </p>
+            <p className="text-xs text-zinc-600">
+              {searchTerm
+                ? `No servers matching "${searchTerm}". Try a different query.`
+                : "No Discord servers are registered in the system yet."}
+            </p>
+          </div>
         </div>
       )}
 
@@ -290,20 +305,24 @@ export function ServerTable({
             Page {currentPage} of {totalPages}
           </div>
           <div className="flex items-center gap-2">
-            <button
+            <Button
+              variant="outline"
+              size="icon"
               onClick={() => setCurrentPage(currentPage - 1)}
               disabled={currentPage === 1}
-              className="p-2 rounded-lg bg-zinc-900/50 border border-white/10 hover:border-cyan-500/50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+              className="h-8 w-8 border-white/10 bg-zinc-900/50 hover:border-cyan-500/50 hover:text-cyan-400"
             >
               <ChevronLeft className="size-4" />
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
               onClick={() => setCurrentPage(currentPage + 1)}
               disabled={currentPage >= totalPages}
-              className="p-2 rounded-lg bg-zinc-900/50 border border-white/10 hover:border-cyan-500/50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+              className="h-8 w-8 border-white/10 bg-zinc-900/50 hover:border-cyan-500/50 hover:text-cyan-400"
             >
               <ChevronRight className="size-4" />
-            </button>
+            </Button>
           </div>
         </div>
       )}

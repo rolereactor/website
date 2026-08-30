@@ -21,6 +21,7 @@ interface UsersState {
     pages: number;
   } | null;
   searchQuery: string | null;
+  currentPage: number;
   isLoading: boolean;
   error: string | null;
   lastFetched: number | null;
@@ -44,19 +45,21 @@ export const useUsersStore = create<UsersState>()(
       users: [],
       pagination: null,
       searchQuery: null,
+      currentPage: 1,
       isLoading: false,
       error: null,
       lastFetched: null,
 
       fetchUsers: async (search?: string, force = false, page = 1) => {
-        const { lastFetched, searchQuery, isLoading, users } = get();
+        const { lastFetched, searchQuery, currentPage, isLoading, users } = get();
 
-        // Return cached data if valid and same search query
+        // Cache is only valid for the exact same search + page combination
         const now = Date.now();
         const isCacheValid = lastFetched && now - lastFetched < CACHE_DURATION;
         const isSameQuery = search === searchQuery;
+        const isSamePage = page === currentPage;
 
-        if (!force && isCacheValid && isSameQuery && users.length > 0) {
+        if (!force && isCacheValid && isSameQuery && isSamePage && users.length > 0) {
           return;
         }
 
@@ -76,7 +79,7 @@ export const useUsersStore = create<UsersState>()(
           }
 
           const query = new URLSearchParams({
-            limit: "50",
+            limit: "10",
             page: String(page || 1),
             ...(search && { search }),
           });
@@ -99,6 +102,7 @@ export const useUsersStore = create<UsersState>()(
               users: result.users,
               pagination: result.pagination,
               searchQuery: search || null,
+              currentPage: page,
               lastFetched: Date.now(),
               isLoading: false,
             });
@@ -179,6 +183,7 @@ export const useUsersStore = create<UsersState>()(
         users: state.users,
         pagination: state.pagination,
         searchQuery: state.searchQuery,
+        currentPage: state.currentPage,
         lastFetched: state.lastFetched,
       }),
     }

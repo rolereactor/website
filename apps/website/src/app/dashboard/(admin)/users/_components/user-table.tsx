@@ -16,6 +16,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Zap,
+  UserX,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -61,11 +62,10 @@ export function UserTable() {
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
 
-  const initialSearch = searchParams.get("search") || "";
-  const initialPage = Math.max(1, parseInt(searchParams.get("page") || "1"));
+  const urlSearch = searchParams.get("search") || "";
+  const page = Math.max(1, parseInt(searchParams.get("page") || "1"));
 
-  const [searchTerm, setSearchTerm] = useState(initialSearch);
-  const [currentPage, setCurrentPage] = useState(initialPage);
+  const [searchTerm, setSearchTerm] = useState(urlSearch);
 
   const {
     users,
@@ -75,17 +75,14 @@ export function UserTable() {
     updateUserRole: updateStoreUserRole,
   } = useUsersStore();
 
+  // Single effect driven by URL searchParams
   useEffect(() => {
-    const search = searchParams.get("search") || undefined;
-    const page = Math.max(1, parseInt(searchParams.get("page") || "1"));
-    setCurrentPage(page);
-    setSearchTerm(searchParams.get("search") || "");
-    fetchUsers(search, true, page);
-  }, [searchParams, fetchUsers]);
+    setSearchTerm(urlSearch);
+    fetchUsers(urlSearch || undefined, true, page);
+  }, [urlSearch, page, fetchUsers]);
 
   const handleSearch = (val: string) => {
     setSearchTerm(val);
-    setCurrentPage(1);
     startTransition(() => {
       const params = new URLSearchParams(searchParams);
       if (val) {
@@ -96,20 +93,17 @@ export function UserTable() {
       params.set("page", "1");
       router.push(`?${params.toString()}`);
     });
-    fetchUsers(val || undefined, true, 1);
   };
 
   const handlePageChange = (newPage: number) => {
     if (newPage < 1) return;
     if (pagination && newPage > pagination.pages) return;
 
-    setCurrentPage(newPage);
     startTransition(() => {
       const params = new URLSearchParams(searchParams);
       params.set("page", String(newPage));
       router.push(`?${params.toString()}`);
     });
-    fetchUsers(searchTerm || undefined, true, newPage);
   };
 
   // Role Update State
@@ -234,10 +228,21 @@ export function UserTable() {
           </div>
 
           {users.length === 0 && !isLoading && (
-            <div className="p-12 text-center">
-              <p className="font-mono text-xs text-zinc-600 uppercase tracking-widest">
-                No users found matching current query
-              </p>
+            <div className="py-16 px-8 flex flex-col items-center justify-center gap-5 text-center">
+              <div className="relative">
+                <div className="absolute -inset-3 bg-cyan-500/10 blur-xl rounded-full" />
+                <div className="relative h-14 w-14 rounded-2xl bg-zinc-900 border border-white/10 flex items-center justify-center">
+                  <UserX className="size-6 text-zinc-500" />
+                </div>
+              </div>
+              <div className="space-y-1.5 max-w-xs">
+                <p className="font-mono text-sm font-bold text-zinc-300 uppercase tracking-wider">
+                  No Users Found
+                </p>
+                <p className="text-xs text-zinc-600">
+                  No users match the current search query. Try a different name or ID.
+                </p>
+              </div>
             </div>
           )}
 
@@ -247,20 +252,24 @@ export function UserTable() {
                 Page {pagination.page} of {pagination.pages}
               </div>
               <div className="flex items-center gap-2">
-                <button
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className="p-2 rounded-lg bg-zinc-900/50 border border-white/10 hover:border-cyan-500/50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => handlePageChange(page - 1)}
+                  disabled={page === 1}
+                  className="h-8 w-8 border-white/10 bg-zinc-900/50 hover:border-cyan-500/50 hover:text-cyan-400"
                 >
                   <ChevronLeft className="size-4" />
-                </button>
-                <button
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage >= pagination.pages}
-                  className="p-2 rounded-lg bg-zinc-900/50 border border-white/10 hover:border-cyan-500/50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => handlePageChange(page + 1)}
+                  disabled={page >= pagination.pages}
+                  className="h-8 w-8 border-white/10 bg-zinc-900/50 hover:border-cyan-500/50 hover:text-cyan-400"
                 >
                   <ChevronRight className="size-4" />
-                </button>
+                </Button>
               </div>
             </div>
           )}
@@ -510,13 +519,13 @@ function UserRow({
       <td className="p-4 px-6 text-right">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="p-2 hover:bg-zinc-800 rounded-lg text-zinc-500 hover:text-white transition-all border border-transparent hover:border-white/5 group/btn">
+            <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-white">
               {isRootOwner ? (
-                <ShieldAlert className="size-4 text-cyan-500/50 group-hover/btn:text-cyan-400" />
+                <ShieldAlert className="size-4 text-cyan-500/50 hover:text-cyan-400" />
               ) : (
-                <Key className="size-4 group-hover/btn:scale-110 transition-transform" />
+                <Key className="size-4" />
               )}
-            </button>
+            </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
             align="end"

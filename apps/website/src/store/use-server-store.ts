@@ -82,7 +82,13 @@ export const useServerStore = create<ServerState>()(
               throw new Error("Failed to fetch guilds from Discord");
             }
 
-            const json = await res.json();
+            const text = await res.text();
+            let json: unknown;
+            try {
+              json = text ? JSON.parse(text) : null;
+            } catch {
+              throw new Error("Server returned non-JSON response");
+            }
             const result = z.array(DiscordGuildSchema).safeParse(json);
 
             if (!result.success) {
@@ -110,7 +116,14 @@ export const useServerStore = create<ServerState>()(
               });
 
               if (botRes.ok) {
-                const botData = await botRes.json();
+                let botData: unknown;
+                try {
+                  const botText = await botRes.text();
+                  botData = botText ? JSON.parse(botText) : null;
+                } catch {
+                  console.warn("Server store: Bot check returned non-JSON");
+                  botData = null;
+                }
                 const BotInstallationSchema = z.object({
                   installedGuilds: z.array(z.string()).optional(),
                   data: z

@@ -100,6 +100,10 @@ async function CommandsContent() {
     );
   }
 
+  const validCommands = (usage.commands || []).filter(
+    (cmd) => Boolean(cmd?.name && typeof cmd.name === "string" && cmd.name.trim().length > 0)
+  );
+
   return (
     <>
       {/* Metrics Row */}
@@ -113,7 +117,7 @@ async function CommandsContent() {
         />
         <MetricCard
           title="Active Commands"
-          value={(usage.summary?.totalCommands ?? 0).toString()}
+          value={validCommands.length.toString()}
           icon={Layers}
           description="Available system command modules"
           color="fuchsia"
@@ -142,7 +146,7 @@ async function CommandsContent() {
                 <div className="h-full w-full bg-zinc-900/10 animate-pulse rounded-xl" />
               }
             >
-              <LazyCommandChart data={usage.commands.slice(0, 10)} />
+              <LazyCommandChart data={validCommands.slice(0, 10)} />
             </Suspense>
           </CardContent>
         </Card>
@@ -163,7 +167,7 @@ async function CommandsContent() {
             </CardHeader>
             <CardContent className="overflow-hidden">
               <ScrollArea className="h-107.5 pr-4">
-                {usage.commands?.map((cmd, idx) => (
+                {validCommands.map((cmd, idx) => (
                   <div
                     key={idx}
                     className="group flex items-center justify-between p-3 mb-3 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-cyan-500/20 rounded-xl transition-all duration-300"

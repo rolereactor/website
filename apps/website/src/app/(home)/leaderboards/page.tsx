@@ -18,6 +18,7 @@ import { WifiOff } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://rolereactor.app";
   return {
     title: "Top Communities | Role Reactor",
     description:
@@ -28,11 +29,11 @@ export async function generateMetadata(): Promise<Metadata> {
         "Discover the most active Discord communities powered by Role Reactor's XP system.",
       type: "website",
       locale: "en_US",
-      url: "/leaderboards",
+      url: `${baseUrl}/leaderboards`,
       siteName: "Role Reactor",
       images: [
         {
-          url: "/og.png",
+          url: `${baseUrl}/og.png`,
           width: 1200,
           height: 630,
           alt: "Role Reactor Leaderboards",
@@ -44,7 +45,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: "Top Communities | Role Reactor",
       description:
         "Discover the most active Discord communities powered by Role Reactor's XP system.",
-      images: ["/og.png"],
+      images: [`${baseUrl}/og.png`],
     },
     robots: {
       index: true,
