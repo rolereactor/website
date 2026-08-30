@@ -31,11 +31,13 @@ export function CoreBalance({
   showPlusButton = true,
 }: CoreBalanceProps) {
   const { status } = useSession();
-  const { balance, isLoading } = useCoreBalance();
+  const { cores, sparks, isLoading } = useCoreBalance();
 
   // Round balance to 2 decimal places to fix floating point precision issues
-  const roundedBalance = balance ? Math.round(balance * 100) / 100 : 0;
-  const displayBalance = roundedBalance.toFixed(2);
+  const roundedCores = cores ? Math.round(cores * 100) / 100 : 0;
+  const roundedSparks = sparks ? Math.round(sparks * 100) / 100 : 0;
+  const displayCores = roundedCores.toFixed(2);
+  const displaySparks = roundedSparks.toFixed(2);
 
   if (status === "unauthenticated") return null;
 
@@ -97,17 +99,26 @@ export function CoreBalance({
           </div>
           <div className="flex flex-col">
             <span className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">
-              Your Cores
+              Energy &amp; Rewards
             </span>
-            <span
-              className={cn(
-                "text-lg font-black leading-tight tracking-widest text-white mt-0.5",
-                audiowide.className,
-                isLoading && "opacity-50 animate-pulse"
-              )}
-            >
-              {isLoading ? "..." : displayBalance}
-            </span>
+            <div className="flex items-center gap-2 mt-0.5">
+              <span
+                className={cn(
+                  "text-base font-black leading-tight text-white",
+                  audiowide.className
+                )}
+              >
+                🔮 {displayCores}
+              </span>
+              <span
+                className={cn(
+                  "text-xs font-bold leading-tight text-amber-400",
+                  audiowide.className
+                )}
+              >
+                ⚡ {displaySparks}
+              </span>
+            </div>
           </div>
         </div>
         {showPlusButton && (
@@ -155,7 +166,7 @@ export function CoreBalance({
             isLoading && "opacity-50 animate-pulse"
           )}
         >
-          {isLoading ? "..." : displayBalance}
+          {isLoading ? "..." : displayCores}
         </span>
         {showPlusButton &&
           (onClick ? (
@@ -208,7 +219,7 @@ export function CoreBalance({
           isLoading ? "opacity-50 animate-pulse" : "text-white"
         )}
       >
-        {isLoading ? "0" : displayBalance}
+        {isLoading ? "0" : displayCores}
       </span>
 
       {/* Plus Button - Tech Style */}
