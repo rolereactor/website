@@ -100,7 +100,7 @@ export function BmacPaymentView({ onBack, onComplete }: BmacPaymentViewProps) {
 
   if (loading) {
     return (
-      <div className="flex flex-col h-full items-center justify-center p-12 min-h-[400px]">
+      <div className="flex flex-col h-full items-center justify-center p-12 min-h-100">
         <Loader2 className="w-8 h-8 animate-spin text-cyan-400 mb-4" />
         <p className="text-xs text-zinc-500 uppercase tracking-widest">
           Generating your code...
@@ -111,7 +111,7 @@ export function BmacPaymentView({ onBack, onComplete }: BmacPaymentViewProps) {
 
   if (error || !data) {
     return (
-      <div className="flex flex-col h-full items-center justify-center p-12 min-h-[400px]">
+      <div className="flex flex-col h-full items-center justify-center p-12 min-h-100">
         <p className="text-xs text-red-400 uppercase tracking-widest mb-4">
           {error || "Failed to load"}
         </p>

@@ -37,7 +37,7 @@ export default function DialogTestPage() {
             <DialogTrigger asChild>
               <Button variant="outline">Edit Neural Ident</Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-106.25">
               <DialogHeader>
                 <DialogTitle>Edit Profile</DialogTitle>
                 <DialogDescription className="font-mono text-[10px] uppercase">
@@ -89,7 +89,7 @@ export default function DialogTestPage() {
             <DialogTrigger asChild>
               <Button variant="glitch">Access Kernel</Button>
             </DialogTrigger>
-            <DialogContent variant="glitch" className="sm:max-w-[425px]">
+            <DialogContent variant="glitch" className="sm:max-w-106.25">
               <DialogHeader>
                 <DialogTitle variant="glitch" className="font-audiowide italic">
                   KERNEL_ROOT_ACCESS

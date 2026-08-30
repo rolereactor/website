@@ -116,7 +116,7 @@ export function PaymentPendingView({
   };
 
   return (
-    <div className="flex flex-col h-full items-center justify-center p-12 text-center space-y-6 relative overflow-hidden min-h-[400px] [ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <div className="flex flex-col h-full items-center justify-center p-12 text-center space-y-6 relative overflow-hidden min-h-100 [ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.05),transparent_70%)]" />
 
       {status === "confirmed" ? (
@@ -138,7 +138,7 @@ export function PaymentPendingView({
         >
           {status === "confirmed" ? "ENERGY RECEIVED" : "LINK ESTABLISHED"}
         </h3>
-        <p className="text-xs text-zinc-500 max-w-[280px] font-bold uppercase tracking-wider leading-relaxed">
+        <p className="text-xs text-zinc-500 max-w-70 font-bold uppercase tracking-wider leading-relaxed">
           {getStatusText()}
         </p>
       </div>
@@ -156,7 +156,7 @@ export function PaymentPendingView({
       )}
 
       <Button
-        className="w-full max-w-[240px] mt-6 bg-zinc-900 hover:bg-zinc-800 text-white border border-white/10 rounded-xl h-12 font-black uppercase tracking-widest text-xs relative z-10 transition-all hover:border-cyan-500/30"
+        className="w-full max-w-60 mt-6 bg-zinc-900 hover:bg-zinc-800 text-white border border-white/10 rounded-xl h-12 font-black uppercase tracking-widest text-xs relative z-10 transition-all hover:border-cyan-500/30"
         onClick={onReturn}
       >
         Return to Dashboard

@@ -150,7 +150,7 @@ export default function AlertTestPage() {
             title="Telemetry Output"
             description="Live signal stream with auto-exit transitions."
           >
-            <div className="flex flex-col gap-4 w-full min-h-[400px]">
+            <div className="flex flex-col gap-4 w-full min-h-100">
               {alerts.length === 0 && (
                 <div className="flex-1 flex flex-col items-center justify-center text-zinc-600 border border-dashed border-white/5 rounded-2xl animate-pulse">
                   <Terminal className="w-8 h-8 mb-4 opacity-10" />

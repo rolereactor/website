@@ -83,17 +83,17 @@ const TechDecorations = ({ variant }: { variant?: string | null }) => {
     <>
       {/* Bottom Gradient Line */}
       <div
-        className={`absolute bottom-0 left-0 right-0 h-[2px] bg-linear-to-r from-transparent ${activeStyle.gradient} to-transparent opacity-50`}
+        className={`absolute bottom-0 left-0 right-0 h-0.5 bg-linear-to-r from-transparent ${activeStyle.gradient} to-transparent opacity-50`}
       />
 
       {/* Top Right Corner Accent */}
       <div
-        className={`absolute -top-[1px] -right-[1px] w-3 h-3 border-t border-r ${activeStyle.corner}`}
+        className={`absolute -top-px -right-px w-3 h-3 border-t border-r ${activeStyle.corner}`}
       />
 
       {/* Bottom Left Corner Accent */}
       <div
-        className={`absolute -bottom-[1px] -left-[1px] w-3 h-3 border-b border-l ${activeStyle.corner}`}
+        className={`absolute -bottom-px -left-px w-3 h-3 border-b border-l ${activeStyle.corner}`}
       />
     </>
   );

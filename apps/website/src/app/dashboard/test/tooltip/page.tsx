@@ -101,7 +101,7 @@ export default function TooltipTestPage() {
                   <TooltipTrigger>
                     <Info className="h-3.5 w-3.5 text-zinc-700 hover:text-cyan-500 transition-colors" />
                   </TooltipTrigger>
-                  <TooltipContent className="max-w-[180px] font-mono text-[9px] uppercase leading-relaxed">
+                  <TooltipContent className="max-w-45 font-mono text-[9px] uppercase leading-relaxed">
                     Neural kernels are synchronized at 99.8% efficiency.
                   </TooltipContent>
                 </Tooltip>
@@ -118,7 +118,7 @@ export default function TooltipTestPage() {
                   <TooltipTrigger>
                     <Info className="h-3.5 w-3.5 text-zinc-700 hover:text-cyan-500 transition-colors" />
                   </TooltipTrigger>
-                  <TooltipContent className="max-w-[180px] font-mono text-[9px] uppercase leading-relaxed">
+                  <TooltipContent className="max-w-45 font-mono text-[9px] uppercase leading-relaxed">
                     Current power consumption is within safety parameters.
                   </TooltipContent>
                 </Tooltip>

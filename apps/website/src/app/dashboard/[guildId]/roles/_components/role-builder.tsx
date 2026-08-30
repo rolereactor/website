@@ -548,7 +548,7 @@ function SelectionModePicker({
               {isActive && (
                 <div
                   className={cn(
-                    "absolute inset-0 opacity-[0.06] bg-radial-[ellipse_at_center]",
+                    "absolute inset-0 opacity-6 bg-radial-[ellipse_at_center]",
                     isToggle && "from-cyan-400 to-transparent",
                     isUnique && "from-amber-400 to-transparent"
                   )}

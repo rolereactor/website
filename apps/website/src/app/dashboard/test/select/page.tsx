@@ -33,7 +33,7 @@ export default function SelectTestPage() {
         <Showcase title="Node Hub">
           <div className="flex flex-col gap-6 w-full items-center">
             <Select>
-              <SelectTrigger className="w-full max-w-[240px] font-mono text-xs uppercase tracking-widest">
+              <SelectTrigger className="w-full max-w-60 font-mono text-xs uppercase tracking-widest">
                 <div className="flex items-center gap-2">
                   <Database className="h-3.5 w-3.5 text-cyan-500" />
                   <SelectValue placeholder="Primary Source" />
@@ -53,7 +53,7 @@ export default function SelectTestPage() {
             </Select>
 
             <Select defaultValue="cpu-core">
-              <SelectTrigger className="w-full max-w-[240px] font-mono text-xs uppercase tracking-widest border-purple-500/20 bg-purple-500/5 text-purple-300">
+              <SelectTrigger className="w-full max-w-60 font-mono text-xs uppercase tracking-widest border-purple-500/20 bg-purple-500/5 text-purple-300">
                 <div className="flex items-center gap-2">
                   <Cpu className="h-3.5 w-3.5 text-purple-400" />
                   <SelectValue placeholder="Target CPU" />
@@ -70,7 +70,7 @@ export default function SelectTestPage() {
 
         <Showcase title="Global Relay">
           <Select>
-            <SelectTrigger className="w-full max-w-[300px] font-mono text-xs uppercase tracking-widest">
+            <SelectTrigger className="w-full max-w-75 font-mono text-xs uppercase tracking-widest">
               <div className="flex items-center gap-2">
                 <Globe className="h-3.5 w-3.5 text-emerald-500" />
                 <SelectValue placeholder="Relay Zone" />

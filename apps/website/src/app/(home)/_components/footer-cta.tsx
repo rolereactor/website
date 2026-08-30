@@ -14,7 +14,7 @@ export function FooterCTA() {
       <div className="max-w-3xl mx-auto relative z-10 text-center">
         {/* Glow effect behind */}
         <div className="absolute inset-0 -z-10">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-indigo-600/10 rounded-full blur-[100px]" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-75 bg-indigo-600/10 rounded-full blur-[100px]" />
         </div>
 
         <motion.div

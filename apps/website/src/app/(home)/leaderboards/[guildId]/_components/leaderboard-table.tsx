@@ -71,9 +71,9 @@ export function LeaderboardTable({
       </div>
 
       <div className="p-0 overflow-x-auto">
-        <div className="min-w-[400px]">
+        <div className="min-w-100">
           <TableHeader period={period} />
-          <div className="flex flex-col max-h-[800px] overflow-y-auto custom-scrollbar">
+          <div className="flex flex-col max-h-200 overflow-y-auto custom-scrollbar">
             {leaderboard.length === 0 ? (
               <EmptyState period={period} />
             ) : (

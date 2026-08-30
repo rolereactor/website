@@ -192,7 +192,7 @@ export function ServerTable({
                       </div>
                     )}
                     <div className="flex flex-col">
-                      <span className="text-sm font-bold uppercase font-mono text-zinc-100 group-hover:text-cyan-400 transition-colors truncate max-w-[200px]">
+                      <span className="text-sm font-bold uppercase font-mono text-zinc-100 group-hover:text-cyan-400 transition-colors truncate max-w-50">
                         {guild.name}
                       </span>
                       <span className="text-[10px] text-zinc-500 font-mono tracking-tighter">

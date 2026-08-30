@@ -339,7 +339,7 @@ export function ToolPageClient({ tool }: ToolPageClientProps) {
 
           {/* Fix #6: File info in sidebar */}
           {selectedFile && !resultBlob && !isProcessing && (
-            <div className="flex items-center gap-2 rounded-lg border border-white/8 bg-white/[0.03] px-3 py-2 text-xs">
+            <div className="flex items-center gap-2 rounded-lg border border-white/8 bg-white/3 px-3 py-2 text-xs">
               <FileImage className="h-3.5 w-3.5 shrink-0 text-white/30" />
               <div className="min-w-0 flex-1">
                 <p className="truncate font-medium text-white/60">

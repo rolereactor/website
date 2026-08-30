@@ -61,12 +61,12 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
       )}
 
       {/* Scanline Effect */}
-      <div className="absolute inset-0 pointer-events-none z-0 opacity-[0.02]">
+      <div className="absolute inset-0 pointer-events-none z-0 opacity-2">
         <div className="absolute inset-0 bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(255,255,255,0.03)_2px,rgba(255,255,255,0.03)_4px)]" />
       </div>
 
       {/* Noise Texture */}
-      <div className="absolute inset-0 pointer-events-none z-0 opacity-[0.015] mix-blend-overlay">
+      <div className="absolute inset-0 pointer-events-none z-0 opacity-1.5 mix-blend-overlay">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGQ9Ik0wIDBoMzAwdjMwMEgweiIgZmlsdGVyPSJ1cmwoI2EpIiBvcGFjaXR5PSIuMDUiLz48L3N2Zz4=')]" />
       </div>
 

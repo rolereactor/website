@@ -36,7 +36,7 @@ export default function TabsTestPage() {
           title="System Config"
           description="Encapsulated settings modules."
         >
-          <Tabs defaultValue="account" className="w-full max-w-[400px]">
+          <Tabs defaultValue="account" className="w-full max-w-100">
             <TabsList className="grid w-full grid-cols-2 bg-zinc-950/60 border border-white/10 rounded-xl p-1">
               <TabsTrigger
                 value="account"

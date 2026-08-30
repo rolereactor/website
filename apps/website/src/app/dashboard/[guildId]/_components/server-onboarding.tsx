@@ -66,7 +66,7 @@ export function ServerOnboarding(_props: ServerOnboardingProps) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="relative overflow-hidden rounded-2xl border border-cyan-500/20 bg-gradient-to-br from-zinc-900/80 to-zinc-950/80 p-6 backdrop-blur-sm"
+      className="relative overflow-hidden rounded-2xl border border-cyan-500/20 bg-linear-to-br from-zinc-900/80 to-zinc-950/80 p-6 backdrop-blur-sm"
     >
       <div className="absolute -right-20 -top-20 size-64 rounded-full bg-cyan-500/5 blur-3xl" />
       <div className="absolute -bottom-20 -left-20 size-48 rounded-full bg-cyan-500/5 blur-2xl" />
@@ -104,7 +104,7 @@ export function ServerOnboarding(_props: ServerOnboardingProps) {
                 <div
                   className={
                     feature.color +
-                    " flex size-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br"
+                    " flex size-10 shrink-0 items-center justify-center rounded-lg bg-linear-to-br"
                   }
                 >
                   <Icon className="size-5 text-white" />

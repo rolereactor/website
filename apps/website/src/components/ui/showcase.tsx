@@ -43,23 +43,23 @@ export function Showcase({
 
       <div className="relative flex-1 flex flex-col">
         {/* Tech Accents - Corners */}
-        <div className="absolute -top-[1px] -left-[1px] w-4 h-4 border-t-2 border-l-2 border-cyan-500/30 rounded-tl-sm z-10 group-hover:border-cyan-500/60 transition-colors" />
-        <div className="absolute -top-[1px] -right-[1px] w-4 h-4 border-t-2 border-r-2 border-white/10 rounded-tr-sm z-10" />
-        <div className="absolute -bottom-[1px] -left-[1px] w-4 h-4 border-b-2 border-l-2 border-white/10 rounded-bl-sm z-10" />
-        <div className="absolute -bottom-[1px] -right-[1px] w-4 h-4 border-b-2 border-r-2 border-purple-500/30 rounded-br-sm z-10 group-hover:border-purple-500/60 transition-colors" />
+        <div className="absolute -top-px -left-px w-4 h-4 border-t-2 border-l-2 border-cyan-500/30 rounded-tl-sm z-10 group-hover:border-cyan-500/60 transition-colors" />
+        <div className="absolute -top-px -right-px w-4 h-4 border-t-2 border-r-2 border-white/10 rounded-tr-sm z-10" />
+        <div className="absolute -bottom-px -left-px w-4 h-4 border-b-2 border-l-2 border-white/10 rounded-bl-sm z-10" />
+        <div className="absolute -bottom-px -right-px w-4 h-4 border-b-2 border-r-2 border-purple-500/30 rounded-br-sm z-10 group-hover:border-purple-500/60 transition-colors" />
 
         {/* Data Grid Background */}
         <div
           className={cn(
-            "relative flex-1 p-8 rounded-sm border border-white/5 bg-zinc-950/40 backdrop-blur-xl flex flex-col items-center justify-center gap-4 min-h-[300px] transition-all duration-500 group-hover:bg-zinc-950/60",
+            "relative flex-1 p-8 rounded-sm border border-white/5 bg-zinc-950/40 backdrop-blur-xl flex flex-col items-center justify-center gap-4 min-h-75 transition-all duration-500 group-hover:bg-zinc-950/60",
             className
           )}
           {...props}
         >
           {/* Subtle Grid Pattern */}
-          <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150" />
+          <div className="absolute inset-0 opacity-3 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150" />
           <div
-            className="absolute inset-0 opacity-[0.05] pointer-events-none"
+            className="absolute inset-0 opacity-5 pointer-events-none"
             style={{
               backgroundImage:
                 "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
@@ -68,7 +68,7 @@ export function Showcase({
           />
 
           {/* Scanline Effect */}
-          <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-white/5 to-transparent h-2 w-full -translate-y-full group-hover:animate-scanline" />
+          <div className="absolute inset-0 pointer-events-none bg-linear-to-b from-transparent via-white/5 to-transparent h-2 w-full -translate-y-full group-hover:animate-scanline" />
 
           <div className="relative z-20 w-full flex flex-col items-center justify-center">
             {children}

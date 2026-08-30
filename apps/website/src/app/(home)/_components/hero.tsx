@@ -38,7 +38,7 @@ export function Hero() {
         <div className="absolute bottom-0 right-1/4 w-125 h-100 bg-purple-600/15 rounded-full blur-[100px]" />
         {/* Subtle grid */}
         <div
-          className="absolute inset-0 opacity-[0.02]"
+          className="absolute inset-0 opacity-2"
           style={{
             backgroundImage:
               "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",

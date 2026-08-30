@@ -68,7 +68,7 @@ export function SocialProof({
               className="text-center group"
             >
               <div className="flex justify-center mb-3">
-                <div className="w-10 h-10 rounded-lg bg-white/[0.04] border border-white/[0.06] flex items-center justify-center group-hover:bg-white/[0.06] transition-colors">
+                <div className="w-10 h-10 rounded-lg bg-white/4 border border-white/6 flex items-center justify-center group-hover:bg-white/6 transition-colors">
                   <stat.icon className={`w-5 h-5 ${stat.color}`} />
                 </div>
               </div>

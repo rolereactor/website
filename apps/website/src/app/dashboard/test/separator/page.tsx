@@ -69,11 +69,11 @@ export default function SeparatorTestPage() {
             <div className="h-12 bg-white/5 rounded-lg border border-white/5 flex items-center px-4 font-mono text-xs text-zinc-500">
               Row_Alpha
             </div>
-            <Separator className="bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent h-px" />
+            <Separator className="bg-linear-to-r from-transparent via-cyan-500/20 to-transparent h-px" />
             <div className="h-12 bg-white/5 rounded-lg border border-white/5 flex items-center px-4 font-mono text-xs text-zinc-500">
               Row_Beta
             </div>
-            <Separator className="bg-gradient-to-r from-transparent via-purple-500/20 to-transparent h-px" />
+            <Separator className="bg-linear-to-r from-transparent via-purple-500/20 to-transparent h-px" />
             <div className="h-12 bg-white/5 rounded-lg border border-white/5 flex items-center px-4 font-mono text-xs text-zinc-500">
               Row_Gamma
             </div>

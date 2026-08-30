@@ -24,18 +24,18 @@ export default function SkeletonTestPage() {
           <div className="flex items-center space-x-4 w-full justify-center">
             <Skeleton className="h-12 w-12 rounded-full border border-white/5" />
             <div className="space-y-2">
-              <Skeleton className="h-4 w-[250px] border border-white/5" />
-              <Skeleton className="h-4 w-[200px] border border-white/5" />
+              <Skeleton className="h-4 w-62.5 border border-white/5" />
+              <Skeleton className="h-4 w-50 border border-white/5" />
             </div>
           </div>
         </Showcase>
 
         <Showcase title="Information Shell">
           <div className="flex flex-col space-y-3 w-full items-center">
-            <Skeleton className="h-[125px] w-[250px] rounded-2xl border border-white/5" />
+            <Skeleton className="h-31.25 w-62.5 rounded-2xl border border-white/5" />
             <div className="space-y-2">
-              <Skeleton className="h-4 w-[250px] border border-white/5" />
-              <Skeleton className="h-4 w-[200px] border border-white/5" />
+              <Skeleton className="h-4 w-62.5 border border-white/5" />
+              <Skeleton className="h-4 w-50 border border-white/5" />
             </div>
           </div>
         </Showcase>

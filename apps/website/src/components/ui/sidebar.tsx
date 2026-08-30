@@ -197,7 +197,7 @@ const Sidebar = forwardRef<
       return (
         <div
           className={cn(
-            "flex h-full w-[var(--sidebar-width)] flex-col bg-zinc-950/30 text-zinc-100 border-r border-white/5",
+            "flex h-full w-(--sidebar-width) flex-col bg-zinc-950/30 text-zinc-100 border-r border-white/5",
             className
           )}
           ref={ref}
@@ -214,7 +214,7 @@ const Sidebar = forwardRef<
           <SheetContent
             data-sidebar="sidebar"
             data-mobile="true"
-            className="w-[var(--sidebar-width)] bg-zinc-950/95 p-0 text-white border-r border-white/10 [&>button]:hidden backdrop-blur-xl"
+            className="w-(--sidebar-width) bg-zinc-950/95 p-0 text-white border-r border-white/10 [&>button]:hidden backdrop-blur-xl"
             style={
               {
                 "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
@@ -248,15 +248,15 @@ const Sidebar = forwardRef<
             "relative bg-transparent transition-[width] duration-200 ease-linear",
             // Width based on state and collapsible type
             state === "collapsed" && collapsible === "offcanvas" && "w-0",
-            state === "expanded" && "w-[var(--sidebar-width)]",
+            state === "expanded" && "w-(--sidebar-width)",
             state === "collapsed" &&
               collapsible === "icon" &&
               variant === "inset" &&
-              "w-[calc(var(--sidebar-width-icon)_+_1rem)]",
+              "w-[calc(var(--sidebar-width-icon)+1rem)]",
             state === "collapsed" &&
               collapsible === "icon" &&
               variant === "floating" &&
-              "w-[calc(var(--sidebar-width-icon)_+_1rem)]",
+              "w-[calc(var(--sidebar-width-icon)+1rem)]",
             state === "collapsed" &&
               collapsible === "icon" &&
               variant === "sidebar" &&
@@ -268,15 +268,15 @@ const Sidebar = forwardRef<
           className={cn(
             "fixed inset-y-0 z-10 hidden h-svh transition-[left,right,width] duration-200 ease-linear md:flex",
             // Width based on state
-            state === "expanded" && "w-[var(--sidebar-width)]",
+            state === "expanded" && "w-(--sidebar-width)",
             state === "collapsed" &&
               collapsible === "icon" &&
               variant === "inset" &&
-              "w-[calc(var(--sidebar-width-icon)_+_1rem_+2px)]",
+              "w-[calc(var(--sidebar-width-icon)+1rem+2px)]",
             state === "collapsed" &&
               collapsible === "icon" &&
               variant === "floating" &&
-              "w-[calc(var(--sidebar-width-icon)_+_1rem_+2px)]",
+              "w-[calc(var(--sidebar-width-icon)+1rem+2px)]",
             state === "collapsed" &&
               collapsible === "icon" &&
               variant === "sidebar" &&
@@ -324,12 +324,12 @@ const Sidebar = forwardRef<
                 <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-purple-500/40 rounded-br-md pointer-events-none" />
 
                 {/* Lateral glow */}
-                <div className="absolute inset-y-8 left-0 w-[1px] bg-gradient-to-b from-transparent via-cyan-500/20 to-transparent pointer-events-none" />
+                <div className="absolute inset-y-8 left-0 w-px bg-linear-to-b from-transparent via-cyan-500/20 to-transparent pointer-events-none" />
               </>
             )}
 
             {/* Subtle grid pattern */}
-            <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100" />
+            <div className="absolute inset-0 opacity-2 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100" />
 
             <div className="relative z-10 flex flex-col h-full">{children}</div>
           </div>
@@ -386,8 +386,8 @@ const SidebarRail = forwardRef<
       onClick={toggleSidebar}
       title="Toggle Sidebar"
       className={cn(
-        "absolute inset-y-0 z-20 hidden w-4 ltr:-translate-x-1/2 rtl:-translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:start-1/2 after:w-[2px] after:bg-white/5 hover:after:bg-cyan-500 sm:flex",
-        "[[data-side=left]_&]:cursor-w-resize [[data-side=right]_&]:cursor-e-resize",
+        "absolute inset-y-0 z-20 hidden w-4 ltr:-translate-x-1/2 rtl:-translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:start-1/2 after:w-0.5 after:bg-white/5 hover:after:bg-cyan-500 sm:flex",
+        "in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize",
         "[[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize",
         "after:transition-colors after:duration-300",
         "group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full group-data-[collapsible=offcanvas]:hover:bg-zinc-950/50",
@@ -597,7 +597,7 @@ const SidebarMenuItem = forwardRef<HTMLLIElement, React.ComponentProps<"li">>(
 SidebarMenuItem.displayName = "SidebarMenuItem";
 
 const sidebarMenuButtonVariants = cva(
-  "peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-lg p-2 text-left text-sm outline-none ring-cyan-500/50 transition-all duration-300 hover:bg-white/5 hover:text-white focus-visible:ring-2 active:bg-white/10 active:text-white active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-cyan-500/10 data-[active=true]:font-bold data-[active=true]:text-cyan-400 data-[state=open]:hover:bg-white/5 data-[state=open]:hover:text-white group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0",
+  "peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-lg p-2 text-left text-sm outline-none ring-cyan-500/50 transition-all duration-300 hover:bg-white/5 hover:text-white focus-visible:ring-2 active:bg-white/10 active:text-white active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-cyan-500/10 data-[active=true]:font-bold data-[active=true]:text-cyan-400 data-[state=open]:hover:bg-white/5 data-[state=open]:hover:text-white group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -608,7 +608,7 @@ const sidebarMenuButtonVariants = cva(
       size: {
         default: "h-8 text-sm",
         sm: "h-7 text-xs",
-        lg: "h-12 text-sm group-data-[collapsible=icon]:!p-0",
+        lg: "h-12 text-sm group-data-[collapsible=icon]:p-0!",
       },
     },
     defaultVariants: {

@@ -55,7 +55,7 @@ export function CoreBalance({
       return (
         <div
           className={cn(
-            "mt-2 h-[58px] w-full bg-zinc-900/50 animate-pulse rounded-lg border border-border/40",
+            "mt-2 h-14.5 w-full bg-zinc-900/50 animate-pulse rounded-lg border border-border/40",
             className
           )}
         />

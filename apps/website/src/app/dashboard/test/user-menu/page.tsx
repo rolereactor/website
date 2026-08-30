@@ -16,8 +16,8 @@ export default function UserMenuTestPage() {
   return (
     <div className="relative space-y-6 w-full overflow-hidden">
       {/* Ambient background elements */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-cyan-500/5 blur-[120px] -z-10 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-500/5 blur-[120px] -z-10 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-125 h-125 bg-cyan-500/5 blur-[120px] -z-10 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-125 h-125 bg-purple-500/5 blur-[120px] -z-10 pointer-events-none" />
 
       <div className="space-y-4 relative">
         <div className="absolute -left-4 top-0 w-1 h-full bg-linear-to-b from-cyan-500 via-purple-500 to-transparent opacity-50" />
@@ -68,7 +68,7 @@ export default function UserMenuTestPage() {
           description="Detailed sidebar integration. Profile data module with upward-expansion functionality."
           className="justify-end"
         >
-          <div className="w-80 h-[340px] border border-white/10 bg-zinc-950/80 flex flex-col justify-end p-3 relative shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden group/sidebar">
+          <div className="w-80 h-85 border border-white/10 bg-zinc-950/80 flex flex-col justify-end p-3 relative shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden group/sidebar">
             {/* Grid overlay for sidebar */}
             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] pointer-events-none" />
 
@@ -112,7 +112,7 @@ export default function UserMenuTestPage() {
           <div className="flex flex-col gap-6 w-full max-w-md p-4">
             <div className="flex items-center justify-between w-full p-4 bg-zinc-900/40 border border-white/5 relative overflow-hidden group/item">
               <div className="absolute inset-0 bg-linear-to-r from-cyan-500/5 to-transparent" />
-              <div className="absolute top-0 left-0 w-[2px] h-full bg-cyan-500/40 animate-pulse" />
+              <div className="absolute top-0 left-0 w-0.5 h-full bg-cyan-500/40 animate-pulse" />
               <span className="text-[10px] text-cyan-500/60 font-mono uppercase tracking-[0.3em] font-bold">
                 SESSION // LOADING
               </span>

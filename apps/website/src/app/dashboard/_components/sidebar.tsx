@@ -33,6 +33,7 @@ import {
   Lock,
   Server,
   Image,
+  Radio,
 } from "lucide-react";
 import { isDeveloper } from "@/lib/admin";
 
@@ -62,7 +63,6 @@ import { ServerSwitcher } from "./server-switcher";
 import { useServerStore } from "@/store/use-server-store";
 import { useProEngineStore } from "@/store/use-pro-engine-store";
 import { Suspense, useEffect, useState } from "react";
-import { audiowide } from "@/lib/fonts";
 
 // Helper to get avatar URL
 function getAvatarUrl(user: { id?: string; image?: string | null }): string {
@@ -121,6 +121,35 @@ export function DashboardSidebar({ user }: { user: User }) {
     return baseHref;
   };
 
+  const getCoreItems = () => [
+    {
+      title: contextId ? "Overview" : "System Overview",
+      href: contextId ? `/dashboard/${contextId}` : "/dashboard",
+      icon: LayoutDashboard,
+    },
+    {
+      title: "Image Tools",
+      href: "/dashboard/image-tools",
+      icon: Image,
+    },
+    ...(contextId
+      ? [
+          {
+            title: "Pro Engine",
+            href: getHref("/dashboard/pro-engine", true),
+            icon: Zap,
+            badge: "PRO",
+            badgeActive: isPremium,
+          },
+          {
+            title: "Reaction Roles",
+            href: getHref("/dashboard/roles", true),
+            icon: ShieldCheck,
+          },
+        ]
+      : []),
+  ];
+
   const getEngagementItems = () =>
     contextId
       ? [
@@ -135,6 +164,16 @@ export function DashboardSidebar({ user }: { user: User }) {
             icon: UserPlus,
           },
           {
+            title: "Live Reactor",
+            href: getHref("/dashboard/live-reactor", true),
+            icon: Radio,
+          },
+          {
+            title: "Command Settings",
+            href: getHref("/dashboard/commands", true),
+            icon: Terminal,
+          },
+          {
             title: "Analytics",
             href: getHref("/dashboard/analytics", true),
             icon: BarChart3,
@@ -142,16 +181,43 @@ export function DashboardSidebar({ user }: { user: User }) {
         ]
       : [];
 
-  const getSystemItems = () =>
-    contextId
-      ? [
-          {
-            title: "Command settings",
-            href: getHref("/dashboard/commands", true),
-            icon: Terminal,
-          },
-        ]
-      : [];
+  const getDeveloperItems = () => [
+    {
+      title: "Global Statistics",
+      href: "/dashboard/stats",
+      icon: BarChart3,
+    },
+    {
+      title: "Revenue & Billing",
+      href: "/dashboard/revenue",
+      icon: Zap,
+    },
+    {
+      title: "Command Usage",
+      href: "/dashboard/commands",
+      icon: Terminal,
+    },
+    {
+      title: "User Management",
+      href: "/dashboard/users",
+      icon: Users,
+    },
+    {
+      title: "Server Management",
+      href: "/dashboard/servers",
+      icon: Server,
+    },
+    {
+      title: "System Logs",
+      href: "/dashboard/logs",
+      icon: List,
+    },
+    {
+      title: "System Health",
+      href: "/dashboard/health",
+      icon: Activity,
+    },
+  ];
 
   const getTestItems = () => [
     {
@@ -246,73 +312,6 @@ export function DashboardSidebar({ user }: { user: User }) {
     },
   ];
 
-  const getDeveloperItems = () => [
-    {
-      title: "Bot Statistics",
-      href: "/dashboard/stats",
-      icon: BarChart3,
-    },
-    {
-      title: "Revenue",
-      href: "/dashboard/revenue",
-      icon: Zap,
-    },
-    {
-      title: "Usage",
-      href: "/dashboard/commands",
-      icon: Terminal,
-    },
-    {
-      title: "User Management",
-      href: "/dashboard/users",
-      icon: Users,
-    },
-    {
-      title: "Server Management",
-      href: "/dashboard/servers",
-      icon: Server,
-    },
-    {
-      title: "System Logs",
-      href: "/dashboard/logs",
-      icon: List,
-    },
-    {
-      title: "System Health",
-      href: "/dashboard/config",
-      icon: Activity,
-    },
-  ];
-
-  const getCoreItems = () => [
-    {
-      title: contextId ? "Overview" : "System Overview",
-      href: contextId ? `/dashboard/${contextId}` : "/dashboard",
-      icon: LayoutDashboard,
-    },
-    {
-      title: "Image Tools",
-      href: "/dashboard/image-tools",
-      icon: Image,
-    },
-    ...(contextId
-      ? [
-          {
-            title: "Pro Engine",
-            href: getHref("/dashboard/pro-engine", true),
-            icon: Zap,
-            badge: "PRO",
-            badgeActive: isPremium,
-          },
-          {
-            title: "Reaction Roles",
-            href: getHref("/dashboard/roles", true),
-            icon: ShieldCheck,
-          },
-        ]
-      : []),
-  ];
-
   const isActive = (href: string) => {
     const cleanHref = href.split("?")[0].replace(/\/$/, "");
     const cleanPathname = pathname.split("?")[0].replace(/\/$/, "");
@@ -349,18 +348,18 @@ export function DashboardSidebar({ user }: { user: User }) {
   }) => {
     if (items.length === 0) return null;
     return (
-      <SidebarGroup className="group-data-[collapsible=icon]:px-0">
-        <SidebarGroupLabel
-          className={cn(
-            "group-data-[collapsible=icon]:hidden text-[9px] font-black uppercase tracking-[0.3em] text-zinc-600/70 mb-2 px-4 flex items-center gap-2",
-            audiowide.className
-          )}
-        >
-          <div className="w-1 h-1 rounded-full bg-zinc-800" />
-          {label}
-        </SidebarGroupLabel>
+      <SidebarGroup className="group-data-[collapsible=icon]:px-0 py-1">
+        {label && (
+          <SidebarGroupLabel
+            className={cn(
+              "group-data-[collapsible=icon]:hidden text-[10px] font-semibold uppercase tracking-wider text-zinc-500 mb-1 px-4"
+            )}
+          >
+            {label}
+          </SidebarGroupLabel>
+        )}
         <SidebarGroupContent>
-          <SidebarMenu className="gap-1 px-2 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:items-center">
+          <SidebarMenu className="gap-0.5 px-2 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:items-center">
             {items.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
@@ -369,7 +368,7 @@ export function DashboardSidebar({ user }: { user: User }) {
                   tooltip={item.title}
                   disabled={item.isComingSoon}
                   className={cn(
-                    "h-10 transition-all duration-300 rounded-lg group/btn relative overflow-hidden",
+                    "h-9 transition-all duration-200 rounded-lg group/btn relative overflow-hidden",
                     item.isComingSoon
                       ? "opacity-30 cursor-not-allowed"
                       : "hover:bg-white/5 active:scale-[0.98]"
@@ -378,12 +377,12 @@ export function DashboardSidebar({ user }: { user: User }) {
                   {item.isComingSoon ? (
                     <div className="flex items-center gap-3 w-full px-2 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
                       <item.icon className="size-4 shrink-0" />
-                      <span className="group-data-[collapsible=icon]:hidden text-xs font-bold truncate">
+                      <span className="group-data-[collapsible=icon]:hidden text-[13px] font-medium truncate">
                         {item.title}
                       </span>
                       <Badge
                         variant="outline"
-                        className="ml-auto text-[8px] h-4 px-1 py-0 border-zinc-800 text-zinc-600 group-data-[collapsible=icon]:hidden font-black uppercase tracking-tighter"
+                        className="ml-auto text-[8px] h-4 px-1 py-0 border-zinc-800 text-zinc-600 group-data-[collapsible=icon]:hidden font-medium uppercase tracking-tight"
                       >
                         Soon
                       </Badge>
@@ -409,19 +408,26 @@ export function DashboardSidebar({ user }: { user: User }) {
                       )}
                       <item.icon
                         className={cn(
-                          "size-4 shrink-0 transition-transform group-hover/btn:scale-110",
+                          "size-4 shrink-0 transition-colors",
                           isActive(item.href)
                             ? "text-cyan-400"
-                            : "text-zinc-500"
+                            : "text-zinc-500 group-hover/btn:text-zinc-300"
                         )}
                       />
-                      <span className="group-data-[collapsible=icon]:hidden text-xs truncate">
+                      <span
+                        className={cn(
+                          "group-data-[collapsible=icon]:hidden text-[13px] font-medium truncate transition-colors",
+                          isActive(item.href)
+                            ? "text-zinc-100"
+                            : "text-zinc-400 group-hover/btn:text-zinc-200"
+                        )}
+                      >
                         {item.title}
                       </span>
                       {item.badge && (
                         <Badge
                           className={cn(
-                            "ml-auto text-[9px] h-4 px-1.5 py-0 border-none group-data-[collapsible=icon]:hidden font-black uppercase flex items-center justify-center gap-1",
+                            "ml-auto text-[9px] h-4 px-1.5 py-0 border-none group-data-[collapsible=icon]:hidden font-medium uppercase flex items-center justify-center gap-1",
                             item.badgeActive
                               ? "bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/10 hover:text-cyan-400"
                               : "bg-zinc-800/50 text-zinc-500 hover:bg-zinc-800/50 hover:text-zinc-500 ring-1 ring-inset ring-zinc-700/50"
@@ -520,9 +526,8 @@ export function DashboardSidebar({ user }: { user: User }) {
           </>
         ) : (
           <>
-            <NavGroup label="Core" items={getCoreItems()} />
+            <NavGroup label="General" items={getCoreItems()} />
             <NavGroup label="Engagement" items={getEngagementItems()} />
-            <NavGroup label="System" items={getSystemItems()} />
             {isDeveloper(user) && !contextId && (
               <NavGroup label="Developer" items={getDeveloperItems()} />
             )}

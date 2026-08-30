@@ -67,7 +67,7 @@ const CustomToast = ({ title, description, type = "info" }: ToastProps) => {
   return (
     <Alert
       variant={variant}
-      className="border-white/5 backdrop-blur-2xl shadow-2xl min-w-[320px] max-w-[420px]"
+      className="border-white/5 backdrop-blur-2xl shadow-2xl min-w-80 max-w-105"
     >
       {getIcon(type)}
       <AlertTitle className={cn(audiowide.className, "tracking-[0.2em]")}>

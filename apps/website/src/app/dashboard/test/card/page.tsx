@@ -260,7 +260,7 @@ export default async function CardShowcase() {
             <CardDescription>Last 14 Days • Joins vs Leaves</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="h-[200px] flex items-center justify-center bg-zinc-950/40 rounded-md border border-white/5">
+            <div className="h-50 flex items-center justify-center bg-zinc-950/40 rounded-md border border-white/5">
               <p className="text-zinc-500 text-sm">
                 Chart or detailed content goes here
               </p>

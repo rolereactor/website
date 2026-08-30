@@ -88,7 +88,7 @@ export function StatsGrid({ leaderboard, averageLevel }: StatsGridProps) {
       {/* Active Users */}
       <Card
         variant="stat"
-        className="border-cyan-500/20 hover:border-cyan-500/40 p-5 flex flex-col justify-center min-h-[100px]"
+        className="border-cyan-500/20 hover:border-cyan-500/40 p-5 flex flex-col justify-center min-h-25"
       >
         <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
           <Users className="w-20 h-20 rotate-12 text-cyan-500" />
@@ -119,7 +119,7 @@ export function StatsGrid({ leaderboard, averageLevel }: StatsGridProps) {
       {/* Average Level */}
       <Card
         variant="stat"
-        className="border-purple-500/20 hover:border-purple-500/40 p-5 flex flex-col justify-center min-h-[100px]"
+        className="border-purple-500/20 hover:border-purple-500/40 p-5 flex flex-col justify-center min-h-25"
       >
         <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
           <Zap className="w-20 h-20 rotate-12 text-purple-500" />
@@ -150,7 +150,7 @@ export function StatsGrid({ leaderboard, averageLevel }: StatsGridProps) {
       {/* Total XP */}
       <Card
         variant="stat"
-        className="border-emerald-500/20 hover:border-emerald-500/40 p-5 flex flex-col justify-center min-h-[100px]"
+        className="border-emerald-500/20 hover:border-emerald-500/40 p-5 flex flex-col justify-center min-h-25"
       >
         <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
           <Trophy className="w-20 h-20 rotate-12 text-emerald-500" />

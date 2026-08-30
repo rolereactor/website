@@ -18,7 +18,7 @@ export function XPDisabledState({ onEnable }: { onEnable: () => void }) {
   return (
     <Card
       variant="cyberpunk"
-      className="relative overflow-hidden min-h-[450px] w-full group flex flex-col items-center justify-center"
+      className="relative overflow-hidden min-h-112.5 w-full group flex flex-col items-center justify-center"
     >
       <CyberpunkBackground
         showGrid={true}
@@ -76,7 +76,7 @@ export function XPDisabledState({ onEnable }: { onEnable: () => void }) {
 
               {/* Scan-line effect */}
               <div className="absolute inset-0 rounded-full overflow-hidden">
-                <div className="w-full h-[2px] bg-red-500/20 animate-[scan_3s_ease-in-out_infinite]" />
+                <div className="w-full h-0.5 bg-red-500/20 animate-[scan_3s_ease-in-out_infinite]" />
               </div>
 
               <Lock className="w-6 h-6 text-red-500 drop-shadow-[0_0_12px_rgba(239,68,68,0.6)] relative z-10" />
@@ -141,7 +141,7 @@ export function EmptyState() {
   return (
     <Card
       variant="cyberpunk"
-      className="relative overflow-hidden min-h-[450px] group"
+      className="relative overflow-hidden min-h-112.5 group"
       contentClassName="flex flex-col items-center justify-center p-8 text-center grow"
       showGrid={true}
     >

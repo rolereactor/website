@@ -48,7 +48,7 @@ export function ToolNav() {
       <SelectTrigger
         variant="cyber"
         className={cn(
-          "h-10 w-[calc(100%-4px)] xl:w-[336px] mx-0.5 gap-3 px-4 text-xs font-bold transition-all duration-200 focus:ring-offset-0 [&>svg:last-child]:shrink-0",
+          "h-10 w-[calc(100%-4px)] xl:w-84 mx-0.5 gap-3 px-4 text-xs font-bold transition-all duration-200 focus:ring-offset-0 [&>svg:last-child]:shrink-0",
           current.premium
             ? "border-amber-500/30 text-amber-400 hover:border-amber-500/60 hover:bg-amber-500/5 data-[state=open]:border-amber-500/60 focus:border-amber-500/60 focus:ring-amber-500/20"
             : "border-cyan-500/30 text-cyan-400 hover:border-cyan-500/60 hover:bg-cyan-500/5 data-[state=open]:border-cyan-500/60 focus:border-cyan-500/60 focus:ring-cyan-500/20"
@@ -68,7 +68,7 @@ export function ToolNav() {
       <SelectContent
         variant="cyber"
         align="end"
-        className="w-[var(--radix-select-trigger-width)]"
+        className="w-(--radix-select-trigger-width)"
       >
         {TOOLS.map(({ tool, label, icon: Icon, premium }) => (
           <SelectItem

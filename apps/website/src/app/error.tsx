@@ -28,7 +28,7 @@ export default function RootError({
     <div className="min-h-screen bg-neutral-950 flex flex-col items-center justify-center p-6 text-center space-y-12">
       {/* Background Decor */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-red-500/5 rounded-full blur-[120px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-200 bg-red-500/5 rounded-full blur-[120px]" />
         <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-5" />
       </div>
 

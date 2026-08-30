@@ -89,11 +89,11 @@ export default async function HomePage() {
       <main className="min-h-screen">
         <Hero />
         <div className="max-w-5xl mx-auto px-4">
-          <div className="h-px bg-linear-to-r from-transparent via-white/[0.06] to-transparent" />
+          <div className="h-px bg-linear-to-r from-transparent via-white/6 to-transparent" />
         </div>
         <Features />
         <div className="max-w-5xl mx-auto px-4">
-          <div className="h-px bg-linear-to-r from-transparent via-white/[0.06] to-transparent" />
+          <div className="h-px bg-linear-to-r from-transparent via-white/6 to-transparent" />
         </div>
         <div className="max-w-fd-container mx-auto px-4">
           <ConditionalAdBlock
@@ -107,7 +107,7 @@ export default async function HomePage() {
           totalCommands={totalCommands}
         />
         <div className="max-w-5xl mx-auto px-4">
-          <div className="h-px bg-linear-to-r from-transparent via-white/[0.06] to-transparent" />
+          <div className="h-px bg-linear-to-r from-transparent via-white/6 to-transparent" />
         </div>
         <FooterCTA />
       </main>

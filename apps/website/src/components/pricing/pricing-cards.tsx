@@ -64,7 +64,7 @@ export function PricingCards({
             )}
           >
             {/* Background Tech Pattern */}
-            <div className="absolute inset-x-0 bottom-0 h-full bg-gradient-to-t from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+            <div className="absolute inset-x-0 bottom-0 h-full bg-linear-to-t from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
             {/* Left Side: Price & Badge */}
             <div className="flex flex-col items-start gap-0.5 z-10">

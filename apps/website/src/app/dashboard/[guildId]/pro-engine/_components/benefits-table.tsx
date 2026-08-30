@@ -166,7 +166,6 @@ const benefits = [
     type: "feature",
     category: "Auto-Moderation",
   },
-
 ];
 
 const categoryStyles: Record<
@@ -203,7 +202,6 @@ const categoryStyles: Record<
     badge: "text-red-400",
     badgeBg: "bg-red-500/20",
   },
-
 };
 
 function BenefitRow({
@@ -219,7 +217,7 @@ function BenefitRow({
   return (
     <div
       className={cn(
-        "group grid grid-cols-12 gap-2 px-4 py-3 items-center text-xs transition-colors hover:bg-white/[0.02]",
+        "group grid grid-cols-12 gap-2 px-4 py-3 items-center text-xs transition-colors hover:bg-white/2",
         isFirstOfCategory && "border-t border-white/5",
         isFirstOfCategory && style.bg
       )}

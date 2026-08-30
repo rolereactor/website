@@ -48,7 +48,7 @@ export default function NotFound() {
           className="mb-6"
         >
           <h1
-            className={`text-8xl md:text-9xl font-black tracking-tighter mb-4 bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent ${audiowide.className}`}
+            className={`text-8xl md:text-9xl font-black tracking-tighter mb-4 bg-linear-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent ${audiowide.className}`}
           >
             404
           </h1>

@@ -280,7 +280,7 @@ export function EmojiPickerContent({
       <div
         className={cn(
           "bg-zinc-950 border border-white/10 rounded-2xl shadow-[0_0_40px_-10px_rgba(0,0,0,0.8)]",
-          "flex flex-col w-[318px] overflow-hidden",
+          "flex flex-col w-79.5 overflow-hidden",
           "dialog-scanlines relative group"
         )}
         onKeyDown={(e) => e.stopPropagation()}
@@ -322,7 +322,7 @@ export function EmojiPickerContent({
         {/* Picker Content */}
         <div className="flex-1 relative z-10 bg-zinc-950/50">
           {isLoadingEmojis || !hasFetchedEmojis ? (
-            <div className="h-[350px] flex flex-col items-center justify-center text-zinc-500 gap-3">
+            <div className="h-87.5 flex flex-col items-center justify-center text-zinc-500 gap-3">
               <div className="relative">
                 <div className="w-8 h-8 border-2 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin" />
                 <div className="absolute inset-0 animate-pulse text-cyan-500/50 blur-sm"></div>
@@ -392,7 +392,7 @@ export function EmojiPickerContent({
         </div>
 
         {/* Footer decoration */}
-        <div className="h-1 w-full bg-gradient-to-r from-cyan-500/0 via-cyan-500/20 to-cyan-500/0" />
+        <div className="h-1 w-full bg-linear-to-r from-cyan-500/0 via-cyan-500/20 to-cyan-500/0" />
       </div>
     </PopoverContent>
   );

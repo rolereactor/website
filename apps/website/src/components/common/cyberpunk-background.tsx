@@ -78,7 +78,7 @@ export function CyberpunkBackground({
       {/* Noise Layer - CRT Static */}
       {showNoise && (
         <div
-          className="absolute inset-0 opacity-[0.03] mix-blend-overlay"
+          className="absolute inset-0 opacity-3 mix-blend-overlay"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3Y%3Cfilter id='noiseFilter'%3Y%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3Y%3C/filter%3Y%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3Y%3C/svg%3Y")`,
           }}
@@ -88,7 +88,7 @@ export function CyberpunkBackground({
       {/* Scanlines Layer - Old TV Effect */}
       {showScanlines && (
         <div
-          className="absolute inset-0 opacity-[0.04] pointer-events-none"
+          className="absolute inset-0 opacity-4 pointer-events-none"
           style={{
             background: `repeating-linear-gradient(
               0deg,
@@ -121,14 +121,14 @@ export function CyberpunkBackground({
       {showGlitchLines && (
         <div className="absolute inset-0 opacity-20 mix-blend-screen overflow-hidden">
           <div
-            className="absolute inset-x-0 h-[2px] bg-white/20 animate-glitch-line-move"
+            className="absolute inset-x-0 h-0.5 bg-white/20 animate-glitch-line-move"
             style={{
               background: `linear-gradient(90deg, transparent, ${gridColor}, transparent)`,
               boxShadow: `0 0 15px ${gridColor}`,
             }}
           />
           <div
-            className="absolute inset-x-0 h-[1px] bg-fuchsia-500/30 animate-glitch-line-move"
+            className="absolute inset-x-0 h-px bg-fuchsia-500/30 animate-glitch-line-move"
             style={{
               animationDelay: "-2.5s",
               animationDuration: "7s",

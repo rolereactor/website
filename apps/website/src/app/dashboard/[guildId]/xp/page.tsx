@@ -108,7 +108,7 @@ export default function XPPage({ params }: XPPageProps) {
         <PageHeader
           category="Engagement Management"
           categoryIcon={Trophy}
-          title="XP System"
+          title="XP & Levels"
           description="Monitor community activity and manage leveling rewards for"
           serverName={guildName}
         />
@@ -127,7 +127,7 @@ export default function XPPage({ params }: XPPageProps) {
       <PageHeader
         category="Engagement Management"
         categoryIcon={Trophy}
-        title="XP System"
+        title="XP & Levels"
         description="Monitor community activity and manage leveling rewards for"
         serverName={guildName}
       />

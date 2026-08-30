@@ -35,7 +35,7 @@ export function BotOfflineCard() {
           className="mb-8"
         >
           <div className="relative">
-            <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-red-600 to-orange-600 opacity-30 blur-lg" />
+            <div className="absolute -inset-1 rounded-2xl bg-linear-to-r from-red-600 to-orange-600 opacity-30 blur-lg" />
             <Image
               src="/logo.png"
               width={80}
@@ -57,7 +57,7 @@ export function BotOfflineCard() {
           className="mb-8 space-y-4"
         >
           <h1
-            className={`text-5xl md:text-7xl font-black tracking-tighter bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent ${audiowide.className}`}
+            className={`text-5xl md:text-7xl font-black tracking-tighter bg-linear-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent ${audiowide.className}`}
           >
             OFFLINE
           </h1>

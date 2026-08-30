@@ -167,7 +167,7 @@ export function Features() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.4, delay: index * 0.05 }}
-                className={`group relative p-5 rounded-xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.04] hover:border-white/[0.12] ${colors.border} ${colors.glow}`}
+                className={`group relative p-5 rounded-xl border border-white/6 bg-white/2 backdrop-blur-sm transition-all duration-300 hover:bg-white/4 hover:border-white/12 ${colors.border} ${colors.glow}`}
               >
                 <div
                   className={`w-10 h-10 ${colors.bg} rounded-lg flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110`}

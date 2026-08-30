@@ -38,7 +38,7 @@ export function BotInviteCard({ guildId }: BotInviteCardProps) {
           className="mb-8"
         >
           <div className="relative">
-            <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 opacity-30 blur-lg" />
+            <div className="absolute -inset-1 rounded-2xl bg-linear-to-r from-blue-600 to-purple-600 opacity-30 blur-lg" />
             <Image
               src="/logo.png"
               width={80}
@@ -60,7 +60,7 @@ export function BotInviteCard({ guildId }: BotInviteCardProps) {
           className="mb-8 space-y-4"
         >
           <h1
-            className={`text-5xl md:text-7xl font-black tracking-tighter bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent ${audiowide.className}`}
+            className={`text-5xl md:text-7xl font-black tracking-tighter bg-linear-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent ${audiowide.className}`}
           >
             NOT CONNECTED
           </h1>

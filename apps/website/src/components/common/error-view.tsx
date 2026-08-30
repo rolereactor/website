@@ -33,24 +33,24 @@ export function ErrorView({
   return (
     <div
       className={cn(
-        "flex min-h-[400px] w-full items-center justify-center p-4",
+        "flex min-h-100 w-full items-center justify-center p-4",
         className
       )}
     >
       <div className="relative w-full max-w-lg group">
         {/* Glow Effects */}
-        <div className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-red-500/20 via-transparent to-purple-500/20 blur-2xl opacity-50 group-hover:opacity-75 transition-opacity duration-1000" />
+        <div className="absolute -inset-1 rounded-2xl bg-linear-to-br from-red-500/20 via-transparent to-purple-500/20 blur-2xl opacity-50 group-hover:opacity-75 transition-opacity duration-1000" />
 
         <Card className="relative overflow-hidden border-white/5 bg-black/80 backdrop-blur-xl">
           {/* Cyberpunk Grid */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none opacity-20" />
-          <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-red-500/50 to-transparent opacity-30" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-6 pointer-events-none opacity-20" />
+          <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-red-500/50 to-transparent opacity-30" />
 
           <div className="relative z-10 flex flex-col items-center p-8 sm:p-12 text-center space-y-8">
             {/* Icon Group */}
             <div className="relative">
               <div className="absolute -inset-4 bg-red-500/20 blur-xl rounded-full animate-pulse" />
-              <div className="relative h-20 w-20 rounded-2xl bg-gradient-to-br from-red-500/10 to-transparent border border-red-500/20 flex items-center justify-center shadow-[0_0_30px_-5px_rgba(220,38,38,0.3)]">
+              <div className="relative h-20 w-20 rounded-2xl bg-linear-to-br from-red-500/10 to-transparent border border-red-500/20 flex items-center justify-center shadow-[0_0_30px_-5px_rgba(220,38,38,0.3)]">
                 <AlertCircle className="w-10 h-10 text-red-500" />
                 <div className="absolute -top-2 -right-2 h-6 w-6 rounded-md bg-zinc-900 border border-red-500/30 flex items-center justify-center">
                   <Terminal className="w-3.5 h-3.5 text-red-500 animate-pulse" />
@@ -111,11 +111,11 @@ export function ErrorView({
 
             {/* Footer */}
             <div className="pt-4 flex items-center gap-3 opacity-50">
-              <div className="h-px w-12 bg-gradient-to-r from-transparent to-red-500/30" />
+              <div className="h-px w-12 bg-linear-to-r from-transparent to-red-500/30" />
               <span className="text-[9px] text-red-500/70 font-mono uppercase tracking-[0.3em]">
                 System Alert
               </span>
-              <div className="h-px w-12 bg-gradient-to-l from-transparent to-red-500/30" />
+              <div className="h-px w-12 bg-linear-to-l from-transparent to-red-500/30" />
             </div>
           </div>
         </Card>

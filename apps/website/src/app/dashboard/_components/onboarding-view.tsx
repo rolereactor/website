@@ -29,7 +29,7 @@ export function OnboardingView({ inviteUrl }: OnboardingViewProps) {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative rounded-[1.5rem] sm:rounded-4xl overflow-hidden border border-white/10 bg-zinc-950/50 shadow-2xl min-h-[380px] sm:min-h-[420px] flex items-center group"
+        className="relative rounded-[1.5rem] sm:rounded-4xl overflow-hidden border border-white/10 bg-zinc-950/50 shadow-2xl min-h-95 sm:min-h-105 flex items-center group"
       >
         {/* Cinematic Background Layer */}
         <div className="absolute inset-0 z-0 select-none">
@@ -95,8 +95,8 @@ export function OnboardingView({ inviteUrl }: OnboardingViewProps) {
               IGNITE THE <br />
               <span className="relative inline-block bg-linear-to-r from-blue-400 via-cyan-300 to-indigo-400 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(34,211,238,0.4)] py-1">
                 COMMUNITY
-                <div className="absolute -bottom-1 left-0 w-full h-px sm:h-[3px] bg-cyan-500/20 rounded-full blur-[2px]" />
-                <div className="absolute -bottom-1 left-0 w-2/3 h-px sm:h-[3px] bg-cyan-400 shadow-[0_0_15px_#22d3ee] rounded-full" />
+                <div className="absolute -bottom-1 left-0 w-full h-px sm:h-0.75 bg-cyan-500/20 rounded-full blur-[2px]" />
+                <div className="absolute -bottom-1 left-0 w-2/3 h-px sm:h-0.75 bg-cyan-400 shadow-[0_0_15px_#22d3ee] rounded-full" />
               </span>
             </h1>
           </motion.div>

@@ -117,7 +117,7 @@ export function ComparisonSlider({
 
         {/* Divider line & Handle */}
         <div
-          className="absolute top-0 bottom-0 w-[2px] bg-white shadow-[0_0_12px_rgba(255,255,255,0.5)] pointer-events-none"
+          className="absolute top-0 bottom-0 w-0.5 bg-white shadow-[0_0_12px_rgba(255,255,255,0.5)] pointer-events-none"
           style={{ left: `calc(${sliderPosition}% - 1px)` }}
         >
           <div

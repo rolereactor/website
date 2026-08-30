@@ -77,7 +77,7 @@ function ResizeOptions({
   return (
     <div className="space-y-3">
       {/* Mode toggle */}
-      <div className="flex gap-2 rounded-lg border border-white/8 bg-white/[0.03] p-1">
+      <div className="flex gap-2 rounded-lg border border-white/8 bg-white/3 p-1">
         {(["pixels", "percentage"] as const).map((m) => (
           <button
             key={m}
