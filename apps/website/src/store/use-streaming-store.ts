@@ -156,13 +156,26 @@ const CACHE_DURATION = 5 * 60 * 1000;
 
 async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
   const res = await fetch(url, options);
-  const data = await res.json();
-  if (!res.ok || data.status === "error") {
-    throw new Error(
-      data.error || data.message || `Request failed (${res.status})`
-    );
+  const text = await res.text();
+  let data: any = null;
+
+  try {
+    data = text ? JSON.parse(text) : null;
+  } catch {
+    data = null;
   }
-  return data;
+
+  if (!res.ok || (data && (data.status === "error" || data.success === false))) {
+    const errorMsg =
+      data?.error || data?.message || `Request failed (${res.status})`;
+    throw new Error(errorMsg);
+  }
+
+  if (!data) {
+    throw new Error(`Invalid JSON response from server (${res.status})`);
+  }
+
+  return data as T;
 }
 
 // ─── Store ──────────────────────────────────────────────────────────────────
