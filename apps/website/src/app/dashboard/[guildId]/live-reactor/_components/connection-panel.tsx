@@ -13,6 +13,8 @@ import {
   Tv,
   Gamepad2,
   Clock,
+  Eye,
+  Users,
 } from "lucide-react";
 
 import { useSearchParams } from "next/navigation";
@@ -60,6 +62,16 @@ const PLATFORMS = [
     comingSoon: true,
   },
 ];
+
+function formatUptime(startedAt: string): string {
+  const ms = Date.now() - new Date(startedAt).getTime();
+  if (ms < 0) return "Just started";
+  const h = Math.floor(ms / 3_600_000);
+  const m = Math.floor((ms % 3_600_000) / 60_000);
+  if (h > 0) return `${h}h ${m}m`;
+  if (m > 0) return `${m}m`;
+  return "Just started";
+}
 
 export function ConnectionPanel({ guildId }: ConnectionPanelProps) {
   const searchParams = useSearchParams();
@@ -185,6 +197,8 @@ export function ConnectionPanel({ guildId }: ConnectionPanelProps) {
           const showConfirm = showDisconnectConfirm === platform.id;
           const Icon = platform.icon;
 
+          const isLive = connection?.isLive ?? false;
+
           return (
             <Card
               key={platform.id}
@@ -192,7 +206,8 @@ export function ConnectionPanel({ guildId }: ConnectionPanelProps) {
               showGrid
               className={cn(
                 "transition-all duration-200",
-                isConnected && platform.borderColor,
+                isConnected && !isLive && platform.borderColor,
+                isConnected && isLive && "border-red-500/40 shadow-[0_0_20px_-5px_rgba(239,68,68,0.3)]",
                 platform.comingSoon && "opacity-70"
               )}
             >
@@ -220,10 +235,21 @@ export function ConnectionPanel({ guildId }: ConnectionPanelProps) {
                           Coming Soon
                         </Badge>
                       ) : isConnected ? (
-                        <Badge variant="success" className="text-[10px] h-4">
-                          <CheckCircle2 className="w-2.5 h-2.5 mr-1" />
-                          Connected
-                        </Badge>
+                        <div className="flex items-center gap-1.5">
+                          <Badge variant="success" className="text-[10px] h-4">
+                            <CheckCircle2 className="w-2.5 h-2.5 mr-1" />
+                            Connected
+                          </Badge>
+                          {isLive && (
+                            <Badge className="text-[10px] h-4 bg-red-500/20 text-red-400 border border-red-500/30 gap-1">
+                              <span className="relative flex h-1.5 w-1.5">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
+                                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-red-500" />
+                              </span>
+                              LIVE
+                            </Badge>
+                          )}
+                        </div>
                       ) : (
                         <Badge variant="destructive" className="text-[10px] h-4">
                           <XCircle className="w-2.5 h-2.5 mr-1" />
@@ -238,27 +264,61 @@ export function ConnectionPanel({ guildId }: ConnectionPanelProps) {
                         {platform.name} support coming soon. Stay tuned!
                       </p>
                     ) : isConnected && connection ? (
-                      <div className="flex items-center gap-3 text-xs text-zinc-400">
-                        <span>
-                          Channel:{" "}
-                          <span className="text-white font-medium">
-                            {connection.platformLogin || "Unknown"}
+                      <div className="flex flex-col gap-1">
+                        {/* Channel row */}
+                        <div className="flex items-center gap-3 text-xs text-zinc-400">
+                          <span>
+                            Channel:{" "}
+                            <span className="text-white font-medium">
+                              {connection.platformLogin || "Unknown"}
+                            </span>
                           </span>
-                        </span>
-                        <span className="text-zinc-600">·</span>
-                        <span>
-                          Alerts:{" "}
-                          <span
-                            className={cn(
-                              "font-medium",
-                              connection.alertsEnabled
-                                ? "text-emerald-400"
-                                : "text-zinc-500"
+                          <span className="text-zinc-600">·</span>
+                          <span>
+                            Alerts:{" "}
+                            <span
+                              className={cn(
+                                "font-medium",
+                                connection.alertsEnabled
+                                  ? "text-emerald-400"
+                                  : "text-zinc-500"
+                              )}
+                            >
+                              {connection.alertsEnabled ? "On" : "Off"}
+                            </span>
+                          </span>
+                        </div>
+
+                        {/* Live stream metadata */}
+                        {isLive && (
+                          <div className="flex flex-col gap-0.5 mt-0.5">
+                            {connection.streamTitle && (
+                              <p className="text-xs text-white/80 font-medium truncate max-w-xs">
+                                {connection.streamTitle}
+                              </p>
                             )}
-                          >
-                            {connection.alertsEnabled ? "On" : "Off"}
-                          </span>
-                        </span>
+                            <div className="flex items-center gap-3 text-xs text-zinc-500">
+                              {connection.gameName && (
+                                <span className="flex items-center gap-1">
+                                  <Eye className="w-3 h-3" />
+                                  {connection.gameName}
+                                </span>
+                              )}
+                              {connection.viewerCount !== undefined && (
+                                <span className="flex items-center gap-1 text-red-400/80">
+                                  <Users className="w-3 h-3" />
+                                  {connection.viewerCount.toLocaleString()}
+                                </span>
+                              )}
+                              {connection.startedAt && (
+                                <span className="flex items-center gap-1">
+                                  <Clock className="w-3 h-3" />
+                                  {formatUptime(connection.startedAt)}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <p className="text-xs text-zinc-500">

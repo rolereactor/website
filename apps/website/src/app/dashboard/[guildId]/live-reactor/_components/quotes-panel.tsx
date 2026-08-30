@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface QuotesPanelProps {
   guildId: string;
@@ -60,11 +61,30 @@ export function QuotesPanel({ guildId }: QuotesPanelProps) {
 
   if (quotesLoading && quotes.length === 0) {
     return (
-      <Card variant="cyberpunk" showGrid>
-        <CardContent className="flex items-center justify-center py-12">
-          <Loader2 className="w-6 h-6 text-cyan-400 animate-spin" />
-        </CardContent>
-      </Card>
+      <div className="space-y-6">
+        <Card variant="cyberpunk" showGrid>
+          <CardHeader>
+            <Skeleton className="h-6 w-32" />
+          </CardHeader>
+          <CardContent className="flex gap-3">
+            <Skeleton className="h-10 flex-1 rounded-lg" />
+            <Skeleton className="h-10 w-28 rounded-lg" />
+          </CardContent>
+        </Card>
+        <Card variant="cyberpunk" showGrid>
+          <CardHeader>
+            <Skeleton className="h-6 w-36" />
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="flex items-center justify-between p-3 rounded-xl border border-white/5 bg-white/2">
+                <Skeleton className="h-4 w-64" />
+                <Skeleton className="h-7 w-7 rounded-md" />
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 

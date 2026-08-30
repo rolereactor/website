@@ -26,6 +26,7 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface FiltersPanelProps {
   guildId: string;
@@ -155,11 +156,31 @@ export function FiltersPanel({ guildId }: FiltersPanelProps) {
 
   if (filtersLoading && !filters) {
     return (
-      <Card variant="cyberpunk" showGrid>
-        <CardContent className="flex items-center justify-center py-12">
-          <Loader2 className="w-6 h-6 text-cyan-400 animate-spin" />
-        </CardContent>
-      </Card>
+      <div className="space-y-6">
+        <Card variant="cyberpunk" showGrid>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <Skeleton className="h-6 w-44" />
+            <Skeleton className="h-6 w-11 rounded-full" />
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <Skeleton className="h-4 w-64" />
+          </CardContent>
+        </Card>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Card key={i} variant="cyberpunk" showGrid>
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <Skeleton className="h-5 w-32" />
+                <Skeleton className="h-6 w-11 rounded-full" />
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Skeleton className="h-3.5 w-full" />
+                <Skeleton className="h-9 w-full rounded-lg" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
     );
   }
 

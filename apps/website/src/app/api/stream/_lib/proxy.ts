@@ -59,10 +59,20 @@ export async function streamProxy(
     return NextResponse.json(data ?? { success: true });
   } catch (error) {
     console.error(`Stream proxy error [${method} ${botPath}]:`, error);
-    const message = error instanceof Error ? error.message : "Unknown error";
+    const isUnreachable =
+      error instanceof Error &&
+      (error.message.includes("fetch failed") ||
+        (error as { cause?: { code?: string } }).cause?.code === "ECONNREFUSED");
+
+    const message = isUnreachable
+      ? "Bot service unreachable"
+      : error instanceof Error
+        ? error.message
+        : "Unknown error";
+
     return NextResponse.json(
       { success: false, error: message },
-      { status: 500 }
+      { status: isUnreachable ? 503 : 500 }
     );
   }
 }

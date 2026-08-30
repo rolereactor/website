@@ -29,6 +29,7 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface ConfigPanelProps {
   guildId: string;
@@ -127,11 +128,39 @@ export function ConfigPanel({ guildId }: ConfigPanelProps) {
 
   if (configLoading && !config) {
     return (
-      <Card variant="cyberpunk" showGrid>
-        <CardContent className="flex items-center justify-center py-12">
-          <Loader2 className="w-6 h-6 text-cyan-400 animate-spin" />
-        </CardContent>
-      </Card>
+      <div className="space-y-6">
+        <Card variant="cyberpunk" showGrid>
+          <CardHeader>
+            <Skeleton className="h-6 w-40" />
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-10 w-full rounded-lg" />
+            </div>
+            <div className="flex items-center justify-between py-2">
+              <div className="space-y-1">
+                <Skeleton className="h-4 w-36" />
+                <Skeleton className="h-3 w-48" />
+              </div>
+              <Skeleton className="h-6 w-11 rounded-full" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card variant="cyberpunk" showGrid>
+          <CardHeader>
+            <Skeleton className="h-6 w-48" />
+          </CardHeader>
+          <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="flex items-center justify-between p-3 rounded-xl border border-white/5 bg-white/2">
+                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-5 w-9 rounded-full" />
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 

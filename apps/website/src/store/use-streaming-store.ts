@@ -12,6 +12,12 @@ export interface StreamConnection {
   alertChannelId: string | null;
   commandsEnabled: boolean;
   commandPrefix: string;
+  // Live stream status (optional — degrades gracefully if not returned by backend)
+  isLive?: boolean;
+  streamTitle?: string;
+  gameName?: string;
+  viewerCount?: number;
+  startedAt?: string; // ISO date string
 }
 
 export interface StreamConfig {
@@ -157,17 +163,17 @@ const CACHE_DURATION = 5 * 60 * 1000;
 async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
   const res = await fetch(url, options);
   const text = await res.text();
-  let data: any = null;
+  let data: Record<string, unknown> | null = null;
 
   try {
-    data = text ? JSON.parse(text) : null;
+    data = text ? (JSON.parse(text) as Record<string, unknown>) : null;
   } catch {
     data = null;
   }
 
   if (!res.ok || (data && (data.status === "error" || data.success === false))) {
     const errorMsg =
-      data?.error || data?.message || `Request failed (${res.status})`;
+      (data?.error as string) || (data?.message as string) || `Request failed (${res.status})`;
     throw new Error(errorMsg);
   }
 
@@ -531,13 +537,11 @@ export const useStreamingStore = create<StreamingState>()(
       clearCache: (guildId) => {
         if (guildId) {
           const s = get();
-          const removeKey = <T>(
-            cache: Record<string, T>
-          ): Record<string, T> => {
+          function removeKey<T>(cache: Record<string, T>): Record<string, T> {
             const next = { ...cache };
-            delete next[guildId];
+            delete next[guildId as string];
             return next;
-          };
+          }
           set({
             statusCache: removeKey(s.statusCache),
             configCache: removeKey(s.configCache),

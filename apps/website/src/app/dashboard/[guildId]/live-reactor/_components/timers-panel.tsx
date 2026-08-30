@@ -25,6 +25,7 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface TimersPanelProps {
   guildId: string;
@@ -99,11 +100,36 @@ export function TimersPanel({ guildId }: TimersPanelProps) {
 
   if (timersLoading && timers.length === 0) {
     return (
-      <Card variant="cyberpunk" showGrid>
-        <CardContent className="flex items-center justify-center py-12">
-          <Loader2 className="w-6 h-6 text-cyan-400 animate-spin" />
-        </CardContent>
-      </Card>
+      <div className="space-y-6">
+        <Card variant="cyberpunk" showGrid>
+          <CardHeader>
+            <Skeleton className="h-6 w-32" />
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Skeleton className="h-10 w-full rounded-lg" />
+              <Skeleton className="h-10 w-full rounded-lg" />
+            </div>
+            <Skeleton className="h-10 w-full rounded-lg" />
+          </CardContent>
+        </Card>
+        <Card variant="cyberpunk" showGrid>
+          <CardHeader>
+            <Skeleton className="h-6 w-36" />
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="flex items-center justify-between p-3 rounded-xl border border-white/5 bg-white/2">
+                <div className="space-y-1.5 flex-1">
+                  <Skeleton className="h-4 w-32" />
+                  <Skeleton className="h-3 w-48" />
+                </div>
+                <Skeleton className="h-6 w-11 rounded-full" />
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 

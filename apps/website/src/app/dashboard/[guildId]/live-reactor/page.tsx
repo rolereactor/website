@@ -74,6 +74,7 @@ export default function StreamingPage({ params }: StreamingPageProps) {
   const isInitialLoading = !isInitialized && isAnyLoading;
   const connections = statusCache[guildId] || [];
   const isConnected = connections.some((c) => c.isConnected);
+  const isLive = connections.some((c) => c.isConnected && c.isLive);
 
   if (isInitialLoading) {
     return (
@@ -110,7 +111,7 @@ export default function StreamingPage({ params }: StreamingPageProps) {
   return (
     <div className="space-y-6 w-full">
       <PageHeader
-        category="Live Reactor"
+        category="Streaming Integration"
         categoryIcon={Radio}
         title="Live Reactor"
         description="Manage your streaming integration and chat features for"
@@ -122,6 +123,7 @@ export default function StreamingPage({ params }: StreamingPageProps) {
           activeTab={activeTab}
           onTabChange={setActiveTab}
           isConnected={isConnected}
+          isLive={isLive}
         />
 
         <div className="flex-1 min-w-0">{renderPanel()}</div>
