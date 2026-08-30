@@ -10,6 +10,7 @@ import {
   Clock,
   CheckCircle2,
   XCircle,
+  Sparkles,
 } from "lucide-react";
 import {
   Card,
@@ -27,6 +28,7 @@ import { toast } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 import { audiowide } from "@/lib/fonts";
 import { useCoreBalance } from "@/hooks/use-core-balance";
+import { ReferralSection } from "@/components/account/referral-section";
 
 interface Transaction {
   paymentId: string;
@@ -46,7 +48,7 @@ export function BillingSection() {
   const [isRedeeming, setIsRedeeming] = useState(false);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isLoadingTransactions, setIsLoadingTransactions] = useState(false);
-  const [visibleTransactions, setVisibleTransactions] = useState(10);
+  const [visibleTransactions, setVisibleTransactions] = useState(5);
 
   useEffect(() => {
     if (session?.user?.id) {
@@ -74,7 +76,11 @@ export function BillingSection() {
     setVisibleTransactions((prev) => prev + 20);
   };
 
-  const hasMoreTransactions = visibleTransactions < transactions.length;
+  const activeTransactions = transactions.filter(
+    (tx) => tx.coresGranted !== 0 || tx.amount > 0
+  );
+
+  const hasMoreTransactions = visibleTransactions < activeTransactions.length;
 
   const handleRedeemCode = async () => {
     if (!redeemCode.trim()) {
@@ -167,92 +173,127 @@ export function BillingSection() {
 
   return (
     <div className="space-y-6">
-      {/* Core Balance Card */}
-      <Card className="bg-zinc-950/50 border-white/5 relative overflow-hidden">
-        <div className="absolute inset-0 bg-linear-to-br from-cyan-500/5 to-purple-500/5 pointer-events-none" />
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="text-white font-bold text-lg flex items-center gap-2">
-                <div className="p-2 bg-cyan-500/10 rounded-lg">
-                  <Zap className="w-5 h-5 text-cyan-400" />
-                </div>
-                Your Core Balance
-              </CardTitle>
-              <CardDescription className="text-zinc-500">
-                Global energy credits for powering Pro Engine across servers
-              </CardDescription>
-            </div>
-            <PricingDialog>
-              <Button
-                size="sm"
-                className="bg-cyan-500 hover:bg-cyan-600 text-white shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] transition-all"
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                Add Cores
-              </Button>
-            </PricingDialog>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="p-6 bg-zinc-900/50 rounded-xl border border-cyan-500/20">
+      {/* Top Section: Core Balance & Redeem Code Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Core Balance Card (Spans 2 columns on desktop) */}
+        <Card className="lg:col-span-2 bg-zinc-950/50 border-white/5 relative overflow-hidden flex flex-col justify-between">
+          <div className="absolute inset-0 bg-linear-to-br from-cyan-500/5 to-purple-500/5 pointer-events-none" />
+          <CardHeader>
             <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="text-white font-bold text-lg flex items-center gap-2">
+                  <div className="p-2 bg-cyan-500/10 rounded-lg">
+                    <Zap className="w-5 h-5 text-cyan-400" />
+                  </div>
+                  Your Core Balance
+                </CardTitle>
+                <CardDescription className="text-zinc-500">
+                  Global energy credits for powering Pro Engine across servers
+                </CardDescription>
+              </div>
+              <PricingDialog>
+                <Button
+                  size="sm"
+                  className="bg-cyan-500 hover:bg-cyan-600 text-white shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] transition-all"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Cores
+                </Button>
+              </PricingDialog>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4 flex-1 flex flex-col justify-between">
+            <div className="p-5 bg-zinc-900/50 rounded-xl border border-cyan-500/20 flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="relative">
                   <div className="absolute inset-0 bg-cyan-500/20 rounded-full blur-lg" />
-                  <div className="w-16 h-16 relative z-10 drop-shadow-[0_0_15px_rgba(0,255,255,0.6)] overflow-hidden rounded-full">
+                  <div className="w-14 h-14 relative z-10 drop-shadow-[0_0_15px_rgba(0,255,255,0.6)] overflow-hidden rounded-full shrink-0">
                     <Image
                       src="/images/cores/core_energy.png"
                       alt="Cores"
                       fill
                       className="object-contain"
-                      sizes="64px"
+                      sizes="56px"
                     />
                   </div>
                 </div>
                 <div>
                   <div
                     className={cn(
-                      "text-4xl font-black text-white",
+                      "text-3xl sm:text-4xl font-black text-white tracking-wide",
                       audiowide.className
                     )}
                   >
                     {(balance ?? 0).toFixed(2)}
                   </div>
-                  <div className="text-sm text-zinc-500 font-medium mt-1">
-                    Available Cores
+                  <div className="text-xs sm:text-sm text-zinc-400 font-medium mt-0.5">
+                    Available Energy Cores
                   </div>
                 </div>
               </div>
-              <PricingDialog>
-                <Button
-                  variant="outline"
-                  className="border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 hover:border-cyan-500/50"
-                >
-                  Top Up
-                </Button>
-              </PricingDialog>
             </div>
-          </div>
 
-          {/* Info */}
-          <div className="mt-4 p-4 bg-cyan-500/5 rounded-lg border border-cyan-500/10">
-            <div className="flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-cyan-400 mt-0.5" />
-              <div className="text-xs text-zinc-400 space-y-1">
-                <p>
-                  Cores are global and can be used to activate Pro Engine on any
-                  server you manage.
-                </p>
-                <p className="text-zinc-500">
-                  Pro Engine subscriptions are managed separately for each
-                  server.
-                </p>
+            {/* Info */}
+            <div className="p-3 bg-cyan-500/5 rounded-lg border border-cyan-500/10">
+              <div className="flex items-start gap-2.5">
+                <AlertCircle className="w-4 h-4 text-cyan-400 mt-0.5 shrink-0" />
+                <div className="text-xs text-zinc-400 space-y-0.5">
+                  <p>
+                    Cores are global energy credits used to activate Pro Engine on any server you manage.
+                  </p>
+                  <p className="text-zinc-500">
+                    Subscriptions renew automatically per server as long as your balance has sufficient Cores.
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+
+        {/* Redeem Code Card (1 column on desktop) */}
+        <Card className="lg:col-span-1 bg-zinc-950/50 border-white/5 relative overflow-hidden flex flex-col justify-between">
+          <div className="absolute inset-0 bg-linear-to-br from-purple-500/5 to-pink-500/5 pointer-events-none" />
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <div className="p-2 bg-purple-500/10 rounded-lg">
+                <Gift className="w-5 h-5 text-purple-400" />
+              </div>
+              <div>
+                <CardTitle className="text-white font-bold text-lg">
+                  Redeem Code
+                </CardTitle>
+                <CardDescription className="text-zinc-500">
+                  Instant promo & gift activation
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4 flex-1 flex flex-col justify-between">
+            <div className="p-3.5 bg-purple-500/5 rounded-lg border border-purple-500/10 flex items-start gap-2.5">
+              <Sparkles className="w-4 h-4 text-purple-400 mt-0.5 shrink-0" />
+              <p className="text-xs text-zinc-300 leading-relaxed">
+                Enter a valid promo or gift code to instantly add Cores to your global energy balance.
+              </p>
+            </div>
+            <div className="space-y-3">
+              <Input
+                placeholder="ENTER CODE..."
+                value={redeemCode}
+                onChange={(e) => setRedeemCode(e.target.value.toUpperCase())}
+                className="bg-zinc-900/50 border-white/10 text-white font-mono uppercase tracking-wider h-11 text-center focus:border-purple-500/50"
+                disabled={isRedeeming}
+              />
+              <Button
+                onClick={handleRedeemCode}
+                disabled={isRedeeming || !redeemCode.trim()}
+                className="w-full bg-purple-500 hover:bg-purple-600 text-white shadow-[0_0_20px_rgba(168,85,247,0.4)] h-11 font-semibold transition-all"
+              >
+                {isRedeeming ? "Redeeming..." : "Redeem Promo Code"}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
       {/* Transaction History Card */}
       <Card className="bg-zinc-950/50 border-white/5">
@@ -278,51 +319,64 @@ export function BillingSection() {
                 Loading transactions...
               </div>
             </div>
-          ) : transactions.length > 0 ? (
-            <div className="space-y-2">
-              {transactions.slice(0, visibleTransactions).map((tx, index) => (
-                <div
-                  key={tx.paymentId || index}
-                  className="flex items-center justify-between p-4 bg-zinc-900/30 rounded-lg border border-white/5 hover:border-white/10 transition-all"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2">
-                      {getStatusIcon(tx.status)}
-                      {getProviderBadge(tx.provider)}
+          ) : activeTransactions.length > 0 ? (
+            <div className="space-y-1.5">
+              <div className="max-h-80 overflow-y-auto space-y-1.5 pr-1">
+                {activeTransactions.slice(0, visibleTransactions).map((tx, index) => (
+                  <div
+                    key={tx.paymentId || index}
+                    className="flex items-center justify-between py-2 px-3 bg-zinc-900/40 rounded-lg border border-white/5 hover:border-white/10 transition-all text-xs"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        {getStatusIcon(tx.status)}
+                        {getProviderBadge(tx.provider)}
+                      </div>
+                      <div>
+                        <div
+                          className={cn(
+                            "font-bold text-xs",
+                            tx.coresGranted < 0
+                              ? "text-rose-400"
+                              : tx.coresGranted > 0
+                              ? "text-emerald-400"
+                              : "text-zinc-400"
+                          )}
+                        >
+                          {tx.coresGranted > 0 ? "+" : ""}
+                          {tx.coresGranted.toLocaleString()} Cores
+                        </div>
+                        <div className="text-[11px] text-zinc-500">
+                          {formatDate(tx.createdAt)}
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <div className="text-white font-bold text-sm">
-                        +{tx.coresGranted.toLocaleString()} Cores
-                      </div>
-                      <div className="text-xs text-zinc-500">
-                        {formatDate(tx.createdAt)}
-                      </div>
+                    <div className="text-right shrink-0">
+                      {tx.amount > 0 ? (
+                        <>
+                          <div className="text-white font-mono text-xs font-semibold">
+                            ${tx.amount.toFixed(2)}
+                          </div>
+                          <div className="text-[10px] text-zinc-500 uppercase">
+                            {tx.currency || "USD"}
+                          </div>
+                        </>
+                      ) : (
+                        <div className="text-[11px] text-zinc-500">Free</div>
+                      )}
                     </div>
                   </div>
-                  <div className="text-right">
-                    {tx.amount > 0 ? (
-                      <>
-                        <div className="text-white font-mono text-sm">
-                          ${tx.amount.toFixed(2)}
-                        </div>
-                        <div className="text-xs text-zinc-500 uppercase">
-                          {tx.currency || "USD"}
-                        </div>
-                      </>
-                    ) : (
-                      <div className="text-xs text-zinc-500">Free</div>
-                    )}
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
               {hasMoreTransactions && (
-                <div className="flex justify-center pt-4">
+                <div className="flex justify-center pt-2">
                   <Button
                     variant="outline"
+                    size="sm"
                     onClick={showMoreTransactions}
-                    className="border-white/10 text-zinc-400 hover:text-white hover:border-cyan-500/30 hover:bg-cyan-500/5"
+                    className="h-8 text-xs border-white/10 text-zinc-400 hover:text-white hover:border-cyan-500/30 hover:bg-cyan-500/5"
                   >
-                    Show More ({transactions.length - visibleTransactions}{" "}
+                    Show More ({activeTransactions.length - visibleTransactions}{" "}
                     remaining)
                   </Button>
                 </div>
@@ -350,42 +404,8 @@ export function BillingSection() {
         </CardContent>
       </Card>
 
-      {/* Redeem Code Card */}
-      <Card className="bg-zinc-950/50 border-white/5">
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <div className="p-2 bg-purple-500/10 rounded-lg">
-              <Gift className="w-5 h-5 text-purple-400" />
-            </div>
-            <div>
-              <CardTitle className="text-white font-bold text-lg">
-                Redeem Code
-              </CardTitle>
-              <CardDescription className="text-zinc-500">
-                Have a promo code? Enter it here for free cores
-              </CardDescription>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="flex gap-2">
-            <Input
-              placeholder="Enter your code..."
-              value={redeemCode}
-              onChange={(e) => setRedeemCode(e.target.value.toUpperCase())}
-              className="flex-1 bg-zinc-900/50 border-white/10 text-white font-mono uppercase tracking-wider h-11"
-              disabled={isRedeeming}
-            />
-            <Button
-              onClick={handleRedeemCode}
-              disabled={isRedeeming || !redeemCode.trim()}
-              className="bg-purple-500 hover:bg-purple-600 text-white shadow-[0_0_20px_rgba(168,85,247,0.4)] h-11 px-6"
-            >
-              {isRedeeming ? "Redeeming..." : "Redeem"}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Referral Program Section */}
+      <ReferralSection />
     </div>
   );
 }
