@@ -185,30 +185,30 @@ export function BillingSection() {
                   <div className="p-2 bg-cyan-500/10 rounded-lg">
                     <Zap className="w-5 h-5 text-cyan-400" />
                   </div>
-                  Your Core Balance
+                  Your Energy &amp; Core Balance
                 </CardTitle>
-                <CardDescription className="text-zinc-500">
-                  Global energy credits for powering Pro Engine across servers
+                <CardDescription className="text-zinc-400 mt-1">
+                  Global energy credits &amp; rewards for powering Pro Engine across servers
                 </CardDescription>
               </div>
               <PricingDialog>
                 <Button
                   size="sm"
-                  className="bg-cyan-500 hover:bg-cyan-600 text-white shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] transition-all"
+                  className="bg-cyan-500 hover:bg-cyan-600 text-white shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] transition-all font-semibold"
                 >
-                  <Plus className="w-4 h-4 mr-2" />
+                  <Plus className="w-4 h-4 mr-1.5" />
                   Add Cores
                 </Button>
               </PricingDialog>
             </div>
           </CardHeader>
           <CardContent className="space-y-4 flex-1 flex flex-col justify-between">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               {/* Cores Card */}
-              <div className="p-4 bg-zinc-900/60 rounded-xl border border-cyan-500/20 flex items-center gap-3">
-                <div className="relative">
+              <div className="p-4 bg-zinc-900/60 rounded-xl border border-cyan-500/20 flex items-center gap-3.5 relative overflow-hidden">
+                <div className="relative shrink-0">
                   <div className="absolute inset-0 bg-cyan-500/20 rounded-full blur-md" />
-                  <div className="w-12 h-12 relative z-10 drop-shadow-[0_0_12px_rgba(0,255,255,0.5)] overflow-hidden rounded-full shrink-0">
+                  <div className="w-12 h-12 relative z-10 drop-shadow-[0_0_12px_rgba(0,255,255,0.5)] overflow-hidden rounded-full">
                     <Image
                       src="/images/cores/core_energy.png"
                       alt="Cores"
@@ -218,48 +218,58 @@ export function BillingSection() {
                     />
                   </div>
                 </div>
-                <div className="min-w-0">
-                  <div className="flex items-baseline gap-1.5 flex-wrap">
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-1 mb-1">
+                    <span className="text-xs font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1">
+                      🔮 Paid Cores
+                    </span>
+                    <Badge className="bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-[10px] px-1.5 py-0 font-mono shrink-0">
+                      Transferable
+                    </Badge>
+                  </div>
+                  <div className="flex items-baseline gap-2">
                     <span
                       className={cn(
-                        "text-2xl font-black text-white tracking-wide",
+                        "text-2xl sm:text-3xl font-black text-white tracking-wide leading-none",
                         audiowide.className
                       )}
                     >
                       {(cores ?? 0).toFixed(2)}
                     </span>
-                    <span className="text-xs text-zinc-500 font-mono">
+                    <span className="text-xs text-zinc-400 font-mono leading-none">
                       (≈ ${((cores ?? 0) * 0.2).toFixed(2)})
                     </span>
-                  </div>
-                  <div className="text-xs text-cyan-400 font-medium flex items-center gap-1.5 mt-0.5">
-                    <span>🔮 Paid Cores</span>
-                    <Badge className="bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-[10px] px-1 py-0 font-mono">
-                      Transferable
-                    </Badge>
                   </div>
                 </div>
               </div>
 
               {/* Sparks Card */}
-              <div className="p-4 bg-zinc-900/60 rounded-xl border border-amber-500/20 flex items-center gap-3">
-                <div className="p-2.5 bg-amber-500/10 rounded-full border border-amber-500/30 shrink-0">
-                  <Zap className="w-6 h-6 text-amber-400 fill-amber-400/20" />
+              <div className="p-4 bg-zinc-900/60 rounded-xl border border-amber-500/20 flex items-center gap-3.5 relative overflow-hidden">
+                <div className="p-3 bg-amber-500/10 rounded-full border border-amber-500/30 shrink-0 relative">
+                  <div className="absolute inset-0 bg-amber-500/20 rounded-full blur-md" />
+                  <Zap className="w-6 h-6 text-amber-400 fill-amber-400/20 relative z-10" />
                 </div>
-                <div className="min-w-0">
-                  <div
-                    className={cn(
-                      "text-2xl font-black text-amber-300 tracking-wide",
-                      audiowide.className
-                    )}
-                  >
-                    {(sparks ?? 0).toFixed(2)}
-                  </div>
-                  <div className="text-xs text-amber-400 font-medium flex items-center gap-1.5 mt-0.5">
-                    <span>⚡ Sparks</span>
-                    <Badge className="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[10px] px-1 py-0 font-mono">
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-1 mb-1">
+                    <span className="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1">
+                      ⚡ Sparks
+                    </span>
+                    <Badge className="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[10px] px-1.5 py-0 font-mono shrink-0">
                       Rewards
                     </Badge>
+                  </div>
+                  <div className="flex items-baseline gap-2">
+                    <span
+                      className={cn(
+                        "text-2xl sm:text-3xl font-black text-amber-300 tracking-wide leading-none",
+                        audiowide.className
+                      )}
+                    >
+                      {(sparks ?? 0).toFixed(2)}
+                    </span>
+                    <span className="text-xs text-zinc-500 font-mono leading-none">
+                      Free Rewards
+                    </span>
                   </div>
                 </div>
               </div>
