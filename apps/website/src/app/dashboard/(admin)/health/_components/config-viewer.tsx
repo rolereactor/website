@@ -78,7 +78,7 @@ const ConfigSection = ({ title, icon: Icon, data }: ConfigSectionProps) => {
               className="flex items-center justify-between p-3 hover:bg-white/5 transition-colors"
             >
               <span className="text-xs font-mono text-zinc-400">{key}</span>
-              <div className="text-xs font-mono text-zinc-200 truncate max-w-[200px] md:max-w-md">
+              <div className="text-xs font-mono text-zinc-200 truncate max-w-50 md:max-w-md">
                 {renderValue(value)}
               </div>
             </div>
@@ -186,7 +186,7 @@ export function ConfigViewer() {
               <p className="text-[10px] uppercase tracking-widest text-zinc-500">
                 Bot Name
               </p>
-              <p className="text-lg font-bold text-white truncate max-w-[150px]">
+              <p className="text-lg font-bold text-white truncate max-w-37.5">
                 {config?.botInfo?.name ?? "Role Reactor"}
               </p>
             </div>
