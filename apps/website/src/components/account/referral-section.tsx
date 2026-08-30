@@ -195,7 +195,7 @@ export function ReferralSection() {
               <Sparkles className="w-3.5 h-3.5" /> Your Unique Referral Link
             </div>
             <div className="flex items-center gap-2 min-w-0">
-              <div className="text-xs sm:text-sm font-mono text-zinc-300 select-all truncate grow bg-zinc-950/60 px-2.5 py-1.5 rounded-lg border border-white/10">
+              <div className="h-9 text-xs sm:text-sm font-mono text-zinc-300 select-all truncate grow bg-zinc-950/60 px-3 rounded-lg border border-white/10 flex items-center">
                 {isLoading ? (
                   <span className="animate-pulse text-zinc-500">Generating link...</span>
                 ) : (
@@ -207,7 +207,7 @@ export function ReferralSection() {
                   size="sm"
                   onClick={handleCopyLink}
                   disabled={isLoading || !data?.shareUrl}
-                  className="bg-cyan-500 hover:bg-cyan-600 text-white shadow-[0_0_16px_rgba(6,182,212,0.35)] h-8 text-xs"
+                  className="bg-cyan-500 hover:bg-cyan-600 text-white shadow-[0_0_16px_rgba(6,182,212,0.35)] h-9 text-xs px-3"
                 >
                   {copied ? (
                     <><Check className="w-3.5 h-3.5 mr-1 text-emerald-300" /> Copied</>
@@ -220,7 +220,7 @@ export function ReferralSection() {
                   variant="outline"
                   onClick={handleShareTwitter}
                   disabled={isLoading || !data?.shareUrl}
-                  className="border-white/10 text-zinc-300 hover:text-white hover:bg-white/5 h-8 px-2.5"
+                  className="border-white/10 text-zinc-300 hover:text-white hover:bg-white/5 h-9 w-9 p-0 flex items-center justify-center shrink-0"
                   title="Share on X (Twitter)"
                 >
                   <Share2 className="w-3.5 h-3.5" />
@@ -249,13 +249,13 @@ export function ReferralSection() {
                   value={claimInputCode}
                   onChange={(e) => setClaimInputCode(e.target.value.toUpperCase())}
                   maxLength={9}
-                  className="bg-zinc-950 border border-white/15 rounded-lg px-2.5 py-1.5 text-xs font-mono text-white placeholder:text-zinc-600 focus:outline-none focus:border-purple-500 uppercase grow"
+                  className="h-9 bg-zinc-950 border border-white/15 rounded-lg px-3 text-xs font-mono text-white placeholder:text-zinc-600 focus:outline-none focus:border-purple-500 uppercase grow"
                 />
                 <Button
                   type="submit"
                   size="sm"
                   disabled={isClaiming || !claimInputCode.trim()}
-                  className="bg-purple-600 hover:bg-purple-700 text-white shrink-0 text-xs px-3 h-8"
+                  className="bg-purple-600 hover:bg-purple-700 text-white shrink-0 text-xs px-4 h-9 font-medium"
                 >
                   {isClaiming ? "Applying..." : "Apply Referral"}
                 </Button>
