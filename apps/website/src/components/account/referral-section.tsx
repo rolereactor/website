@@ -187,80 +187,82 @@ export function ReferralSection() {
       </CardHeader>
 
       <CardContent className="space-y-6">
-        {/* Share Link Banner */}
-        <div className="p-4 bg-zinc-900/60 rounded-xl border border-cyan-500/20 relative overflow-hidden">
-          <div className="text-xs font-semibold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5 mb-2">
-            <Sparkles className="w-3.5 h-3.5" /> Your Unique Referral Link
-          </div>
-          <div className="flex items-center gap-2 min-w-0">
-            <div className="text-sm font-mono text-zinc-300 select-all truncate grow">
-              {isLoading ? (
-                <span className="animate-pulse text-zinc-500">Generating link...</span>
-              ) : (
-                data?.shareUrl || "https://rolereactor.com?ref="
-              )}
+        {/* Top Banners 2-Column Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* Share Link Banner */}
+          <div className="p-4 bg-zinc-900/60 rounded-xl border border-cyan-500/20 relative overflow-hidden flex flex-col justify-between">
+            <div className="text-xs font-semibold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5 mb-2">
+              <Sparkles className="w-3.5 h-3.5" /> Your Unique Referral Link
             </div>
-            <div className="flex items-center gap-2 shrink-0">
-              <Button
-                size="sm"
-                onClick={handleCopyLink}
-                disabled={isLoading || !data?.shareUrl}
-                className="bg-cyan-500 hover:bg-cyan-600 text-white shadow-[0_0_16px_rgba(6,182,212,0.35)]"
-              >
-                {copied ? (
-                  <><Check className="w-3.5 h-3.5 mr-1.5 text-emerald-300" /> Copied</>
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="text-xs sm:text-sm font-mono text-zinc-300 select-all truncate grow bg-zinc-950/60 px-2.5 py-1.5 rounded-lg border border-white/10">
+                {isLoading ? (
+                  <span className="animate-pulse text-zinc-500">Generating link...</span>
                 ) : (
-                  <><Copy className="w-3.5 h-3.5 mr-1.5" /> Copy</>
+                  data?.shareUrl || "https://rolereactor.com?ref="
                 )}
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={handleShareTwitter}
-                disabled={isLoading || !data?.shareUrl}
-                className="border-white/10 text-zinc-300 hover:text-white hover:bg-white/5 px-2.5"
-                title="Share on X (Twitter)"
-              >
-                <Share2 className="w-3.5 h-3.5" />
-              </Button>
+              </div>
+              <div className="flex items-center gap-1.5 shrink-0">
+                <Button
+                  size="sm"
+                  onClick={handleCopyLink}
+                  disabled={isLoading || !data?.shareUrl}
+                  className="bg-cyan-500 hover:bg-cyan-600 text-white shadow-[0_0_16px_rgba(6,182,212,0.35)] h-8 text-xs"
+                >
+                  {copied ? (
+                    <><Check className="w-3.5 h-3.5 mr-1 text-emerald-300" /> Copied</>
+                  ) : (
+                    <><Copy className="w-3.5 h-3.5 mr-1" /> Copy</>
+                  )}
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={handleShareTwitter}
+                  disabled={isLoading || !data?.shareUrl}
+                  className="border-white/10 text-zinc-300 hover:text-white hover:bg-white/5 h-8 px-2.5"
+                  title="Share on X (Twitter)"
+                >
+                  <Share2 className="w-3.5 h-3.5" />
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Redeem Friend's Code Banner / Status */}
-        {data?.hasClaimedCode ? (
-          <div className="p-3 bg-emerald-500/10 rounded-xl border border-emerald-500/20 flex items-center gap-2 text-xs text-emerald-400">
-            <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-            <span>
-              <strong className="font-semibold">Referral Bonus Active:</strong> You get <span className="underline">+10% bonus Cores</span> on your first purchase of $10 or more!
-            </span>
-          </div>
-        ) : (
-          <form onSubmit={handleManualClaim} className="p-3.5 bg-zinc-900/40 rounded-xl border border-purple-500/20 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
-            <div className="flex items-center gap-2 text-xs text-zinc-300 shrink-0">
-              <Gift className="w-4 h-4 text-purple-400 shrink-0" />
-              <span className="font-medium whitespace-nowrap">Referred by a Friend?</span>
+          {/* Redeem Friend's Code Banner / Status */}
+          {data?.hasClaimedCode ? (
+            <div className="p-4 bg-emerald-500/10 rounded-xl border border-emerald-500/20 flex items-center gap-2 text-xs text-emerald-400">
+              <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span>
+                <strong className="font-semibold">Referral Bonus Active:</strong> You get <span className="underline">+10% bonus Cores</span> on your first purchase of $10 or more!
+              </span>
             </div>
-            <div className="flex items-center gap-2 grow">
-              <input
-                type="text"
-                placeholder="E.G. RR-ABCDEF"
-                value={claimInputCode}
-                onChange={(e) => setClaimInputCode(e.target.value.toUpperCase())}
-                maxLength={9}
-                className="bg-zinc-950 border border-white/15 rounded-lg px-3 py-1.5 text-xs font-mono text-white placeholder:text-zinc-600 focus:outline-none focus:border-purple-500 uppercase grow"
-              />
-              <Button
-                type="submit"
-                size="sm"
-                disabled={isClaiming || !claimInputCode.trim()}
-                className="bg-purple-600 hover:bg-purple-700 text-white shrink-0 text-xs px-3"
-              >
-                {isClaiming ? "Applying..." : "Apply Referral"}
-              </Button>
-            </div>
-          </form>
-        )}
+          ) : (
+            <form onSubmit={handleManualClaim} className="p-4 bg-zinc-900/60 rounded-xl border border-purple-500/20 flex flex-col justify-between">
+              <div className="text-xs font-semibold text-purple-400 uppercase tracking-wider flex items-center gap-1.5 mb-2">
+                <Gift className="w-3.5 h-3.5" /> Referred by a Friend?
+              </div>
+              <div className="flex items-center gap-2 grow">
+                <input
+                  type="text"
+                  placeholder="E.G. RR-ABCDEF"
+                  value={claimInputCode}
+                  onChange={(e) => setClaimInputCode(e.target.value.toUpperCase())}
+                  maxLength={9}
+                  className="bg-zinc-950 border border-white/15 rounded-lg px-2.5 py-1.5 text-xs font-mono text-white placeholder:text-zinc-600 focus:outline-none focus:border-purple-500 uppercase grow"
+                />
+                <Button
+                  type="submit"
+                  size="sm"
+                  disabled={isClaiming || !claimInputCode.trim()}
+                  className="bg-purple-600 hover:bg-purple-700 text-white shrink-0 text-xs px-3 h-8"
+                >
+                  {isClaiming ? "Applying..." : "Apply Referral"}
+                </Button>
+              </div>
+            </form>
+          )}
+        </div>
 
         {/* Key Metrics Grid */}
         <div className="grid grid-cols-3 gap-3">
