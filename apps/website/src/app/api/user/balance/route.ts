@@ -35,37 +35,38 @@ export async function GET(request: Request) {
       return NextResponse.json({
         success: true,
         balance: 0,
+        cores: 0,
+        sparks: 0,
       });
     }
 
     const data = await response.json();
 
-    if (data.success && data.data?.user?.currentCredits !== undefined) {
-      const rawBalance = data.data.user.currentCredits;
-      const fixedBalance = Number(Number(rawBalance).toFixed(2));
-      return NextResponse.json({
-        success: true,
-        balance: fixedBalance,
-      });
-    }
-
     if (data.status === "success" && data.credits !== undefined) {
-      const rawBalance = data.credits;
-      const fixedBalance = Number(Number(rawBalance).toFixed(2));
+      const rawCores = data.credits;
+      const rawSparks = data.sparks ?? 0;
+      const cores = Number(Number(rawCores).toFixed(2));
+      const sparks = Number(Number(rawSparks).toFixed(2));
       return NextResponse.json({
         success: true,
-        balance: fixedBalance,
+        balance: cores,
+        cores,
+        sparks,
       });
     }
 
     return NextResponse.json({
       success: true,
       balance: 0,
+      cores: 0,
+      sparks: 0,
     });
   } catch {
     return NextResponse.json({
       success: true,
       balance: 0,
+      cores: 0,
+      sparks: 0,
     });
   }
 }

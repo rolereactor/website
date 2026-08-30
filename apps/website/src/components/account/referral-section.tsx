@@ -283,10 +283,10 @@ export function ReferralSection() {
           </div>
           <ul className="list-disc list-inside space-y-1 text-zinc-400 pl-1">
             <li>
-              <strong className="text-zinc-200">Referee Welcome Gift:</strong> Your friend gets a <span className="text-emerald-400 font-semibold">+10% bonus in Cores</span> on their first purchase of $10 or more.
+              <strong className="text-zinc-200">Instant Referee Gift:</strong> Your friend receives <span className="text-amber-400 font-semibold">+25 Sparks ⚡ welcome bonus</span> instantly upon applying your code, plus <span className="text-emerald-400 font-semibold">+10% bonus Cores 🔮</span> on their first purchase of $10+.
             </li>
             <li>
-              <strong className="text-zinc-200">Ongoing Passive Reward:</strong> You earn <span className="text-cyan-400 font-semibold">15% bonus Cores</span> on <em className="not-italic text-white underline">every single purchase</em> your referred friends make in the future!
+              <strong className="text-zinc-200">Ongoing Passive Reward:</strong> You earn <span className="text-cyan-400 font-semibold">15% bonus Cores 🔮</span> on <em className="not-italic text-white underline">every single purchase</em> your referred friends make in the future!
             </li>
           </ul>
         </div>

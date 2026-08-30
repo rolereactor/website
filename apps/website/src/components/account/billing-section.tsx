@@ -43,7 +43,7 @@ interface Transaction {
 
 export function BillingSection() {
   const { data: session } = useSession();
-  const { balance, mutate } = useCoreBalance();
+  const { cores, sparks, mutate } = useCoreBalance();
   const [redeemCode, setRedeemCode] = useState("");
   const [isRedeeming, setIsRedeeming] = useState(false);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -203,31 +203,63 @@ export function BillingSection() {
             </div>
           </CardHeader>
           <CardContent className="space-y-4 flex-1 flex flex-col justify-between">
-            <div className="p-5 bg-zinc-900/50 rounded-xl border border-cyan-500/20 flex items-center justify-between">
-              <div className="flex items-center gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* Cores Card */}
+              <div className="p-4 bg-zinc-900/60 rounded-xl border border-cyan-500/20 flex items-center gap-3">
                 <div className="relative">
-                  <div className="absolute inset-0 bg-cyan-500/20 rounded-full blur-lg" />
-                  <div className="w-14 h-14 relative z-10 drop-shadow-[0_0_15px_rgba(0,255,255,0.6)] overflow-hidden rounded-full shrink-0">
+                  <div className="absolute inset-0 bg-cyan-500/20 rounded-full blur-md" />
+                  <div className="w-12 h-12 relative z-10 drop-shadow-[0_0_12px_rgba(0,255,255,0.5)] overflow-hidden rounded-full shrink-0">
                     <Image
                       src="/images/cores/core_energy.png"
                       alt="Cores"
                       fill
                       className="object-contain"
-                      sizes="56px"
+                      sizes="48px"
                     />
                   </div>
                 </div>
-                <div>
+                <div className="min-w-0">
+                  <div className="flex items-baseline gap-1.5 flex-wrap">
+                    <span
+                      className={cn(
+                        "text-2xl font-black text-white tracking-wide",
+                        audiowide.className
+                      )}
+                    >
+                      {(cores ?? 0).toFixed(2)}
+                    </span>
+                    <span className="text-xs text-zinc-500 font-mono">
+                      (≈ ${((cores ?? 0) * 0.2).toFixed(2)})
+                    </span>
+                  </div>
+                  <div className="text-xs text-cyan-400 font-medium flex items-center gap-1.5 mt-0.5">
+                    <span>🔮 Paid Cores</span>
+                    <Badge className="bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-[10px] px-1 py-0 font-mono">
+                      Transferable
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+
+              {/* Sparks Card */}
+              <div className="p-4 bg-zinc-900/60 rounded-xl border border-amber-500/20 flex items-center gap-3">
+                <div className="p-2.5 bg-amber-500/10 rounded-full border border-amber-500/30 shrink-0">
+                  <Zap className="w-6 h-6 text-amber-400 fill-amber-400/20" />
+                </div>
+                <div className="min-w-0">
                   <div
                     className={cn(
-                      "text-3xl sm:text-4xl font-black text-white tracking-wide",
+                      "text-2xl font-black text-amber-300 tracking-wide",
                       audiowide.className
                     )}
                   >
-                    {(balance ?? 0).toFixed(2)}
+                    {(sparks ?? 0).toFixed(2)}
                   </div>
-                  <div className="text-xs sm:text-sm text-zinc-400 font-medium mt-0.5">
-                    Available Energy Cores
+                  <div className="text-xs text-amber-400 font-medium flex items-center gap-1.5 mt-0.5">
+                    <span>⚡ Sparks</span>
+                    <Badge className="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[10px] px-1 py-0 font-mono">
+                      Rewards
+                    </Badge>
                   </div>
                 </div>
               </div>
@@ -239,10 +271,7 @@ export function BillingSection() {
                 <AlertCircle className="w-4 h-4 text-cyan-400 mt-0.5 shrink-0" />
                 <div className="text-xs text-zinc-400 space-y-0.5">
                   <p>
-                    Cores are global energy credits used to activate Pro Engine on any server you manage.
-                  </p>
-                  <p className="text-zinc-500">
-                    Subscriptions renew automatically per server as long as your balance has sufficient Cores.
+                    <strong className="text-cyan-300">Cores 🔮</strong> are transferable energy credits for Pro Engine &amp; custom branding. <strong className="text-amber-300">Sparks ⚡</strong> are earned via voting &amp; daily streaks for personal rewards.
                   </p>
                 </div>
               </div>

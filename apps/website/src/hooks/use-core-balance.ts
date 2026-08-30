@@ -3,23 +3,34 @@
 import useSWR from "swr";
 import { useSession } from "next-auth/react";
 
+export interface BalanceData {
+  balance: number;
+  cores: number;
+  sparks: number;
+}
+
 // Fetcher function for SWR
-const fetcher = async (url: string) => {
+const fetcher = async (url: string): Promise<BalanceData> => {
   const res = await fetch(url);
-  // Always return balance (API returns 0 on errors)
   const data = await res.json();
-  return (data.balance ?? 0) as number;
+  const cores = (data.cores ?? data.balance ?? 0) as number;
+  const sparks = (data.sparks ?? 0) as number;
+  return {
+    balance: cores,
+    cores,
+    sparks,
+  };
 };
 
 /**
- * Custom hook to fetch and cache user's core balance
+ * Custom hook to fetch and cache user's core balance & sparks
  * Uses SWR for automatic caching, revalidation, and deduplication
  */
 export function useCoreBalance() {
   const { data: session, status } = useSession();
 
   const {
-    data: balance,
+    data: balanceData,
     isLoading: isSWRManagerLoading,
     error,
     mutate,
@@ -34,7 +45,9 @@ export function useCoreBalance() {
   const isLoading = status === "loading" || isSWRManagerLoading;
 
   return {
-    balance: balance ?? 0,
+    balance: balanceData?.cores ?? 0,
+    cores: balanceData?.cores ?? 0,
+    sparks: balanceData?.sparks ?? 0,
     isLoading,
     error,
     mutate, // Allows manual revalidation
