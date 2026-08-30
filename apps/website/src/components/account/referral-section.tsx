@@ -232,23 +232,23 @@ export function ReferralSection() {
           <div className="p-3 bg-emerald-500/10 rounded-xl border border-emerald-500/20 flex items-center gap-2 text-xs text-emerald-400">
             <Check className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>
-              <strong className="font-semibold">Referral Code Applied:</strong> You get <span className="underline">+10% bonus Cores</span> on your first purchase of $10 or more!
+              <strong className="font-semibold">Referral Bonus Active:</strong> You get <span className="underline">+10% bonus Cores</span> on your first purchase of $10 or more!
             </span>
           </div>
         ) : (
-          <form onSubmit={handleManualClaim} className="p-3.5 bg-zinc-900/40 rounded-xl border border-white/10 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+          <form onSubmit={handleManualClaim} className="p-3.5 bg-zinc-900/40 rounded-xl border border-purple-500/20 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
             <div className="flex items-center gap-2 text-xs text-zinc-300 shrink-0">
               <Gift className="w-4 h-4 text-purple-400 shrink-0" />
-              <span className="font-medium whitespace-nowrap">Have a Referral Code?</span>
+              <span className="font-medium whitespace-nowrap">Referred by a Friend?</span>
             </div>
             <div className="flex items-center gap-2 grow">
               <input
                 type="text"
-                placeholder="e.g. RR-ABCDEF"
+                placeholder="E.G. RR-ABCDEF"
                 value={claimInputCode}
                 onChange={(e) => setClaimInputCode(e.target.value.toUpperCase())}
                 maxLength={9}
-                className="bg-zinc-950 border border-white/15 rounded-lg px-3 py-1.5 text-xs font-mono text-white placeholder:text-zinc-600 focus:outline-none focus:border-cyan-500 uppercase grow"
+                className="bg-zinc-950 border border-white/15 rounded-lg px-3 py-1.5 text-xs font-mono text-white placeholder:text-zinc-600 focus:outline-none focus:border-purple-500 uppercase grow"
               />
               <Button
                 type="submit"
@@ -256,7 +256,7 @@ export function ReferralSection() {
                 disabled={isClaiming || !claimInputCode.trim()}
                 className="bg-purple-600 hover:bg-purple-700 text-white shrink-0 text-xs px-3"
               >
-                {isClaiming ? "Applying..." : "Redeem Code"}
+                {isClaiming ? "Applying..." : "Apply Referral"}
               </Button>
             </div>
           </form>
