@@ -6,7 +6,6 @@ import {
   Users,
   Copy,
   Check,
-  Share2,
   Gift,
   Zap,
   TrendingUp,
@@ -123,33 +122,6 @@ export function ReferralSection() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleShareLink = async () => {
-    if (!data?.shareUrl) return;
-
-    const shareTitle = "Join me on Role Reactor!";
-    const shareText = "Level up your Discord server with Role Reactor! Use my link for +10% bonus Cores on your first purchase:";
-
-    if (typeof navigator !== "undefined" && navigator.share) {
-      try {
-        await navigator.share({
-          title: shareTitle,
-          text: shareText,
-          url: data.shareUrl,
-        });
-        return;
-      } catch {
-        // Fallback if user cancels or native share fails
-      }
-    }
-
-    // Fallback for desktop: Open Twitter/X share window
-    const text = encodeURIComponent(shareText);
-    window.open(
-      `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(data.shareUrl)}`,
-      "_blank"
-    );
-  };
-
   const handleManualClaim = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!claimInputCode.trim()) return;
@@ -216,30 +188,18 @@ export function ReferralSection() {
                   data?.shareUrl || "https://rolereactor.com?ref="
                 )}
               </div>
-              <div className="flex items-center gap-1.5 shrink-0">
-                <Button
-                  size="sm"
-                  onClick={handleCopyLink}
-                  disabled={isLoading || !data?.shareUrl}
-                  className="bg-cyan-500 hover:bg-cyan-600 text-white shadow-[0_0_16px_rgba(6,182,212,0.35)] h-9 text-xs px-3"
-                >
-                  {copied ? (
-                    <><Check className="w-3.5 h-3.5 mr-1 text-emerald-300" /> Copied</>
-                  ) : (
-                    <><Copy className="w-3.5 h-3.5 mr-1" /> Copy</>
-                  )}
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={handleShareLink}
-                  disabled={isLoading || !data?.shareUrl}
-                  className="border-white/10 text-zinc-300 hover:text-white hover:bg-white/5 h-9 w-9 p-0 flex items-center justify-center shrink-0"
-                  title="Share Referral Link"
-                >
-                  <Share2 className="w-3.5 h-3.5" />
-                </Button>
-              </div>
+              <Button
+                size="sm"
+                onClick={handleCopyLink}
+                disabled={isLoading || !data?.shareUrl}
+                className="bg-cyan-500 hover:bg-cyan-600 text-white shadow-[0_0_16px_rgba(6,182,212,0.35)] h-9 text-xs px-3 shrink-0"
+              >
+                {copied ? (
+                  <><Check className="w-3.5 h-3.5 mr-1 text-emerald-300" /> Copied</>
+                ) : (
+                  <><Copy className="w-3.5 h-3.5 mr-1" /> Copy</>
+                )}
+              </Button>
             </div>
           </div>
 
