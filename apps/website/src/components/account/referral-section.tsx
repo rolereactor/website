@@ -229,7 +229,7 @@ export function ReferralSection() {
                   type="submit"
                   size="sm"
                   disabled={isClaiming || !claimInputCode.trim()}
-                  className="bg-purple-600 hover:bg-purple-700 text-white shrink-0 text-xs px-4 h-9 font-medium"
+                  className="bg-purple-600 hover:bg-purple-700 text-white shrink-0 text-xs px-4 h-9 font-medium shadow-[0_0_16px_rgba(168,85,247,0.35)]"
                 >
                   {isClaiming ? "Applying..." : "Apply Referral"}
                 </Button>
