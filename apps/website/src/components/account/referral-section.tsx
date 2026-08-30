@@ -123,15 +123,29 @@ export function ReferralSection() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleShareTwitter = () => {
+  const handleShareLink = async () => {
     if (!data?.shareUrl) return;
-    const text = encodeURIComponent(
-      `Level up your Discord server with @RoleReactorBot! Use my link for +10% bonus Cores on your first purchase:`
-    );
+
+    const shareTitle = "Join me on Role Reactor!";
+    const shareText = "Level up your Discord server with Role Reactor! Use my link for +10% bonus Cores on your first purchase:";
+
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({
+          title: shareTitle,
+          text: shareText,
+          url: data.shareUrl,
+        });
+        return;
+      } catch {
+        // Fallback if user cancels or native share fails
+      }
+    }
+
+    // Fallback for desktop: Open Twitter/X share window
+    const text = encodeURIComponent(shareText);
     window.open(
-      `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(
-        data.shareUrl
-      )}`,
+      `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(data.shareUrl)}`,
       "_blank"
     );
   };
@@ -218,10 +232,10 @@ export function ReferralSection() {
                 <Button
                   size="sm"
                   variant="outline"
-                  onClick={handleShareTwitter}
+                  onClick={handleShareLink}
                   disabled={isLoading || !data?.shareUrl}
                   className="border-white/10 text-zinc-300 hover:text-white hover:bg-white/5 h-9 w-9 p-0 flex items-center justify-center shrink-0"
-                  title="Share on X (Twitter)"
+                  title="Share Referral Link"
                 >
                   <Share2 className="w-3.5 h-3.5" />
                 </Button>
