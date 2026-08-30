@@ -33,11 +33,10 @@ export function CoreBalance({
   const { status } = useSession();
   const { cores, sparks, isLoading } = useCoreBalance();
 
-  // Round balance to 2 decimal places to fix floating point precision issues
+  // Round Cores to 2 decimal places for financial precision, format Sparks as whole integer
   const roundedCores = cores ? Math.round(cores * 100) / 100 : 0;
-  const roundedSparks = sparks ? Math.round(sparks * 100) / 100 : 0;
   const displayCores = roundedCores.toFixed(2);
-  const displaySparks = roundedSparks.toFixed(2);
+  const displaySparks = Math.floor(sparks ?? 0).toLocaleString();
 
   if (status === "unauthenticated") return null;
 

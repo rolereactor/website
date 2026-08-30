@@ -265,7 +265,7 @@ export function BillingSection() {
                         audiowide.className
                       )}
                     >
-                      {(sparks ?? 0).toFixed(2)}
+                      {Math.floor(sparks ?? 0).toLocaleString()}
                     </span>
                     <span className="text-xs text-zinc-500 font-mono leading-none">
                       Free Rewards
