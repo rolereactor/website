@@ -1,14 +1,15 @@
 import { NextResponse } from "next/server";
+import { botFetch } from "@/lib/bot-fetch";
 
-const BOT_API_URL = process.env.BOT_API_URL || "http://localhost:3030";
+const BOT_API_URL = process.env.BOT_API_URL;
 
 export async function GET() {
+  if (!BOT_API_URL) {
+    return NextResponse.json({ online: false }, { status: 200 });
+  }
+
   try {
-    const response = await fetch(`${BOT_API_URL}/api/v1/bot/status`, {
-      method: "GET",
-      headers: {
-        "User-Agent": `RoleReactorWebsite (${process.env.NEXT_PUBLIC_WEBSITE_URL || "https://rolereactor.xyz"}, 1.0.0)`,
-      },
+    const response = await botFetch("/api/v1/bot/status", {
       signal: AbortSignal.timeout(5000),
     });
 

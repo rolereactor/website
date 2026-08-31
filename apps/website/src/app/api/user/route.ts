@@ -44,13 +44,16 @@ export async function GET(request: Request) {
     }
 
     const { searchParams } = new URL(request.url);
-    const limit = searchParams.get("limit") || "50";
-    const page = searchParams.get("page") || "1";
+    const rawLimit = searchParams.get("limit") || "50";
+    const rawPage = searchParams.get("page") || "1";
     const search = searchParams.get("search");
 
+    const limitNum = Math.max(1, Math.min(100, parseInt(rawLimit, 10) || 50));
+    const pageNum = Math.max(1, parseInt(rawPage, 10) || 1);
+
     const query = new URLSearchParams({
-      limit,
-      page,
+      limit: String(limitNum),
+      page: String(pageNum),
       ...(search && { search }),
     });
 
@@ -60,7 +63,6 @@ export async function GET(request: Request) {
     );
 
     if (data?.users && Array.isArray(data.users)) {
-      const limitNum = parseInt(limit, 10) || 10;
       const rawCount = data.users.length;
 
       const seen = new Set<string>();

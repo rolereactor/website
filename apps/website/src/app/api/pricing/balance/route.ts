@@ -1,37 +1,41 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+import { auth } from "@/auth";
 import { botFetch } from "@/lib/bot-fetch";
 
 /**
- * Real-time Core balance for a user.
+ * Real-time Core balance for the authenticated user.
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get("user_id");
-
-    if (!userId) {
+    const session = await auth();
+    if (!session?.user?.id) {
       return NextResponse.json(
-        { success: false, error: "Missing user_id" },
-        { status: 400 }
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
       );
     }
+
+    const userId = session.user.id;
 
     const response = await botFetch(`/pricing?user_id=${userId}`, {
       method: "GET",
       cache: "no-store",
+      userId,
     });
 
     if (!response.ok) {
-      throw new Error(`Bot API returned ${response.status}`);
+      return NextResponse.json(
+        { success: false, error: "Failed to fetch balance" },
+        { status: response.status }
+      );
     }
 
     const data = await response.json();
 
-    // Extract and normalize user data - API returns "requestedUserId" but schema expects "userId"
+    // Extract and normalize user data
     let userData = null;
     if (data.success && data.data?.user) {
       const rawCredits = data.data.user.currentCredits;
-      // Fix floating point precision issue from bot API
       const fixedCredits = rawCredits
         ? Number(Number(rawCredits).toFixed(2))
         : 0;
@@ -50,7 +54,6 @@ export async function GET(request: NextRequest) {
 
     if (data.status === "success" && data.user) {
       const rawCredits = data.user.currentCredits;
-      // Fix floating point precision issue from bot API
       const fixedCredits = rawCredits
         ? Number(Number(rawCredits).toFixed(2))
         : 0;
@@ -68,16 +71,14 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ success: true, data: { user: userData } });
     }
 
-    throw new Error("Invalid response format from Bot API");
-  } catch (error) {
-    console.error("Error fetching pricing balance:", error);
     return NextResponse.json(
-      {
-        success: false,
-        error:
-          "Pricing service is currently unavailable. Please try again later.",
-      },
-      { status: 503 }
+      { success: false, error: "Invalid response format" },
+      { status: 500 }
+    );
+  } catch {
+    return NextResponse.json(
+      { success: false, error: "Failed to fetch balance" },
+      { status: 500 }
     );
   }
 }

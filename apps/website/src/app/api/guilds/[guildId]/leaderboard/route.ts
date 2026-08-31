@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { botFetch } from "@/lib/bot-fetch";
+import { isValidSnowflake } from "@/lib/api-validation";
 
 export const dynamic = "force-dynamic";
 
@@ -9,6 +10,13 @@ export async function GET(
 ) {
   try {
     const { guildId } = await params;
+
+    if (!isValidSnowflake(guildId)) {
+      return NextResponse.json(
+        { error: "Invalid guild ID format" },
+        { status: 400 }
+      );
+    }
 
     const { searchParams } = new URL(request.url);
     const limit = searchParams.get("limit") || "50";

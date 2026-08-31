@@ -37,23 +37,13 @@ export type UserRole = (typeof UserRoles)[keyof typeof UserRoles];
 export function isDeveloper(user?: ExtendedUser | null): boolean {
   if (!user?.id) return false;
 
-  // 1. Root IDs always have access
-  const envDevIds = process.env.NEXT_PUBLIC_DEVELOPER_IDS ?? "";
-  const botDevIds =
-    process.env.DISCORD_DEVELOPERS ??
-    process.env.NEXT_PUBLIC_DISCORD_DEVELOPERS ??
-    "";
+  // 1. Root IDs always have access (server-side env vars only)
+  const botDevIds = process.env.DISCORD_DEVELOPERS ?? "";
 
-  const rootIds = [
-    ...envDevIds
-      .split(",")
-      .map((id) => id.trim())
-      .filter(Boolean),
-    ...botDevIds
-      .split(",")
-      .map((id) => id.trim())
-      .filter(Boolean),
-  ];
+  const rootIds = botDevIds
+    .split(",")
+    .map((id) => id.trim())
+    .filter(Boolean);
 
   if (rootIds.includes(user.id)) return true;
 

@@ -1,30 +1,35 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+import { auth } from "@/auth";
 import { botFetch } from "@/lib/bot-fetch";
 
 /**
  * Get Core credit packages and pricing from the bot API
- * Optional user_id param for personalized pricing info
+ * Requires authentication — uses session user ID for personalized pricing
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get("user_id");
-
-    // Build path with optional user_id
-    let path = "/pricing";
-    if (userId) {
-      path += `?user_id=${userId}`;
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
     }
 
-    // Call bot API to get pricing
-    const response = await botFetch(path, {
+    const userId = session.user.id;
+
+    // Call bot API to get pricing with authenticated user
+    const response = await botFetch(`/pricing?user_id=${userId}`, {
       method: "GET",
-      // Disable cache to ensure real-time balance updates
       cache: "no-store",
+      userId,
     });
 
     if (!response.ok) {
-      throw new Error(`Bot API returned ${response.status}`);
+      return NextResponse.json(
+        { success: false, error: "Pricing service unavailable" },
+        { status: 503 }
+      );
     }
 
     const data = await response.json();
@@ -38,24 +43,20 @@ export async function GET(request: NextRequest) {
     }
 
     if (data.status === "success") {
-      // The bot spreads data into the root object, so we extract the useful bits
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { status, timestamp, ...pricingInfo } = data;
+      const { status: _, timestamp: __, ...pricingInfo } = data;
       return NextResponse.json({
         success: true,
         data: pricingInfo,
       });
     }
 
-    throw new Error("Invalid response format from Bot API");
-  } catch (error) {
-    console.error("Error fetching pricing:", error);
     return NextResponse.json(
-      {
-        success: false,
-        error:
-          "Pricing service is currently unavailable. Please try again later.",
-      },
+      { success: false, error: "Invalid response format" },
+      { status: 500 }
+    );
+  } catch {
+    return NextResponse.json(
+      { success: false, error: "Pricing service is currently unavailable" },
       { status: 503 }
     );
   }

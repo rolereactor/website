@@ -103,7 +103,7 @@ export function ServerDetailsDialog({
         setDetails(data);
       }
     } catch (error) {
-      console.error("Failed to fetch guild details:", error);
+      // Error handling - details remains null, showing error state
     } finally {
       setIsLoading(false);
     }

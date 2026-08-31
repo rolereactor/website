@@ -25,15 +25,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (session.user && token) {
         session.user.id = token.id ?? token.sub ?? "";
 
-        try {
-          const userData = await botFetchJson<{ id: string; role: string }>(
-            `/user/${session.user.id}`,
-            { silent: true }
-          );
-          session.user.role = userData.role ?? "user";
-        } catch {
-          session.user.role = "user";
-        }
+        // Use cached role from JWT to avoid per-request bot API calls
+        session.user.role = (token.userRole as string) ?? "user";
 
         if (token.accessToken) {
           session.accessToken = token.accessToken;
@@ -58,6 +51,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.id = profile.id;
 
         try {
+          const userData = await botFetchJson<{ id: string; role: string }>(
+            `/user/${profile.id}`,
+            { silent: true }
+          );
+          // Cache role in JWT to avoid per-request lookups
+          token.userRole = userData.role ?? "user";
+
           await botFetchJson("/user/sync", {
             method: "POST",
             userId: profile.id,
@@ -76,6 +76,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             `[Auth] Failed to sync user ${profile.id} with bot:`,
             error
           );
+          token.userRole = "user";
         }
 
         const avatar = profile.avatar;

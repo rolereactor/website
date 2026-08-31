@@ -38,11 +38,6 @@ export async function GET() {
   }
 
   try {
-    // Log diagnostic info (safely)
-    console.log(
-      `Making Discord API request for user ${session.user?.id} with token: ${accessToken?.substring(0, 5)}...`
-    );
-
     const response = await fetch("https://discord.com/api/users/@me/guilds", {
       headers: {
         Authorization: `Bearer ${accessToken}`,

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { botFetch } from "@/lib/bot-fetch";
+import { isValidSnowflake } from "@/lib/api-validation";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +11,14 @@ export async function PATCH(
 ) {
   try {
     const { guildId, variableId } = await params;
+
+    if (!isValidSnowflake(guildId)) {
+      return NextResponse.json(
+        { error: "Invalid guild ID format" },
+        { status: 400 }
+      );
+    }
+
     const session = await auth();
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -44,6 +53,14 @@ export async function DELETE(
 ) {
   try {
     const { guildId, variableId } = await params;
+
+    if (!isValidSnowflake(guildId)) {
+      return NextResponse.json(
+        { error: "Invalid guild ID format" },
+        { status: 400 }
+      );
+    }
+
     const session = await auth();
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

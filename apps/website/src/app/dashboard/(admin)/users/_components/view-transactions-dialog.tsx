@@ -48,7 +48,7 @@ export function ViewTransactionsDialog({
     } else {
       setTransactions([]);
     }
-  }, [open, user]);
+  }, [open, user?.id]);
 
   const loadTransactions = async (userId: string) => {
     setIsLoading(true);

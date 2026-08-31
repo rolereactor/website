@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { botFetch } from "@/lib/bot-fetch";
+import { isValidSnowflake } from "@/lib/api-validation";
 
 export async function DELETE(
   _request: NextRequest,
@@ -8,6 +9,13 @@ export async function DELETE(
 ) {
   try {
     const { guildId, messageId } = await params;
+
+    if (!isValidSnowflake(guildId)) {
+      return NextResponse.json(
+        { error: "Invalid guild ID format" },
+        { status: 400 }
+      );
+    }
 
     const session = await auth();
     if (!session) {

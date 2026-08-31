@@ -185,7 +185,7 @@ export function ReferralSection() {
                 {isLoading ? (
                   <span className="animate-pulse text-zinc-500">Generating link...</span>
                 ) : (
-                  data?.shareUrl || "https://rolereactor.com?ref="
+                  data?.shareUrl || "https://rolereactor.xyz?ref="
                 )}
               </div>
               <Button

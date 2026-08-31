@@ -1,5 +1,6 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { streamProxy } from "../../_lib/proxy";
+import { isValidSnowflake } from "@/lib/api-validation";
 
 export const dynamic = "force-dynamic";
 
@@ -8,5 +9,13 @@ export async function DELETE(
   { params }: { params: Promise<{ guildId: string }> }
 ) {
   const { guildId } = await params;
+
+  if (!isValidSnowflake(guildId)) {
+    return NextResponse.json(
+      { error: "Invalid guild ID format" },
+      { status: 400 }
+    );
+  }
+
   return streamProxy("DELETE", guildId, `/stream/guilds/${guildId}/disconnect`);
 }
