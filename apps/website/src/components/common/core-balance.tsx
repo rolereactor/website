@@ -98,24 +98,38 @@ export function CoreBalance({
           </div>
           <div className="flex flex-col">
             <span className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">
-              Energy &amp; Rewards
+              Core &amp; Sparks
             </span>
             <div className="flex items-center gap-2 mt-0.5">
               <span
                 className={cn(
-                  "text-base font-black leading-tight text-white",
+                  "text-base font-black leading-tight text-white flex items-center gap-1",
                   audiowide.className
                 )}
               >
-                🔮 {displayCores}
+                <Image
+                  src="/images/cores/core_icon.png"
+                  width={16}
+                  height={16}
+                  alt="Cores"
+                  className="inline-block shrink-0"
+                />
+                {displayCores}
               </span>
               <span
                 className={cn(
-                  "text-xs font-bold leading-tight text-amber-400",
+                  "text-xs font-bold leading-tight text-amber-400 flex items-center gap-1",
                   audiowide.className
                 )}
               >
-                ⚡ {displaySparks}
+                <Image
+                  src="/images/cores/spark_icon.png"
+                  width={14}
+                  height={14}
+                  alt="Sparks"
+                  className="inline-block shrink-0"
+                />
+                {displaySparks}
               </span>
             </div>
           </div>

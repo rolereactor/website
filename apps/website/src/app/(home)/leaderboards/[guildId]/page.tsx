@@ -158,7 +158,7 @@ export async function generateMetadata({
     // Fallback to generic name
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://rolereactor.app";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://rolereactor.xyz";
 
   return {
     title: `${serverName} Leaderboard | Role Reactor`,

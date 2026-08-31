@@ -76,14 +76,23 @@ export const usePricingStore = create<PricingStore>()(
             const shouldFetchUser =
               !!userId && (force || !hasUserData || !userCacheValid);
 
+            const safeFetchJson = async (url: string) => {
+              try {
+                const res = await fetch(url);
+                if (!res.ok) return null;
+                const text = await res.text();
+                return JSON.parse(text);
+              } catch {
+                return null;
+              }
+            };
+
             const packagesPromise = shouldFetchPackages
-              ? fetch("/api/pricing/packages").then((r) => r.json())
+              ? safeFetchJson("/api/pricing/packages")
               : Promise.resolve(null);
 
             const userPromise = shouldFetchUser
-              ? fetch(`/api/pricing/balance?user_id=${userId}`).then((r) =>
-                  r.json()
-                )
+              ? safeFetchJson(`/api/pricing/balance?user_id=${userId}`)
               : Promise.resolve(null);
 
             const [packagesRes, userRes] = await Promise.all([

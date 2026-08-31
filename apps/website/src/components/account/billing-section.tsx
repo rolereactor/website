@@ -185,10 +185,10 @@ export function BillingSection() {
                   <div className="p-2 bg-cyan-500/10 rounded-lg">
                     <Zap className="w-5 h-5 text-cyan-400" />
                   </div>
-                  Your Energy &amp; Core Balance
+                  Cores &amp; Sparks Balance
                 </CardTitle>
                 <CardDescription className="text-zinc-400 mt-1">
-                  Global energy credits &amp; rewards for powering Pro Engine across servers
+                  Manage Paid Cores for Pro Engine and reward Sparks across servers
                 </CardDescription>
               </div>
               <PricingDialog>
@@ -207,10 +207,9 @@ export function BillingSection() {
               {/* Cores Card */}
               <div className="p-4 bg-zinc-900/60 rounded-xl border border-cyan-500/20 flex items-center gap-3.5 relative overflow-hidden">
                 <div className="relative shrink-0">
-                  <div className="absolute inset-0 bg-cyan-500/20 rounded-full blur-md" />
-                  <div className="w-12 h-12 relative z-10 drop-shadow-[0_0_12px_rgba(0,255,255,0.5)] overflow-hidden rounded-full">
+                  <div className="w-12 h-12 relative z-10 overflow-hidden rounded-full">
                     <Image
-                      src="/images/cores/core_energy.png"
+                      src="/images/cores/core_icon.png"
                       alt="Cores"
                       fill
                       className="object-contain"
@@ -221,7 +220,7 @@ export function BillingSection() {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-1 mb-1">
                     <span className="text-xs font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1">
-                      🔮 Paid Cores
+                      Paid Cores
                     </span>
                     <Badge className="bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-[10px] px-1.5 py-0 font-mono shrink-0">
                       Transferable
@@ -245,14 +244,21 @@ export function BillingSection() {
 
               {/* Sparks Card */}
               <div className="p-4 bg-zinc-900/60 rounded-xl border border-amber-500/20 flex items-center gap-3.5 relative overflow-hidden">
-                <div className="p-3 bg-amber-500/10 rounded-full border border-amber-500/30 shrink-0 relative">
-                  <div className="absolute inset-0 bg-amber-500/20 rounded-full blur-md" />
-                  <Zap className="w-6 h-6 text-amber-400 fill-amber-400/20 relative z-10" />
+                <div className="relative shrink-0">
+                  <div className="w-12 h-12 relative z-10 overflow-hidden rounded-full">
+                    <Image
+                      src="/images/cores/spark_icon.png"
+                      alt="Sparks"
+                      fill
+                      className="object-contain"
+                      sizes="48px"
+                    />
+                  </div>
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-1 mb-1">
                     <span className="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1">
-                      ⚡ Sparks
+                      Sparks
                     </span>
                     <Badge className="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[10px] px-1.5 py-0 font-mono shrink-0">
                       Rewards
@@ -281,7 +287,7 @@ export function BillingSection() {
                 <AlertCircle className="w-4 h-4 text-cyan-400 mt-0.5 shrink-0" />
                 <div className="text-xs text-zinc-400 space-y-0.5">
                   <p>
-                    <strong className="text-cyan-300">Cores 🔮</strong> are transferable energy credits for Pro Engine &amp; custom branding. <strong className="text-amber-300">Sparks ⚡</strong> are earned via Top.gg voting &amp; referral gifts for personal rewards.
+                    <strong className="text-cyan-300">Paid Cores</strong> are transferable energy credits for Pro Engine &amp; custom branding. <strong className="text-amber-300">Sparks</strong> are earned via Top.gg voting &amp; referral gifts for personal rewards.
                   </p>
                 </div>
               </div>

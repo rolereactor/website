@@ -35,10 +35,14 @@ export async function GET(request: NextRequest) {
       const fixedCredits = rawCredits
         ? Number(Number(rawCredits).toFixed(2))
         : 0;
+      const fixedSparks = Number(
+        Number(data.data.user.sparks ?? 0).toFixed(2)
+      );
       userData = {
         userId: data.data.user.requestedUserId,
         isFirstPurchase: data.data.user.isFirstPurchase,
         currentCredits: fixedCredits,
+        sparks: fixedSparks,
         eligibleForFirstPurchaseBonus:
           data.data.user.eligibleForFirstPurchaseBonus,
       };
@@ -50,10 +54,12 @@ export async function GET(request: NextRequest) {
       const fixedCredits = rawCredits
         ? Number(Number(rawCredits).toFixed(2))
         : 0;
+      const fixedSparks = Number(Number(data.user.sparks ?? 0).toFixed(2));
       userData = {
         userId: data.user.requestedUserId,
         isFirstPurchase: data.user.isFirstPurchase,
         currentCredits: fixedCredits,
+        sparks: fixedSparks,
         eligibleForFirstPurchaseBonus: data.user.eligibleForFirstPurchaseBonus,
       };
     }

@@ -21,10 +21,25 @@ export function Hero() {
   const [botOnline, setBotOnline] = useState<boolean | null>(null);
 
   useEffect(() => {
-    fetch("/api/bot-status")
-      .then((res) => res.json())
-      .then((data) => setBotOnline(data.online ?? false))
-      .catch(() => setBotOnline(false));
+    let isMounted = true;
+    async function checkBotStatus() {
+      try {
+        const res = await fetch("/api/bot-status");
+        if (!res.ok) {
+          if (isMounted) setBotOnline(false);
+          return;
+        }
+        const text = await res.text();
+        const data = JSON.parse(text);
+        if (isMounted) setBotOnline(data?.online ?? false);
+      } catch {
+        if (isMounted) setBotOnline(false);
+      }
+    }
+    checkBotStatus();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (

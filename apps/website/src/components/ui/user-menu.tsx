@@ -337,7 +337,7 @@ export function UserMenu({
                 >
                   <Zap className="mr-3 h-4 w-4 text-zinc-400 group-hover:text-cyan-400 group-hover:drop-shadow-[0_0_5px_rgba(6,182,212,0.5)] transition-all" />
                   <span className="font-medium font-mono text-sm">
-                    Core Energy
+                    Core &amp; Sparks
                   </span>
                 </a>
               </DropdownMenuItem>
