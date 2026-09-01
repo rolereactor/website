@@ -16,6 +16,7 @@ export const metadata: Metadata = {
 
 import { auth } from "@/auth";
 import { notFound } from "next/navigation";
+import { isDeveloper } from "@/lib/admin";
 import { getManageableGuilds } from "@/lib/server/guilds";
 import { StoreHydrator } from "./_components/store-hydrator";
 
@@ -39,6 +40,9 @@ export default async function DashboardLayout({
     notFound();
   }
 
+  // Resolved server-side so client components never read env vars (avoids hydration mismatch)
+  const developerAccess = isDeveloper(session.user);
+
   return (
     <SidebarProvider className="flex h-dvh w-full overflow-hidden bg-background">
       <Suspense fallback={null}>
@@ -46,7 +50,7 @@ export default async function DashboardLayout({
       </Suspense>
       <NavigationProgress />
       <CommandMenu />
-      <DashboardSidebar user={session.user} />
+      <DashboardSidebar user={session.user} developerAccess={developerAccess} />
       <SidebarInset className="relative flex flex-col flex-1 min-w-0 md:my-2 md:mr-2 md:rounded-xl md:shadow-2xl border border-white/5 bg-background/50 backdrop-blur-sm overflow-hidden h-dvh pb-14 md:pb-0">
         <DashboardHeader />
         <main className="flex-1 overflow-hidden relative">

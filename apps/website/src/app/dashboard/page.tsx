@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { OverviewLanding } from "@/app/dashboard/_components/overview-landing";
 import { SystemHealth } from "@/app/dashboard/_components/system-health";
 import { isDeveloper } from "@/lib/admin";
@@ -11,12 +11,20 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { BarChart3, Zap, Terminal, ArrowRight } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  BarChart3,
+  Zap,
+  Terminal,
+  ArrowRight,
+  Server,
+  Image as ImageIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 import { botFetchJson } from "@/lib/bot-fetch";
-import { formatCompactNumber } from "@/lib/utils";
+import { formatCompactNumber, getDiscordImageUrl } from "@/lib/utils";
 import { TerminalLogsPreview } from "@/app/dashboard/_components/terminal-logs-preview";
 
 interface BotStats {
@@ -109,13 +117,37 @@ export default async function DashboardPage() {
     );
   }
 
-  // 3. Regular User View Fast-Pass
-  // We check if they have guilds with the bot installed on the server
-  const { installedGuildIds } = await getManageableGuilds();
+  // 3. Regular User View — server picker landing (users stay on /dashboard)
+  const { guilds, installedGuildIds } = await getManageableGuilds();
+  const installedGuilds = guilds.filter((g) => installedGuildIds.includes(g.id));
 
-  if (installedGuildIds.length > 0) {
-    // Instant redirect to the first installed guild found
-    redirect(`/dashboard/${installedGuildIds[0]}`);
+  if (installedGuilds.length > 0) {
+    return (
+      <div className="space-y-6 w-full">
+        <div>
+          <h2 className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mb-1">
+            Your Servers
+          </h2>
+          <p className="text-xs text-zinc-600">
+            Pick a server to manage, or jump into the tools.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {installedGuilds.map((guild) => (
+            <ServerCard key={guild.id} guild={guild} />
+          ))}
+          <OverviewNavCard
+            title="Image Tools"
+            description="Resize, compress, convert, and upscale images right from your browser."
+            href="/dashboard/image-tools"
+            icon={ImageIcon}
+            color="cyan"
+            stats="FREE TOOLS"
+          />
+        </div>
+      </div>
+    );
   }
 
   // 4. Default: Show Onboarding
@@ -181,6 +213,46 @@ function OverviewNavCard({
               {stats}
             </span>
           </div>
+        </CardContent>
+      </Card>
+    </Link>
+  );
+}
+
+interface ServerCardProps {
+  guild: { id: string; name?: string | null; icon?: string | null };
+}
+
+function ServerCard({ guild }: ServerCardProps) {
+  const iconUrl = getDiscordImageUrl("icons", guild.id, guild.icon, 128);
+
+  return (
+    <Link href={`/dashboard/${guild.id}`}>
+      <Card
+        variant="cyberpunk"
+        className="group h-full transition-all duration-500 border-white/10 hover:border-cyan-500/50 bg-white/5"
+      >
+        <CardContent className="flex items-center gap-4 p-6">
+          <Avatar className="h-12 w-12 shrink-0 rounded-xl">
+            <AvatarImage
+              src={iconUrl || undefined}
+              alt={guild.name || guild.id}
+              width={128}
+              height={128}
+            />
+            <AvatarFallback className="rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
+              <Server className="h-5 w-5" />
+            </AvatarFallback>
+          </Avatar>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-black uppercase tracking-wider text-white truncate">
+              {guild.name || "Unknown Server"}
+            </p>
+            <p className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-0.5">
+              Manage Server
+            </p>
+          </div>
+          <ArrowRight className="size-4 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all shrink-0" />
         </CardContent>
       </Card>
     </Link>

@@ -11,6 +11,7 @@ import {
   Terminal,
   Zap,
   Ghost,
+  DoorOpen,
   Layers,
   ListCollapse,
   AlertTriangle,
@@ -34,8 +35,8 @@ import {
   Server,
   Image,
   Radio,
+  Ticket,
 } from "lucide-react";
-import { isDeveloper } from "@/lib/admin";
 
 import Link from "next/link";
 import type { User } from "next-auth";
@@ -73,7 +74,13 @@ function getAvatarUrl(user: { id?: string; image?: string | null }): string {
   return `https://cdn.discordapp.com/embed/avatars/0.png`;
 }
 
-export function DashboardSidebar({ user }: { user: User }) {
+export function DashboardSidebar({
+  user,
+  developerAccess = false,
+}: {
+  user: User;
+  developerAccess?: boolean;
+}) {
   const pathname = usePathname();
   const params = useParams();
   const searchParams = useSearchParams();
@@ -159,6 +166,11 @@ export function DashboardSidebar({ user }: { user: User }) {
             icon: UserPlus,
           },
           {
+            title: "Goodbye System",
+            href: getHref("/dashboard/goodbye", true),
+            icon: DoorOpen,
+          },
+          {
             title: "XP & Levels",
             href: getHref("/dashboard/xp", true),
             icon: Trophy,
@@ -167,6 +179,11 @@ export function DashboardSidebar({ user }: { user: User }) {
             title: "Live Reactor",
             href: getHref("/dashboard/live-reactor", true),
             icon: Radio,
+          },
+          {
+            title: "Tickets",
+            href: getHref("/dashboard/tickets", true),
+            icon: Ticket,
           },
         ]
       : [];
@@ -180,12 +197,13 @@ export function DashboardSidebar({ user }: { user: User }) {
             icon: Terminal,
           },
         ]
-      : []),
-    {
-      title: "Image Tools",
-      href: "/dashboard/image-tools",
-      icon: Image,
-    },
+      : [
+          {
+            title: "Image Tools",
+            href: "/dashboard/image-tools",
+            icon: Image,
+          },
+        ]),
   ];
 
   const getDeveloperItems = () => [
@@ -536,7 +554,7 @@ export function DashboardSidebar({ user }: { user: User }) {
             <NavGroup label="Core" items={getCoreItems()} />
             <NavGroup label="Engagement" items={getEngagementItems()} />
             <NavGroup label="Tools & Config" items={getToolItems()} />
-            {isDeveloper(user) && !contextId && (
+            {developerAccess && !contextId && (
               <NavGroup label="Developer" items={getDeveloperItems()} />
             )}
           </>
@@ -551,8 +569,14 @@ export function DashboardSidebar({ user }: { user: User }) {
               status="authenticated"
               coreImageUrl="/images/cores/core_energy.png"
               dashboardUrl="/dashboard"
-              showDashboardLink={isDeveloper(user)}
-              dashboardLabel={contextId ? "System Overview" : "Dashboard"}
+              showDashboardLink={developerAccess || Boolean(contextId)}
+              dashboardLabel={
+                contextId
+                  ? developerAccess
+                    ? "System Overview"
+                    : "All Servers"
+                  : "Dashboard"
+              }
               showCoreBalance={false}
               variant="sidebar"
               side="top"
