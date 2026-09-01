@@ -13,7 +13,7 @@ export default function AdminUsersPage() {
   return (
     <div className="space-y-6 w-full">
       <PageHeader
-        category="Admin Monitoring"
+        category="Developer Access"
         categoryIcon={Users}
         title="User Management"
         description="Manage user roles and system access for the entire bot infrastructure."

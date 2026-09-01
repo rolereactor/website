@@ -199,7 +199,7 @@ export default function ProEnginePage() {
     return (
       <div className="space-y-6 w-full">
         <PageHeader
-          category="System Configuration"
+          category="Core Management"
           categoryIcon={Crown}
           title="Pro Engine"
           serverName={guildName}
@@ -218,7 +218,7 @@ export default function ProEnginePage() {
   return (
     <div className="space-y-6 w-full relative">
       <PageHeader
-        category="System Configuration"
+        category="Core Management"
         categoryIcon={Crown}
         title="Pro Engine"
         badge={

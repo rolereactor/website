@@ -241,7 +241,7 @@ export default async function AdminCommandsPage() {
   return (
     <div className="space-y-6 w-full">
       <PageHeader
-        category="Admin Analytics"
+        category="Developer Access"
         categoryIcon={Activity}
         title="Command Usage"
         description="Monitor global command execution and performance analytics across all Discord servers."

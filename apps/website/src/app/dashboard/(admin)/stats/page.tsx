@@ -321,7 +321,7 @@ export default async function AdminStatsPage() {
   return (
     <div className="space-y-6 w-full">
       <PageHeader
-        category="Admin Monitoring"
+        category="Developer Access"
         categoryIcon={Activity}
         title="Global Statistics"
         description="Monitor system-wide bot performance and user growth metrics."

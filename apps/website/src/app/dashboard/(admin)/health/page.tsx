@@ -13,7 +13,7 @@ export default function SystemHealthPage() {
   return (
     <div className="space-y-6 w-full">
       <PageHeader
-        category="Admin Monitoring"
+        category="Developer Access"
         categoryIcon={Activity}
         title="System Health"
         description="Monitor real-time system performance, resource utilization, and operational status."

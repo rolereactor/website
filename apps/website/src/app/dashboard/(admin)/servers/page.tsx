@@ -84,7 +84,7 @@ export default function ServersPage() {
   return (
     <div className="space-y-6 w-full">
       <PageHeader
-        category="Admin Monitoring"
+        category="Developer Access"
         categoryIcon={Server}
         title="Server Management"
         description="View and manage all Discord servers the bot is currently installed in."

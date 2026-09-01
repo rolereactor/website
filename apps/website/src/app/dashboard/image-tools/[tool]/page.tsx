@@ -65,7 +65,7 @@ export default async function ToolPage({ params }: PageProps) {
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        category="Image Tools"
+        category="Tools & Configuration"
         categoryIcon={meta.icon}
         title={`${meta.label} Image`}
         description={meta.description}

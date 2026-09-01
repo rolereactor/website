@@ -340,7 +340,7 @@ export default async function AdminRevenuePage() {
   return (
     <div className="space-y-6 w-full">
       <PageHeader
-        category="Admin Monitoring"
+        category="Developer Access"
         categoryIcon={DollarSign}
         title="Revenue & Billing"
         description="Monitor revenue streams and transaction logs for the entire system."

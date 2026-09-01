@@ -36,7 +36,7 @@ export default async function CommandsPage({
     return (
       <div className="space-y-6 w-full">
         <PageHeader
-          category="System Configuration"
+          category="Tools & Configuration"
           categoryIcon={Terminal}
           title="Command Settings"
           description="Manage availability and access for all bot commands in"
@@ -50,7 +50,7 @@ export default async function CommandsPage({
   return (
     <div className="space-y-6 w-full">
       <PageHeader
-        category="System Configuration"
+        category="Tools & Configuration"
         categoryIcon={Terminal}
         title="Command Settings"
         description="Manage availability and access for all bot commands in"

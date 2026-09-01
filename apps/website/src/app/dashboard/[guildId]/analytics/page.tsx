@@ -271,7 +271,7 @@ export default function AnalyticsPage({ params }: AnalyticsPageProps) {
     return (
       <div className="space-y-6 w-full">
         <PageHeader
-          category="Server Insights"
+          category="Core Management"
           categoryIcon={BarChart3}
           title="Analytics"
           description="Track server growth and activity for"
@@ -312,7 +312,7 @@ export default function AnalyticsPage({ params }: AnalyticsPageProps) {
 
       <div className="space-y-6 w-full">
         <PageHeader
-          category="Server Insights"
+          category="Core Management"
           categoryIcon={BarChart3}
           title="Analytics"
           description="Track server growth and activity for"

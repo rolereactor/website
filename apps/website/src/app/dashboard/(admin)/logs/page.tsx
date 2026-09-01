@@ -13,7 +13,7 @@ export default function AdminLogsPage() {
   return (
     <div className="space-y-6 w-full">
       <PageHeader
-        category="Admin Monitoring"
+        category="Developer Access"
         categoryIcon={Terminal}
         title="System Logs"
         description="Monitor real-time system events and diagnostic output from the bot instance."
