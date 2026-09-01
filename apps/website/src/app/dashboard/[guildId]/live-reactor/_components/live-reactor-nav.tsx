@@ -84,7 +84,7 @@ export function LiveReactorNav({
           type="button"
           onClick={() => setIsOpen(!isOpen)}
           className={cn(
-            "w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200",
+            "w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 cursor-pointer",
             "bg-zinc-950/90 backdrop-blur-xl border shadow-[0_0_20px_-4px_rgba(6,182,212,0.15)]",
             isOpen
               ? "border-cyan-500/50 text-white shadow-[0_0_25px_-2px_rgba(6,182,212,0.3)]"
@@ -137,7 +137,7 @@ export function LiveReactorNav({
                       setIsOpen(false);
                     }}
                     className={cn(
-                      "w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left transition-all duration-150 relative group",
+                      "w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left transition-all duration-150 relative group cursor-pointer",
                       isActive
                         ? "bg-cyan-500/15 text-cyan-200 border-l-2 border-cyan-400 font-semibold"
                         : "text-zinc-400 hover:bg-white/5 hover:text-zinc-100"
@@ -192,7 +192,7 @@ export function LiveReactorNav({
                 key={item.id}
                 onClick={() => onTabChange(item.id)}
                 className={cn(
-                  "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all duration-200 relative group",
+                  "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all duration-200 relative group cursor-pointer",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900",
                   isActive
                     ? "bg-white/5 text-zinc-100"

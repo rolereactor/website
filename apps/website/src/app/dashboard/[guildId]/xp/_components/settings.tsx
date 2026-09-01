@@ -343,7 +343,7 @@ export const XPSettingsTab = forwardRef<
                 variant="glass"
                 className="hover:border-white/20"
               >
-                <CardContent className="p-5">
+                <CardContent className="p-6">
                   <div className="flex flex-col gap-5">
                     <div className="flex items-start justify-between">
                       <div

@@ -417,20 +417,13 @@ export function CommandList({ guildId }: CommandListProps) {
 
               {filteredCommands.length === 0 && (
                 <div className="text-center py-20 bg-zinc-900/20 rounded-3xl border border-dashed border-white/10 group">
-                  <div className="w-20 h-20 bg-zinc-800/30 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-500 relative">
-                    <div className="absolute inset-0 bg-cyan-500/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <Search className="w-8 h-8 text-zinc-600 group-hover:text-cyan-500 transition-colors" />
+                  <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 mx-auto mb-4 group-hover:scale-110 transition-transform duration-500 relative">
+                    <div className="absolute inset-0 bg-cyan-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <Search className="w-8 h-8 relative z-10" />
                   </div>
-                  <h4
-                    className={cn(
-                      "text-xl text-white font-black mb-2 uppercase tracking-widest",
-                      audiowide.className
-                    )}
-                  >
-                    No results found
-                  </h4>
-                  <p className="text-zinc-500 text-sm font-medium max-w-xs mx-auto mb-6">
-                    We couldn't find any commands matching your search.
+                  <p className="text-sm text-zinc-400 font-medium">No results found</p>
+                  <p className="text-zinc-500 text-xs font-bold mt-1 max-w-xs mx-auto mb-6">
+                    We couldn&apos;t find any commands matching your search.
                   </p>
                   <Button
                     variant="link"

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import {
+  LayoutGrid,
   Terminal,
   Plus,
   Pencil,
@@ -215,9 +216,11 @@ export function CommandsPanel({ guildId }: CommandsPanelProps) {
         </CardHeader>
         <CardContent>
           {customCommands.length === 0 ? (
-            <div className="text-center py-8">
-              <Terminal className="w-10 h-10 text-zinc-700 mx-auto mb-3" />
-              <p className="text-sm text-zinc-500">No custom commands yet.</p>
+            <div className="text-center py-12">
+              <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 mx-auto mb-4">
+                <LayoutGrid className="w-8 h-8" />
+              </div>
+              <p className="text-sm text-zinc-400 font-medium">No custom commands yet.</p>
               <p className="text-xs text-zinc-600 mt-1">
                 Click &quot;Add Command&quot; to create your first one.
               </p>

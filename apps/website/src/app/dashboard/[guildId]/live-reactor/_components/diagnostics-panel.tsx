@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import {
-  Activity,
+  LayoutGrid,
   RefreshCcw,
   Loader2,
   CheckCircle2,
@@ -99,8 +99,10 @@ export function DiagnosticsPanel({ guildId }: DiagnosticsPanelProps) {
     return (
       <Card variant="cyberpunk" showGrid>
         <CardContent className="text-center py-12">
-          <Activity className="w-10 h-10 text-zinc-700 mx-auto mb-3" />
-          <p className="text-sm text-zinc-500">No diagnostic data available.</p>
+          <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 mx-auto mb-4">
+            <LayoutGrid className="w-8 h-8" />
+          </div>
+          <p className="text-sm text-zinc-400 font-medium">No diagnostic data available.</p>
           <Button
             variant="cyber"
             className="mt-4"

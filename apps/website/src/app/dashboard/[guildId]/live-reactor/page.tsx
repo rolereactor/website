@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, use, useEffect } from "react";
+import { useState, use, useEffect, useCallback } from "react";
 import { Radio } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
 import { useStreamingStore } from "@/store/use-streaming-store";
 import { useServerStore } from "@/store/use-server-store";
@@ -24,8 +25,22 @@ interface StreamingPageProps {
 
 export default function StreamingPage({ params }: StreamingPageProps) {
   const { guildId } = use(params);
-  const [activeTab, setActiveTab] = useState("connection");
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get("tab");
+  const [activeTab, setActiveTab] = useState(tabParam || "connection");
   const [isInitialized, setIsInitialized] = useState(false);
+
+  const handleTabChange = useCallback(
+    (tab: string) => {
+      setActiveTab(tab);
+      window.history.replaceState(
+        null,
+        "",
+        `/dashboard/${guildId}/live-reactor?tab=${tab}`
+      );
+    },
+    [guildId]
+  );
 
   const {
     isLoading,
@@ -111,7 +126,7 @@ export default function StreamingPage({ params }: StreamingPageProps) {
   return (
     <div className="space-y-6 w-full">
       <PageHeader
-        category="Streaming Integration"
+        category="Engagement Management"
         categoryIcon={Radio}
         title="Live Reactor"
         description="Manage your streaming integration and chat features for"
@@ -121,7 +136,7 @@ export default function StreamingPage({ params }: StreamingPageProps) {
       <div className="flex flex-col lg:flex-row gap-6">
         <LiveReactorNav
           activeTab={activeTab}
-          onTabChange={setActiveTab}
+          onTabChange={handleTabChange}
           isConnected={isConnected}
           isLive={isLive}
         />

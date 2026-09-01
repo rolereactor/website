@@ -1,7 +1,7 @@
 "use client";
 
 import { Audiowide } from "next/font/google";
-import { MessageSquare, Mic, Crown } from "lucide-react";
+import { LayoutGrid, MessageSquare, Mic, Crown } from "lucide-react";
 import { cn, getDiscordImageUrl } from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -120,16 +120,12 @@ function MemberList({
         </div>
 
         {members.length === 0 ? (
-          <div className="text-center py-8">
-            <p
-              className={cn(
-                "text-zinc-600 text-xs font-bold",
-                audiowide.className
-              )}
-            >
-              NO DATA YET
-            </p>
-            <p className="text-zinc-700 text-[10px] mt-1">
+          <div className="text-center py-12">
+            <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 mx-auto mb-4">
+              <LayoutGrid className="w-8 h-8" />
+            </div>
+            <p className="text-sm text-zinc-400 font-medium">No data yet</p>
+            <p className="text-xs text-zinc-600 mt-1">
               Activity data will appear as members engage.
             </p>
           </div>

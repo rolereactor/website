@@ -238,19 +238,12 @@ export function LeaderboardList({
 
             {searchQuery && filteredLeaderboard.length === 0 && (
               <div className="py-24 text-center">
-                <div className="w-16 h-16 bg-zinc-900 border border-white/5 rounded-full flex items-center justify-center mx-auto mb-4 opacity-50">
-                  <Search className="w-6 h-6 text-zinc-700" />
+                <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 mx-auto mb-4">
+                  <Search className="w-8 h-8" />
                 </div>
-                <h4
-                  className={cn(
-                    "text-white font-black uppercase tracking-widest",
-                    audiowide.className
-                  )}
-                >
-                  No members found
-                </h4>
+                <p className="text-sm text-zinc-400 font-medium">No members found</p>
                 <p className="text-zinc-500 text-xs font-bold mt-1">
-                  We couldn't find any results for "{searchQuery}"
+                  We couldn't find any results for &quot;{searchQuery}&quot;
                 </p>
               </div>
             )}
