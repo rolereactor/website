@@ -181,6 +181,8 @@ export function DashboardSidebar({
             title: "Live Reactor",
             href: getHref("/dashboard/live-reactor", true),
             icon: Radio,
+            badge: "NEW",
+            badgeActive: true,
           },
           {
             title: "Tickets",
