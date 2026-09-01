@@ -40,6 +40,8 @@ export function GuildGrowthChart({ data }: { data: GrowthPoint[] }) {
             dataKey="label"
             axisLine={false}
             tickLine={false}
+            interval="preserveStartEnd"
+            minTickGap={24}
             tick={{
               fill: "#71717a",
               fontSize: 10,

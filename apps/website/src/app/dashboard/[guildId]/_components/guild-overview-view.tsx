@@ -16,12 +16,6 @@ import {
   Ticket,
   Zap,
   Gift,
-  ShieldCheck,
-  UserPlus,
-  Radio,
-  Image as ImageIcon,
-  Terminal,
-  Layers,
 } from "lucide-react";
 
 import Link from "next/link";
@@ -29,13 +23,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { motion } from "motion/react";
 
 import { cn, getDiscordImageUrl } from "@/lib/utils";
-import { audiowide } from "@/lib/fonts";
+import { audiowide, orbitron } from "@/lib/fonts";
 import { CyberpunkBackground } from "@/components/common/cyberpunk-background";
 import dynamic from "next/dynamic";
 
-function getPast7Days() {
+function getPastDays(days: number) {
   const dates = [];
-  for (let i = 6; i >= 0; i--) {
+  for (let i = days - 1; i >= 0; i--) {
     const d = new Date();
     d.setDate(d.getDate() - i);
     dates.push({
@@ -97,8 +91,8 @@ export function GuildOverviewView({
 
   const growthData =
     guildStats?.growthHistory?.length > 0
-      ? guildStats.growthHistory
-      : getPast7Days();
+      ? guildStats.growthHistory.slice(-14)
+      : getPastDays(14);
 
   const onlineCount =
     guildStats?.onlineCount ??
@@ -108,14 +102,32 @@ export function GuildOverviewView({
   const memberCount = guildStats?.memberCount || 1;
   const onlinePercentage = (onlineCount / memberCount) * 100;
   let onlineStatusText = "Systems Idle";
+  let onlineBadgeVariant: "success" | "accent" | "outline" = "outline";
 
   if (onlineCount > 0) {
-    if (onlinePercentage > 40) onlineStatusText = "High Traffic";
-    else if (onlinePercentage > 20) onlineStatusText = "Moderate Activity";
-    else if (onlinePercentage > 5) onlineStatusText = "Low Activity";
+    if (onlinePercentage > 40) {
+      onlineStatusText = "High Traffic";
+      onlineBadgeVariant = "success";
+    } else if (onlinePercentage > 20) {
+      onlineStatusText = "Moderate Activity";
+      onlineBadgeVariant = "success";
+    } else if (onlinePercentage > 5) {
+      onlineStatusText = "Low Activity";
+      onlineBadgeVariant = "accent";
+    }
   } else {
     onlineStatusText = "Server Inactive";
+    onlineBadgeVariant = "outline";
   }
+
+  const new7d = guildStats?.growth?.new7d ?? 0;
+  const memberTrendLabel =
+    new7d > 0 ? `+${new7d} this week` : new7d < 0 ? `${new7d} this week` : "Stable";
+  const memberBadgeVariant =
+    new7d > 0 ? "success" : new7d < 0 ? "destructive" : "outline";
+
+  const boostTier = guildStats?.premiumTier || 0;
+  const boostBadgeVariant = boostTier > 0 ? "info" : "outline";
 
   const stats = [
     {
@@ -126,19 +138,16 @@ export function GuildOverviewView({
           (guildStats?.memberCount || 0) - (guildStats?.botCount || 0)
         ).toLocaleString() || "0",
       icon: Users,
-      trend:
-        guildStats?.growth?.new7d > 0
-          ? `+${guildStats.growth.new7d} this week`
-          : "Stable",
-      trendUp: guildStats?.growth?.new7d > 0,
+      trend: memberTrendLabel,
+      badgeVariant: memberBadgeVariant,
       color: "cyan",
     },
     {
       label: "Server Boosts",
       value: guildStats?.premiumSubscriptionCount?.toString() || "0",
       icon: Rocket,
-      trend: `Level ${guildStats?.premiumTier || 0}`,
-      trendUp: null,
+      trend: `Level ${boostTier}`,
+      badgeVariant: boostBadgeVariant,
       color: "fuchsia",
     },
     {
@@ -146,7 +155,7 @@ export function GuildOverviewView({
       value: onlineCount.toLocaleString(),
       icon: Cable,
       trend: onlineStatusText,
-      trendUp: null,
+      badgeVariant: onlineBadgeVariant,
       color: "emerald",
     },
   ];
@@ -431,19 +440,7 @@ export function GuildOverviewView({
                   </div>
                   {stat.trend && (
                     <Badge
-                      variant={
-                        stat.trendUp === true
-                          ? "success"
-                          : stat.trendUp === false
-                            ? "destructive"
-                            : stat.color === "fuchsia"
-                              ? "info"
-                              : stat.color === "cyan"
-                                ? "accent"
-                                : stat.color === "emerald"
-                                  ? "success"
-                                  : "outline"
-                      }
+                      variant={stat.badgeVariant as "success" | "destructive" | "info" | "accent" | "outline"}
                       className="tabular-nums border-none"
                     >
                       {stat.trend}
@@ -456,8 +453,8 @@ export function GuildOverviewView({
                   </p>
                   <h3
                     className={cn(
-                      "text-3xl font-black tabular-nums tracking-tight text-white",
-                      audiowide.className
+                      "text-3xl font-black text-white tabular-nums tracking-tight drop-shadow-[0_0_10px_rgba(255,255,255,0.15)]",
+                      orbitron.className
                     )}
                   >
                     {stat.value}
@@ -469,64 +466,13 @@ export function GuildOverviewView({
         ))}
       </div>
 
-      {/* Server Tools & Modules Grid */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-white flex items-center gap-2">
-            <Layers className="text-cyan-400 w-5 h-5" /> Server Control Modules
-          </h2>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <QuickModuleCard
-            title="Image Tools"
-            description="Resize, compress, convert & upscale server images"
-            icon={ImageIcon}
-            href="/dashboard/image-tools"
-            color="cyan"
-            badge="UTILITY"
-          />
-          <QuickModuleCard
-            title="Reaction Roles"
-            description="Configure interactive button & emoji role assignment"
-            icon={ShieldCheck}
-            href={`/dashboard/${guildId}/roles`}
-            color="cyan"
-          />
-          <QuickModuleCard
-            title="Welcome System"
-            description="Automatic greeting messages & onboarding"
-            icon={UserPlus}
-            href={`/dashboard/${guildId}/welcome`}
-            color="emerald"
-          />
-          <QuickModuleCard
-            title="Live Reactor"
-            description="Twitch stream alerts, notifications & chat bot"
-            icon={Radio}
-            href={`/dashboard/${guildId}/live-reactor`}
-            color="fuchsia"
-            badge="PRO"
-          />
-          <QuickModuleCard
-            title="Command Settings"
-            description="Manage bot custom prefix & command toggles"
-            icon={Terminal}
-            href={`/dashboard/${guildId}/commands`}
-            color="amber"
-          />
-          <QuickModuleCard
-            title="Pro Engine"
-            description="Advanced automation & high-speed engines"
-            icon={Zap}
-            href={`/dashboard/${guildId}/pro-engine`}
-            color="yellow"
-            badge={isPremium ? "ACTIVE" : "UPGRADE"}
-          />
-        </div>
-      </div>
-
-      {/* Main Content Area */}
-      <div className="space-y-4">
+      {/* Main Content Area — Growth Insights Chart */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.45, duration: 0.4 }}
+        className="space-y-4"
+      >
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-bold text-white flex items-center gap-2">
             <TrendingUp className="text-emerald-500 w-5 h-5" /> Server Growth
@@ -551,7 +497,8 @@ export function GuildOverviewView({
                   Last 14 Days • Joins vs Leaves
                 </p>
               </div>
-              <div className="flex items-center gap-6 bg-zinc-950/40 px-4 py-2 rounded-md border border-white/5">
+              {/* Legend */}
+              <div className="flex items-center gap-4 bg-zinc-950/40 px-3.5 py-1.5 rounded-lg border border-white/5">
                 <div className="flex items-center gap-2">
                   <div className="w-2.5 h-2.5 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.4)]" />
                   <span className="text-[11px] text-zinc-300 font-black uppercase tracking-wider">
@@ -573,7 +520,7 @@ export function GuildOverviewView({
             </div>
           </CardContent>
         </Card>
-      </div>
+      </motion.div>
     </div>
   );
 }
@@ -614,68 +561,5 @@ function DashboardBenefit({
         <span className="text-[9px] text-zinc-500 truncate">{sub}</span>
       </div>
     </div>
-  );
-}
-
-function QuickModuleCard({
-  title,
-  description,
-  icon: Icon,
-  href,
-  color = "cyan",
-  badge,
-}: {
-  title: string;
-  description: string;
-  icon: React.ElementType;
-  href: string;
-  color?: "cyan" | "emerald" | "fuchsia" | "amber" | "yellow";
-  badge?: string;
-}) {
-  return (
-    <Link href={href} className="block group">
-      <Card
-        variant="cyberpunk"
-        className="p-5 h-full transition-all duration-300 hover:scale-[1.02] border-white/5 hover:border-cyan-500/40 relative overflow-hidden"
-      >
-        <div className="flex items-start justify-between mb-3 relative z-10">
-          <div
-            className={cn(
-              "p-2.5 rounded-xl border border-white/10 transition-colors",
-              color === "cyan" &&
-                "bg-cyan-500/10 text-cyan-400 border-cyan-500/30 group-hover:bg-cyan-500/20",
-              color === "emerald" &&
-                "bg-emerald-500/10 text-emerald-400 border-emerald-500/30 group-hover:bg-emerald-500/20",
-              color === "fuchsia" &&
-                "bg-fuchsia-500/10 text-fuchsia-400 border-fuchsia-500/30 group-hover:bg-fuchsia-500/20",
-              color === "amber" &&
-                "bg-amber-500/10 text-amber-400 border-amber-500/30 group-hover:bg-amber-500/20",
-              color === "yellow" &&
-                "bg-yellow-500/10 text-yellow-400 border-yellow-500/30 group-hover:bg-yellow-500/20"
-            )}
-          >
-            <Icon className="w-5 h-5" />
-          </div>
-          {badge && (
-            <Badge
-              variant={
-                badge === "PRO" || badge === "ACTIVE" ? "accent" : "outline"
-              }
-              className="text-[9px] font-mono tracking-wider"
-            >
-              {badge}
-            </Badge>
-          )}
-        </div>
-        <div className="space-y-1 relative z-10">
-          <h3 className="text-sm font-black text-white group-hover:text-cyan-300 transition-colors">
-            {title}
-          </h3>
-          <p className="text-xs text-zinc-400 leading-relaxed line-clamp-2">
-            {description}
-          </p>
-        </div>
-      </Card>
-    </Link>
   );
 }

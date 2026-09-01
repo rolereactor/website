@@ -13,7 +13,6 @@ import {
   Wrench,
   Gift,
   Sparkles,
-  ThumbsUp,
   ExternalLink,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -153,7 +152,7 @@ function NotificationItem({
 }
 
 export function NotificationBell() {
-  const { data: session } = useSession();
+  const { data: session, status: sessionStatus } = useSession();
   const {
     notifications,
     unreadCount,
@@ -214,6 +213,13 @@ export function NotificationBell() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.user?.id]);
 
+  // Show skeleton while session is still resolving — prevents layout shift
+  if (sessionStatus === "loading") {
+    return (
+      <div className="h-9 w-9 rounded-lg border border-white/5 bg-zinc-900/60 animate-pulse shrink-0" />
+    );
+  }
+
   if (!session?.user) return null;
 
   return (
@@ -222,7 +228,7 @@ export function NotificationBell() {
         <Button
           variant="ghost"
           size="icon"
-          className="relative h-9 w-9 rounded-lg border border-transparent hover:border-cyan-500/30 hover:bg-cyan-950/20 hover:shadow-[0_0_15px_-3px_rgba(6,182,212,0.4)] transition-all duration-300 group cursor-pointer"
+          className="relative h-9 w-9 rounded-lg border border-white/10 bg-zinc-950/60 backdrop-blur-xl hover:border-cyan-500/30 hover:bg-cyan-950/20 hover:shadow-[0_0_15px_-3px_rgba(6,182,212,0.4)] transition-all duration-300 group cursor-pointer"
           aria-label="Notifications"
         >
           <Bell className="h-4 w-4 text-zinc-400 group-hover:text-cyan-400 transition-colors" />
@@ -230,30 +236,30 @@ export function NotificationBell() {
             <span
               className={`absolute -top-1 -right-1 min-w-4.5 h-4.5 flex items-center justify-center text-[10px] font-bold rounded-full bg-cyan-500 text-black px-1 ${
                 canVote
-                  ? "ring-2 ring-purple-500 shadow-[0_0_12px_rgba(168,85,247,0.8)]"
+                  ? "ring-2 ring-amber-500 shadow-[0_0_12px_rgba(251,191,36,0.8)]"
                   : "shadow-[0_0_10px_rgba(6,182,212,0.6)]"
               }`}
-              title={canVote ? `${unreadCount} unread notifications • +1 Core Vote Available` : undefined}
+              title={canVote ? `${unreadCount} unread notifications • +5 Sparks Vote Available!` : undefined}
             >
               {unreadCount > 99 ? "99+" : unreadCount}
             </span>
           ) : canVote ? (
             <span className="absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-purple-500" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500" />
             </span>
           ) : null}
         </Button>
       </SheetTrigger>
       <SheetContent
         side="right"
-        className="w-full sm:w-100 bg-zinc-950 border-l border-white/5 p-0 flex flex-col"
+        className="w-full sm:w-100 bg-zinc-950/95 backdrop-blur-2xl border-l border-white/5 p-0 flex flex-col shadow-[inset_0_0_60px_rgba(6,182,212,0.02)]"
       >
         {/* Header */}
-        <SheetHeader className="px-5 pt-5 pb-4 border-b border-white/5">
+        <SheetHeader className="px-5 pt-5 pb-4 border-b border-white/5 bg-zinc-950/80">
           <div className="flex items-center justify-between">
             <SheetTitle className="text-white font-bold text-lg flex items-center gap-2">
-              <div className="p-1.5 bg-cyan-500/10 rounded-lg">
+              <div className="p-1.5 bg-cyan-500/10 rounded-lg border border-cyan-500/20 shadow-[0_0_10px_rgba(6,182,212,0.1)]">
                 <Bell className="w-4 h-4 text-cyan-400" />
               </div>
               Notifications
@@ -264,7 +270,7 @@ export function NotificationBell() {
                   variant="ghost"
                   size="sm"
                   onClick={markAllAsRead}
-                  className="text-xs text-zinc-400 hover:text-cyan-400 h-8 px-2 gap-1.5"
+                  className="text-xs text-zinc-400 hover:text-cyan-400 h-8 px-2 gap-1.5 cursor-pointer"
                 >
                   <CheckCheck className="w-3.5 h-3.5" />
                   Read all
@@ -274,7 +280,7 @@ export function NotificationBell() {
                 variant="ghost"
                 size="icon"
                 onClick={() => setIsOpen(false)}
-                className="h-8 w-8 text-zinc-500 hover:text-white"
+                className="h-8 w-8 text-zinc-500 hover:text-white hover:bg-white/5 rounded-lg cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </Button>
@@ -298,26 +304,28 @@ export function NotificationBell() {
               href="https://top.gg/bot/1392714201558159431/vote"
               target="_blank"
               rel="noopener noreferrer"
-              className="mb-3 block p-3.5 rounded-xl bg-purple-500/10 border border-purple-500/30 hover:border-purple-500/50 hover:bg-purple-500/15 transition-all group relative overflow-hidden shadow-[0_0_15px_rgba(168,85,247,0.1)]"
+              className="mb-3 block p-3.5 rounded-xl bg-zinc-950/80 border border-amber-500/25 hover:border-amber-500/50 hover:bg-amber-500/5 transition-all group relative overflow-hidden shadow-[0_0_18px_-4px_rgba(251,191,36,0.2)] hover:shadow-[0_0_24px_-4px_rgba(251,191,36,0.35)] backdrop-blur-xl"
             >
-              <div className="flex items-start gap-3">
-                <div className="p-2 rounded-lg bg-purple-500/20 border border-purple-500/40 text-purple-300 group-hover:scale-105 transition-transform shrink-0 mt-0.5">
-                  <ThumbsUp className="w-4 h-4 text-purple-300" />
+              {/* Shimmer */}
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-500/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 pointer-events-none" />
+              <div className="flex items-start gap-3 relative z-10">
+                <div className="p-2 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 group-hover:scale-105 transition-transform shrink-0 mt-0.5">
+                  <Zap className="w-4 h-4 text-amber-400 fill-amber-400/30" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5 mb-0.5">
-                    <span className="font-bold text-xs text-purple-200 group-hover:text-white transition-colors">
-                      🎁 +1 Free Core Available!
+                    <span className="font-bold text-xs text-amber-200 group-hover:text-white transition-colors">
+                      ⚡ +5 Free Sparks Available!
                     </span>
                     <span className="flex h-2 w-2 relative">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75" />
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500" />
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
                     </span>
                   </div>
-                  <p className="text-[11px] text-purple-300/80 leading-snug">
-                    Vote for Role Reactor on Top.gg to claim your free Core credit.
+                  <p className="text-[11px] text-amber-300/70 leading-snug">
+                    Vote for Role Reactor on Top.gg and earn <strong className="text-amber-300">+5–8 Sparks</strong> (streak bonus applies).
                   </p>
-                  <div className="mt-2 flex items-center gap-1 text-[10px] font-mono font-bold text-purple-300 group-hover:text-purple-100">
+                  <div className="mt-2 flex items-center gap-1 text-[10px] font-mono font-bold text-amber-400 group-hover:text-amber-200 transition-colors">
                     <span>Vote Now on Top.gg</span>
                     <ExternalLink className="w-3 h-3 ml-0.5" />
                   </div>

@@ -65,7 +65,7 @@ export function CoreBalance({
     return (
       <div
         className={cn(
-          "h-8 w-24 bg-black/40 border border-white/5 animate-pulse rounded-full backdrop-blur-md ml-3",
+          "h-8 w-28 sm:w-44 bg-zinc-900/60 border border-white/5 animate-pulse rounded-full backdrop-blur-md shrink-0",
           className
         )}
       />
@@ -206,34 +206,61 @@ export function CoreBalance({
   return (
     <div
       className={cn(
-        "flex items-center bg-zinc-950/60 border border-white/10 rounded-full px-1.5 py-1 gap-3 backdrop-blur-xl ml-3 hover:border-cyan-500/30 transition-all group shadow-2xl relative",
+        "flex items-center bg-zinc-950/60 border border-white/10 rounded-full px-1.5 py-1 gap-2 backdrop-blur-xl hover:border-cyan-500/30 transition-all group shadow-2xl relative shrink-0",
         className
       )}
     >
       {/* Inner Glow */}
       <div className="absolute inset-0 rounded-full bg-linear-to-r from-cyan-500/0 via-cyan-500/5 to-cyan-500/0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
 
-      {/* Icon with Neon Glow */}
-      <div className="relative w-5 h-5 shrink-0 ml-0.5">
-        <Image
-          src={coreImageUrl}
-          alt="Cores"
-          fill
-          sizes="20px"
-          className="object-contain drop-shadow-[0_0_8px_rgba(0,255,255,0.6)] group-hover:scale-110 transition-transform"
-        />
+      {/* Cores Section */}
+      <div className="flex items-center gap-1.5 pl-0.5">
+        {/* Core Icon with Neon Glow */}
+        <div className="relative w-5 h-5 shrink-0">
+          <Image
+            src={coreImageUrl}
+            alt="Cores"
+            fill
+            sizes="20px"
+            className="object-contain drop-shadow-[0_0_8px_rgba(0,255,255,0.6)] group-hover:scale-110 transition-transform"
+          />
+        </div>
+        {/* Core Number */}
+        <span
+          className={cn(
+            "font-bold text-sm tracking-widest min-w-5 text-center z-10",
+            audiowide.className,
+            isLoading ? "opacity-50 animate-pulse text-zinc-500" : "text-white"
+          )}
+        >
+          {isLoading ? "0" : displayCores}
+        </span>
       </div>
 
-      {/* Number with Audiowide */}
-      <span
-        className={cn(
-          "font-bold text-sm tracking-widest min-w-5 text-center z-10",
-          audiowide.className,
-          isLoading ? "opacity-50 animate-pulse" : "text-white"
-        )}
-      >
-        {isLoading ? "0" : displayCores}
-      </span>
+      {/* Divider */}
+      <div className="hidden sm:block w-px h-4 bg-white/10 shrink-0" />
+
+      {/* Sparks Section */}
+      <div className="hidden sm:flex items-center gap-1">
+        <div className="relative w-4 h-4 shrink-0">
+          <Image
+            src="/images/cores/spark_icon.png"
+            alt="Sparks"
+            fill
+            sizes="16px"
+            className="object-contain drop-shadow-[0_0_6px_rgba(251,191,36,0.6)]"
+          />
+        </div>
+        <span
+          className={cn(
+            "font-bold text-xs tracking-wider z-10",
+            audiowide.className,
+            isLoading ? "opacity-50 animate-pulse text-zinc-500" : "text-amber-400"
+          )}
+        >
+          {isLoading ? "0" : displaySparks}
+        </span>
+      </div>
 
       {/* Plus Button - Tech Style */}
       {showPlusButton &&

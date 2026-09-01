@@ -1,4 +1,4 @@
-import { Audiowide, Inter } from "next/font/google";
+import { Audiowide, Inter, Orbitron, Rajdhani } from "next/font/google";
 
 export const inter = Inter({
   subsets: ["latin"],
@@ -10,5 +10,17 @@ export const inter = Inter({
 export const audiowide = Audiowide({
   subsets: ["latin"],
   weight: "400",
+  display: "swap",
+});
+
+export const orbitron = Orbitron({
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "800", "900"],
+  display: "swap",
+});
+
+export const rajdhani = Rajdhani({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
   display: "swap",
 });
