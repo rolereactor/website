@@ -169,6 +169,8 @@ export function DashboardSidebar({
             title: "Goodbye System",
             href: getHref("/dashboard/goodbye", true),
             icon: DoorOpen,
+            badge: "NEW",
+            badgeActive: true,
           },
           {
             title: "XP & Levels",
@@ -184,6 +186,8 @@ export function DashboardSidebar({
             title: "Tickets",
             href: getHref("/dashboard/tickets", true),
             icon: Ticket,
+            badge: "NEW",
+            badgeActive: true,
           },
         ]
       : [];
