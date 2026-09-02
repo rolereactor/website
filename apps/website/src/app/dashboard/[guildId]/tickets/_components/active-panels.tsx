@@ -55,12 +55,12 @@ function PanelCard({
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    const ok = await refreshPanel(guildId, panel.panelId);
+    const result = await refreshPanel(guildId, panel.panelId);
     setIsRefreshing(false);
-    if (ok) {
-      toast.success("Panel message refreshed in Discord.");
+    if (result.success) {
+      toast.success(result.message || "Panel message refreshed successfully");
     } else {
-      toast.error("Failed to refresh — the panel message may have been deleted.");
+      toast.error(result.error || "Failed to refresh panel message");
     }
   };
 

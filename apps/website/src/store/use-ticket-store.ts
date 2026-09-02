@@ -144,11 +144,11 @@ interface TicketState {
   fetchSettings: (guildId: string) => Promise<void>;
   fetchStaffStats: (guildId: string) => Promise<void>;
   updateSettings: (guildId: string, settings: Partial<TicketSettings>) => Promise<boolean>;
-  createPanel: (guildId: string, panel: { channelId: string; title: string; description: string; categories?: TicketCategoryInput[] }) => Promise<TicketPanel | null>;
+  createPanel: (guildId: string, panel: { channelId: string; title: string; description: string; categories?: TicketCategoryInput[] }) => Promise<{ panel: TicketPanel | null; message?: string; error?: string }>;
   deletePanel: (guildId: string, panelId: string) => Promise<boolean>;
   togglePanel: (guildId: string, panelId: string) => Promise<boolean>;
-  updatePanel: (guildId: string, panelId: string, updates: { title?: string; description?: string; categories?: TicketCategoryInput[] }) => Promise<{ success: boolean; messageRefreshed?: boolean; error?: string }>;
-  refreshPanel: (guildId: string, panelId: string) => Promise<boolean>;
+  updatePanel: (guildId: string, panelId: string, updates: { title?: string; description?: string; categories?: TicketCategoryInput[] }) => Promise<{ success: boolean; message?: string; messageRefreshed?: boolean; error?: string }>;
+  refreshPanel: (guildId: string, panelId: string) => Promise<{ success: boolean; message?: string; error?: string }>;
   clearCache: (guildId?: string) => void;
   getGuildData: (guildId: string) => GuildTicketData;
 }
@@ -434,8 +434,8 @@ export const useTicketStore = create<TicketState>()(
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(panel),
           });
-          if (!res.ok) throw new Error("Failed to create panel");
           const data = await res.json();
+          if (!res.ok) throw new Error(data?.message || data?.error || "Failed to create panel");
           const newPanel = data.panel || data.data?.panel || null;
 
           if (newPanel) {
@@ -450,10 +450,10 @@ export const useTicketStore = create<TicketState>()(
               },
             });
           }
-          return newPanel;
+          return { panel: newPanel, message: data.message };
         } catch (error) {
           console.error("Ticket Store: Create panel failed", error);
-          return null;
+          return { panel: null, error: (error as Error).message };
         }
       },
 
@@ -539,7 +539,7 @@ export const useTicketStore = create<TicketState>()(
               },
             });
           }
-          return { success: true, messageRefreshed: Boolean(data.messageRefreshed) };
+          return { success: true, message: data.message, messageRefreshed: Boolean(data.messageRefreshed) };
         } catch (error) {
           console.error("Ticket Store: Update panel failed", error);
           return { success: false, error: (error as Error).message };
@@ -551,14 +551,14 @@ export const useTicketStore = create<TicketState>()(
           const res = await fetch(`/api/guilds/${guildId}/tickets/panels/${panelId}/refresh`, {
             method: "POST",
           });
+          const data = await res.json().catch(() => ({}));
           if (!res.ok) {
-            const data = await res.json().catch(() => null);
             throw new Error(data?.message || data?.error || "Failed to refresh panel message");
           }
-          return true;
+          return { success: true, message: data.message };
         } catch (error) {
           console.error("Ticket Store: Refresh panel failed", error);
-          return false;
+          return { success: false, error: (error as Error).message };
         }
       },
 

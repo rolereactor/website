@@ -114,17 +114,18 @@ export function PanelBuilder({
       setSaving(false);
 
       if (result.success) {
+        const message = result.message || "Panel updated successfully";
         toast.success(
           result.messageRefreshed
-            ? "Panel updated — the Discord message was refreshed."
-            : "Panel updated."
+            ? `${message} — Discord message refreshed.`
+            : message
         );
         onSaveComplete();
       } else {
         setError(result.error || "Failed to update panel. Please try again.");
       }
     } else {
-      const panel = await createPanel(guildId, {
+      const result = await createPanel(guildId, {
         channelId,
         title,
         description,
@@ -132,11 +133,11 @@ export function PanelBuilder({
       });
       setSaving(false);
 
-      if (panel) {
-        toast.success("Panel created — the panel message was posted to the channel.");
+      if (result.panel) {
+        toast.success(result.message || "Panel created successfully");
         onSaveComplete();
       } else {
-        setError("Failed to create panel. Please try again.");
+        setError(result.error || "Failed to create panel. Please try again.");
       }
     }
   };
