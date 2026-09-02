@@ -7,6 +7,9 @@ import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ActiveMenus } from "./active-menus";
 import { useProEngineStore } from "@/store/use-pro-engine-store";
+import useSWR from "swr";
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const RoleBuilder = lazy(() =>
   import("./role-builder").then((mod) => ({ default: mod.RoleBuilder }))
@@ -50,6 +53,15 @@ export function RolesTabs({
   const [activeTab, setActiveTab] = useState("active");
   const [editData, setEditData] = useState<EditData | null>(null);
 
+  // Fetch usage data
+  const { data: menusData } = useSWR(
+    guildId ? `/api/guilds/${guildId}/role-reactions?limit=100` : null,
+    fetcher,
+    { revalidateOnFocus: false }
+  );
+
+  const menusCount = menusData?.roleMappings?.length || 0;
+
   const handleEdit = useCallback(
     (data: EditData) => {
       setEditData(data);
@@ -82,6 +94,17 @@ export function RolesTabs({
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
       <div className="flex flex-col lg:flex-row items-center justify-between gap-4 mb-5 min-w-0 px-1">
+        {/* Usage Display */}
+        <div className="flex items-center gap-4 text-sm">
+          <div className="flex items-center gap-2 text-zinc-400">
+            <List className="w-4 h-4 text-cyan-400" />
+            <span>
+              <span className="text-zinc-200 font-medium">{menusCount}</span>
+              <span className="text-zinc-500">/3 menus</span>
+            </span>
+          </div>
+        </div>
+
         <TabsList variant="neon" className="w-full lg:w-auto flex min-w-0">
           <TabsTrigger
             variant="neon"

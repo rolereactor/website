@@ -21,6 +21,7 @@ interface DiscordPreviewProps {
     roleColors?: number[];
   }[];
   serverEmojis?: DiscordEmoji[];
+  serverRoles?: { id: string; color: number }[];
 }
 
 interface DiscordEmoji {
@@ -51,6 +52,7 @@ export function DiscordPreview({
   hideList = false,
   reactions,
   serverEmojis: propEmojis,
+  serverRoles = [],
 }: DiscordPreviewProps) {
   const params = useParams();
   const guildId = params.guildId as string;
@@ -150,7 +152,10 @@ export function DiscordPreview({
         if (!uniqueNames.has(name)) {
           uniqueNames.add(name);
           finalNames.push(name);
-          finalColors.push(r.roleColors![i] || 0);
+          // Look up actual Discord color from serverRoles
+          const roleId = r.roleIds?.[i];
+          const serverRole = serverRoles.find((sr) => sr.id === roleId);
+          finalColors.push(serverRole?.color ?? (r.roleColors![i] || 0));
         }
       }
 
@@ -162,7 +167,7 @@ export function DiscordPreview({
         roleColors: finalColors,
       };
     });
-  }, [reactions]);
+  }, [reactions, serverRoles]);
 
   return (
     <div className="bg-[#313338] text-[#dbdee1] p-4 rounded-xl font-sans text-[15px] select-none shadow-2xl border border-white/5">

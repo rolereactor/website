@@ -32,6 +32,8 @@ const buttonVariants = cva(
           "bg-cyan-500 text-black font-bold uppercase tracking-wide text-xs hover:bg-cyan-400 hover:shadow-[0_0_25px_-5px_rgba(6,182,212,0.6)] rounded-lg shadow-[0_0_15px_-3px_rgba(6,182,212,0.4)]",
         discord:
           "bg-[#5865F2] text-white font-bold uppercase tracking-wide text-xs hover:bg-[#4752C4] hover:shadow-[0_0_25px_-5px_rgba(88,101,242,0.6)] rounded-lg shadow-[0_0_15px_-3px_rgba(88,101,242,0.4)]",
+        plasma:
+          "bg-purple-500 text-white font-bold uppercase tracking-wide text-xs hover:bg-purple-400 hover:shadow-[0_0_25px_-5px_rgba(168,85,247,0.6)] rounded-lg shadow-[0_0_15px_-3px_rgba(168,85,247,0.4)]",
       },
       size: {
         default: "h-9 md:h-10 px-3 md:px-4 py-2",

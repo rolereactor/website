@@ -52,6 +52,19 @@ Always use standard Tailwind CSS v4 syntax in this codebase:
 2. **Upstream Microservice Unreachability**:
    - In Next.js API proxy handlers (e.g. `streamProxy`), intercept Node `ECONNREFUSED` / `fetch failed` errors and return HTTP 503 with `"Bot service unreachable"` instead of leaking unhandled exceptions.
 
+3. **Use Backend Messages**:
+   - Always use messages from the backend instead of hardcoded strings for toast notifications.
+   - Use fallback messages for cases where backend message is unavailable.
+   - Example:
+     ```js
+     // ❌ Bad
+     toast.success("Bundle created successfully");
+     
+     // ✅ Good
+     toast.success(result.message || "Bundle created successfully");
+     ```
+   - This allows the backend to customize messages and ensures consistency.
+
 ## Mobile Navigation Rules
 
 1. **Page Sub-Section Navigation on Mobile**:

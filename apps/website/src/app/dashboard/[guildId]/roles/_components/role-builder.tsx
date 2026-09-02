@@ -15,6 +15,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { DiscordPreview } from "./discord-preview";
 import { PremiumGuard } from "../../../_components/premium-guard";
 import { useRoleBuilder, type ReactionMapping } from "@/hooks/use-role-builder";
@@ -35,8 +41,19 @@ import {
   MousePointer2,
   Zap,
   Hash,
+  Package,
 } from "lucide-react";
 import { DiscordRole, DiscordChannel, DiscordEmoji } from "@/types/discord";
+import useSWR from "swr";
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
+interface RoleBundle {
+  _id: string;
+  guildId: string;
+  name: string;
+  roles: Array<{ roleId: string; roleName: string }>;
+}
 
 const PRESET_COLORS = [
   { name: "Default", hex: "#9b8bf0" },
@@ -73,6 +90,15 @@ export function RoleBuilder({
   onSaveComplete,
 }: RoleBuilderProps) {
   const [showPremiumModal, setShowPremiumModal] = useState(false);
+
+  // Fetch bundles
+  const { data: bundlesData } = useSWR(
+    propGuildId ? `/api/guilds/${propGuildId}/role-bundles` : null,
+    fetcher,
+    { revalidateOnFocus: false }
+  );
+  const bundles: RoleBundle[] = bundlesData?.bundles || [];
+
   const {
     guildId,
     guildIconUrl,
@@ -204,6 +230,7 @@ export function RoleBuilder({
                   emojiError={emojiError}
                   fetchEmojis={fetchEmojis}
                   guildIconUrl={guildIconUrl}
+                  bundles={bundles}
                 />
                 {reactions.length === 0 && (
                   <div className="py-12 text-center">
@@ -268,6 +295,7 @@ export function RoleBuilder({
               hideList={hideList}
               reactions={reactions}
               serverEmojis={serverEmojis}
+              serverRoles={serverRoles}
             />
           </div>
           <PreviewInfo />
@@ -620,6 +648,7 @@ interface RoleMappingListProps {
   emojiError: string | null;
   fetchEmojis: (guildId: string, force?: boolean) => void;
   guildIconUrl: string | null;
+  bundles: RoleBundle[];
 }
 
 function RoleMappingList({
@@ -638,6 +667,7 @@ function RoleMappingList({
   emojiError,
   fetchEmojis,
   guildIconUrl,
+  bundles,
 }: RoleMappingListProps) {
   const customEmojis = useMemo(() => {
     return serverEmojis.map((emoji: DiscordEmoji) => ({
@@ -662,8 +692,12 @@ function RoleMappingList({
           : r.roleName
             ? [r.roleName]
             : [];
+        // Get colors from stored data, fallback to serverRoles for actual Discord colors
         const selectedRoleColors = r.roleColors?.length
-          ? r.roleColors
+          ? r.roleIds?.map((id, idx) => {
+              const serverRole = serverRoles.find((sr: DiscordRole) => sr.id === id);
+              return serverRole?.color ?? r.roleColors?.[idx] ?? r.roleColor ?? 0;
+            }) ?? r.roleColors
           : r.roleColor
             ? [r.roleColor]
             : [];
@@ -780,6 +814,68 @@ function RoleMappingList({
                   </SelectContent>
                 </Select>
               </div>
+
+              {/* Bundle Selector */}
+              {bundles.length > 0 && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-10 px-2 shrink-0 border-purple-500/30 hover:border-purple-500/50 hover:bg-purple-500/10"
+                      title="Use a role bundle"
+                    >
+                      <Package className="w-4 h-4 text-purple-400" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56 bg-zinc-900 border-zinc-800">
+                    {bundles.map((bundle) => (
+                      <DropdownMenuItem
+                        key={bundle._id}
+                        className="flex items-center gap-2 cursor-pointer focus:bg-purple-500/10"
+                        onSelect={() => {
+                          // Add all bundle roles to this emoji
+                          const newRoleIds = [
+                            ...selectedRoleIds,
+                            ...bundle.roles
+                              .map((r) => r.roleId)
+                              .filter((id) => !selectedRoleIds.includes(id)),
+                          ];
+                          const newRoleNames = [
+                            ...selectedRoleNames,
+                            ...bundle.roles
+                              .filter((r) => !selectedRoleIds.includes(r.roleId))
+                              .map((r) => r.roleName),
+                          ];
+                          // Get colors from serverRoles for bundle roles
+                          const newRoleColors = newRoleIds.map((id) => {
+                            const serverRole = serverRoles.find(
+                              (sr: DiscordRole) => sr.id === id
+                            );
+                            return serverRole?.color ?? 0;
+                          });
+                          updateReaction(i, {
+                            roleId: newRoleIds[0],
+                            roleName: newRoleNames[0],
+                            roleColor: newRoleColors[0],
+                            roleIds: newRoleIds,
+                            roleNames: newRoleNames,
+                            roleColors: newRoleColors,
+                          });
+                        }}
+                      >
+                        <Package className="w-4 h-4 text-purple-400" />
+                        <div className="flex-1">
+                          <div className="text-zinc-200 text-sm">{bundle.name}</div>
+                          <div className="text-zinc-500 text-xs">
+                            {bundle.roles.length} role{bundle.roles.length !== 1 ? "s" : ""}
+                          </div>
+                        </div>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
 
               <Button
                 variant="ghost"

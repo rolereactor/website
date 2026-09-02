@@ -129,6 +129,34 @@ export function useRoleBuilder(
     );
   }, [guildData, guildId]);
 
+  // Sync reaction colors with actual Discord colors from serverRoles
+  useEffect(() => {
+    if (serverRoles.length === 0) return;
+
+    setReactions((prev) =>
+      prev.map((r) => {
+        const roleIds = r.roleIds?.length ? r.roleIds : r.roleId ? [r.roleId] : [];
+        const needsUpdate = roleIds.some((id) => {
+          const serverRole = serverRoles.find((sr) => sr.id === id);
+          return serverRole && serverRole.color !== 0;
+        });
+
+        if (!needsUpdate) return r;
+
+        const updatedRoleColors = roleIds.map((id, idx) => {
+          const serverRole = serverRoles.find((sr) => sr.id === id);
+          return serverRole?.color ?? r.roleColors?.[idx] ?? r.roleColor ?? 0;
+        });
+
+        return {
+          ...r,
+          roleColor: updatedRoleColors[0] ?? r.roleColor,
+          roleColors: updatedRoleColors,
+        };
+      })
+    );
+  }, [serverRoles]);
+
   const serverChannels = useMemo(() => {
     const channels = guildData[guildId]?.channels || [];
     return channels.filter((ch: DiscordChannel) => ch.type === 0);

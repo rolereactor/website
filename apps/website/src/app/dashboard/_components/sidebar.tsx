@@ -379,13 +379,14 @@ export function DashboardSidebar({
   }) => {
     if (items.length === 0) return null;
     return (
-      <SidebarGroup className="group-data-[collapsible=icon]:px-0 py-1">
+      <SidebarGroup className="group-data-[collapsible=icon]:px-0 py-2">
         {label && (
           <SidebarGroupLabel
             className={cn(
-              "group-data-[collapsible=icon]:hidden text-[10px] font-semibold uppercase tracking-wider text-zinc-500 mb-1 px-4"
+              "group-data-[collapsible=icon]:hidden mb-2 px-4 flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.3em] text-zinc-600/70 before:content-['//'] before:mr-2 before:text-zinc-800"
             )}
           >
+            <span className="h-1.5 w-1.5 rounded-full bg-zinc-800" />
             {label}
           </SidebarGroupLabel>
         )}
@@ -399,16 +400,16 @@ export function DashboardSidebar({
                   tooltip={item.title}
                   disabled={item.isComingSoon}
                   className={cn(
-                    "h-9 transition-all duration-200 rounded-lg group/btn relative overflow-hidden",
+                    "h-9 transition-all duration-300 rounded-lg group/btn relative overflow-hidden text-sm",
                     item.isComingSoon
                       ? "opacity-30 cursor-not-allowed"
-                      : "hover:bg-white/5 active:scale-[0.98]"
+                      : "hover:text-cyan-100 hover:bg-white/5 active:scale-[0.98]"
                   )}
                 >
                   {item.isComingSoon ? (
                     <div className="flex items-center gap-3 w-full px-2 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
                       <item.icon className="size-4 shrink-0" />
-                      <span className="group-data-[collapsible=icon]:hidden text-[13px] font-medium truncate">
+                      <span className="group-data-[collapsible=icon]:hidden text-xs truncate">
                         {item.title}
                       </span>
                       <Badge
@@ -439,15 +440,15 @@ export function DashboardSidebar({
                       )}
                       <item.icon
                         className={cn(
-                          "size-4 shrink-0 transition-colors",
+                          "size-4 shrink-0 transition-transform group-hover/btn:scale-110",
                           isActive(item.href)
                             ? "text-cyan-400"
-                            : "text-zinc-500 group-hover/btn:text-zinc-300"
+                            : "text-zinc-500"
                         )}
                       />
                       <span
                         className={cn(
-                          "group-data-[collapsible=icon]:hidden text-[13px] font-medium truncate transition-colors",
+                          "group-data-[collapsible=icon]:hidden text-xs truncate transition-colors",
                           isActive(item.href)
                             ? "text-zinc-100"
                             : "text-zinc-400 group-hover/btn:text-zinc-200"
