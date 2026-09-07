@@ -1,18 +1,13 @@
 import type { CorePackage, PricingData } from "@/types/pricing";
-import {
-  SiBitcoin,
-  SiEthereum,
-  SiTether,
-  SiDogecoin,
-  SiSolana,
-  SiLitecoin,
-} from "react-icons/si";
+import { SiBitcoin, SiEthereum, SiBinance, SiSolana } from "react-icons/si";
 import type { IconType } from "react-icons";
 
 export type { CorePackage, PricingData };
 
 /**
- * Supported cryptocurrencies - matched with Plisio supported currencies
+ * Supported cryptocurrencies for Multicoin Gateway (Plisio)
+ * Focused on 4 top native cryptocurrencies (BTC, ETH, BNB, SOL) for a balanced 2x2 grid.
+ * All stablecoin payments (USDC/USDT) are handled via Direct Web3 Wallet on L2s for $0 gas fees.
  */
 export const supportedCryptos: Array<{
   id: string;
@@ -22,11 +17,6 @@ export const supportedCryptos: Array<{
 }> = [
   { id: "BTC", name: "Bitcoin", icon: SiBitcoin, color: "#F7931A" },
   { id: "ETH", name: "Ethereum", icon: SiEthereum, color: "#627EEA" },
-  { id: "USDT_TRX", name: "USDT (TRC20)", icon: SiTether, color: "#26A17B" },
-  { id: "USDT_BSC", name: "USDT (BEP20)", icon: SiTether, color: "#26A17B" },
-  { id: "USDT", name: "USDT (ERC20)", icon: SiTether, color: "#26A17B" },
-  { id: "USDC", name: "USDC (ERC20)", icon: SiTether, color: "#2775CA" },
-  { id: "DOGE", name: "Dogecoin", icon: SiDogecoin, color: "#C2A633" },
-  { id: "LTC", name: "Litecoin", icon: SiLitecoin, color: "#345D9D" },
-  { id: "SOL", name: "Solana", icon: SiSolana, color: "#9945FF" },
+  { id: "BNB", name: "BNB Chain", icon: SiBinance, color: "#F3BA2F" },
+  { id: "SOL", name: "Solana", icon: SiSolana, color: "#14F195" },
 ];

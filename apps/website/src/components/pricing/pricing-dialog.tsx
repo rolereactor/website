@@ -12,7 +12,9 @@ import { useUiSound } from "@/hooks/use-ui-sound";
 import { toast } from "@/lib/toast";
 
 import { PackagesView } from "./packages-view";
+import { MethodSelectionView } from "./method-selection-view";
 import { PaymentMethodView } from "./payment-method-view";
+import { Web3PaymentView } from "./web3-payment-view";
 import { PaymentPendingView } from "./payment-pending-view";
 
 const SESSION_STORAGE_KEY = "role-reactor-pending-package";
@@ -33,7 +35,7 @@ export function PricingDialog({
   const { data: session } = useSession();
   const { playConfirm, playSwitch } = useUiSound();
   const [internalOpen, setInternalOpen] = useState(false);
-  const [view, setView] = useState<"packages" | "payment" | "payment_pending">(
+  const [view, setView] = useState<"packages" | "select_method" | "payment_plisio" | "payment_web3" | "payment_pending">(
     "packages"
   );
 
@@ -82,10 +84,10 @@ export function PricingDialog({
         if (savedPackageId) {
           sessionStorage.removeItem(SESSION_STORAGE_KEY);
           const pkg = packages.find((p) => p.id === savedPackageId);
-          if (pkg) {
-            setSelectedPackage(pkg);
-            setView("payment");
-          }
+            if (pkg) {
+              setSelectedPackage(pkg);
+              setView("select_method");
+            }
         }
       }
     }
@@ -108,7 +110,7 @@ export function PricingDialog({
     if (pkg) {
       playSwitch();
       setSelectedPackage(pkg);
-      setView("payment");
+      setView("select_method");
     }
   };
 
@@ -224,9 +226,52 @@ export function PricingDialog({
               packages={packages}
               pricingData={pricingData}
               onPaymentInitiation={handlePaymentInitiation}
-              onBMACPayment={handleBMACPayment}
               loadingPackageId={loadingPackageId}
               loading={loading}
+            />
+          ) : view === "select_method" && selectedPackage ? (
+            <MethodSelectionView
+              selectedPackage={selectedPackage}
+              onBack={() => {
+                playSwitch();
+                setView("packages");
+              }}
+              onSelectMethod={(method) => {
+                if (method === "bmac") {
+                  handleBMACPayment();
+                } else if (method === "plisio") {
+                  setView("payment_plisio");
+                } else if (method === "web3") {
+                  setView("payment_web3");
+                }
+              }}
+              playConfirm={playConfirm}
+            />
+          ) : view === "payment_plisio" && selectedPackage ? (
+            <PaymentMethodView
+              selectedPackage={selectedPackage}
+              onBack={() => {
+                playSwitch();
+                setView("select_method");
+              }}
+              onCryptoPayment={handleCryptoPayment}
+              loadingCryptoId={loadingCryptoId}
+              playConfirm={playConfirm}
+            />
+          ) : view === "payment_web3" && selectedPackage ? (
+            <Web3PaymentView
+              selectedPackage={selectedPackage}
+              onBack={() => {
+                playSwitch();
+                setView("select_method");
+              }}
+              onSuccess={(hash) => {
+                // Here you would call your backend to verify the web3 payment
+                console.log("Web3 Hash:", hash);
+                // After successful backend verification, you can show the success toast:
+                // handlePaymentComplete(); 
+              }}
+              playConfirm={playConfirm}
             />
           ) : view === "payment_pending" ? (
             <PaymentPendingView
@@ -240,20 +285,7 @@ export function PricingDialog({
                 setOpen(false);
               }}
             />
-          ) : (
-            selectedPackage && (
-              <PaymentMethodView
-                selectedPackage={selectedPackage}
-                onBack={() => {
-                  playSwitch();
-                  setView("packages");
-                }}
-                onCryptoPayment={handleCryptoPayment}
-                loadingCryptoId={loadingCryptoId}
-                playConfirm={playConfirm}
-              />
-            )
-          )}
+          ) : null}
         </DialogContent>
       </Dialog>
     </>

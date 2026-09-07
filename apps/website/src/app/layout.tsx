@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import type { Metadata, Viewport } from "next";
 
-import { RootProvider } from "fumadocs-ui/provider";
+import { FumadocsProvider } from "@/components/providers/fumadocs-provider";
 import { MobileNavClose } from "@/components/common/mobile-nav-close";
 import { Analytics } from "@vercel/analytics/next";
 
@@ -10,6 +10,7 @@ import { SessionProvider } from "@/components/auth/session-provider";
 import { Toaster } from "sonner";
 import { PWAMeta, PWAProvider } from "@/components/pwa/pwa-provider";
 import { initPerformanceMonitoring } from "@/lib/web-vitals";
+import { Web3Provider } from "@/components/providers/web3-provider";
 import "./global.css";
 
 import { inter } from "@/lib/fonts";
@@ -171,29 +172,23 @@ export default function Layout({ children }: { children: ReactNode }) {
         <PWAMeta />
         <PWAProvider />
         <SessionProvider>
-          <RootProvider
-            search={{ enabled: false }}
-            theme={{
-              defaultTheme: "dark",
-              forcedTheme: "dark",
-              attribute: "class",
-              enableSystem: false,
-            }}
-          >
-            {children}
-            <Toaster
-              position="top-center"
-              expand={false}
-              theme="dark"
-              className="toaster group"
-              toastOptions={{
-                unstyled: true,
-                classNames: {
-                  toast: "w-full flex justify-center",
-                },
-              }}
-            />
-          </RootProvider>
+          <Web3Provider>
+            <FumadocsProvider>
+              {children}
+              <Toaster
+                position="top-center"
+                expand={false}
+                theme="dark"
+                className="toaster group"
+                toastOptions={{
+                  unstyled: true,
+                  classNames: {
+                    toast: "w-full flex justify-center",
+                  },
+                }}
+              />
+            </FumadocsProvider>
+          </Web3Provider>
         </SessionProvider>
         {/* Only load analytics in production to prevent development errors */}
         {process.env.NODE_ENV === "production" && <Analytics />}
