@@ -42,12 +42,29 @@ export const useUserStore = create<UserState>()(
           const response = await fetch(
             `/api/pricing/balance?user_id=${userId}`
           );
-          const result = await response.json();
+
+          // Bot service down or other non-ok response — degrade gracefully
+          if (!response.ok) {
+            console.warn(
+              `User store: Balance fetch returned ${response.status}, keeping cached data`
+            );
+            set({ isLoading: false });
+            return;
+          }
+
+          // Read text first to avoid crashing on non-JSON bodies
+          const text = await response.text();
+          let result: { success?: boolean; data?: { user?: unknown } };
+          try {
+            result = text ? JSON.parse(text) : {};
+          } catch {
+            console.warn("User store: Non-JSON response from balance endpoint");
+            set({ isLoading: false });
+            return;
+          }
 
           if (result.success && result.data?.user) {
-            const validation = UserPricingInfoSchema.safeParse(
-              result.data.user
-            );
+            const validation = UserPricingInfoSchema.safeParse(result.data.user);
 
             if (validation.success) {
               set({

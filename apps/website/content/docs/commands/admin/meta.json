@@ -2,16 +2,17 @@
   "title": "Admin",
   "pages": [
     "role-reactions",
+    "starboard",
+    "giveaway",
+    "ticket",
+    "moderation",
+    "role-bundle",
+    "voice-roles",
     "schedule-role",
     "temp-roles",
     "welcome",
     "goodbye",
     "xp",
-    "giveaway",
-    "moderation",
-    "ticket",
-    "automod",
-    "role-bundle",
-    "voice-roles"
+    "automod"
   ]
 }

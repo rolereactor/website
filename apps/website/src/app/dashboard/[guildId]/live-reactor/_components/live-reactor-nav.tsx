@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import {
   Cable,
   Settings,
@@ -9,8 +9,11 @@ import {
   Timer,
   Activity,
   Shield,
+  MonitorPlay,
+  Radio,
   ChevronDown,
   Check,
+  Lock,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "motion/react";
@@ -20,15 +23,19 @@ interface NavItem {
   label: string;
   icon: React.ElementType;
   group?: string;
+  requires?: string[];
+  platformBadge?: string;
 }
 
 const navItems: NavItem[] = [
   { id: "connection", label: "Connection", icon: Cable },
   { id: "config", label: "Configuration", icon: Settings, group: "config" },
-  { id: "commands", label: "Commands", icon: Terminal },
-  { id: "quotes", label: "Quotes", icon: MessageSquareQuote, group: "content" },
-  { id: "timers", label: "Timers", icon: Timer, group: "content" },
-  { id: "filters", label: "Filters", icon: Shield, group: "moderation" },
+  { id: "commands", label: "Commands", icon: Terminal, requires: ["twitch"], platformBadge: "Twitch" },
+  { id: "quotes", label: "Quotes", icon: MessageSquareQuote, group: "content", requires: ["twitch"], platformBadge: "Twitch" },
+  { id: "timers", label: "Timers", icon: Timer, group: "content", requires: ["twitch"], platformBadge: "Twitch" },
+  { id: "filters", label: "Filters", icon: Shield, group: "moderation", requires: ["twitch"], platformBadge: "Twitch" },
+  { id: "overlays", label: "Stream Overlays", icon: MonitorPlay, group: "streaming" },
+  { id: "activity", label: "Live Activity", icon: Radio, group: "streaming" },
   { id: "diagnostics", label: "Diagnostics", icon: Activity, group: "system" },
 ];
 
@@ -37,6 +44,7 @@ interface LiveReactorNavProps {
   onTabChange: (tab: string) => void;
   isConnected: boolean;
   isLive?: boolean;
+  connections?: Array<{ platform: string; isConnected: boolean }>;
 }
 
 export function LiveReactorNav({
@@ -44,9 +52,19 @@ export function LiveReactorNav({
   onTabChange,
   isConnected,
   isLive = false,
+  connections = [],
 }: LiveReactorNavProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  const connectedPlatforms = useMemo(() => {
+    return connections.filter((c) => c.isConnected).map((c) => c.platform);
+  }, [connections]);
+
+  const isTabAvailable = (item: NavItem): boolean => {
+    if (!item.requires) return true;
+    return item.requires.some((p) => connectedPlatforms.includes(p));
+  };
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -128,19 +146,25 @@ export function LiveReactorNav({
                 const isActive = activeTab === item.id;
                 const statusColor = getStatusColor(item.id);
                 const Icon = item.icon;
+                const available = isTabAvailable(item);
 
                 return (
                   <button
                     key={item.id}
                     onClick={() => {
-                      onTabChange(item.id);
-                      setIsOpen(false);
+                      if (available) {
+                        onTabChange(item.id);
+                        setIsOpen(false);
+                      }
                     }}
+                    disabled={!available}
                     className={cn(
                       "w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left transition-all duration-150 relative group cursor-pointer",
                       isActive
                         ? "bg-cyan-500/15 text-cyan-200 border-l-2 border-cyan-400 font-semibold"
-                        : "text-zinc-400 hover:bg-white/5 hover:text-zinc-100"
+                        : available
+                          ? "text-zinc-400 hover:bg-white/5 hover:text-zinc-100"
+                          : "text-zinc-600 opacity-50 cursor-not-allowed"
                     )}
                   >
                     <div className="flex items-center gap-3 min-w-0">
@@ -148,7 +172,7 @@ export function LiveReactorNav({
                         <Icon
                           className={cn(
                             "size-4 shrink-0 transition-colors",
-                            isActive ? "text-cyan-400" : "text-zinc-500 group-hover:text-zinc-300"
+                            isActive ? "text-cyan-400" : available ? "text-zinc-500 group-hover:text-zinc-300" : "text-zinc-700"
                           )}
                         />
                         {statusColor && (
@@ -169,6 +193,9 @@ export function LiveReactorNav({
                           LIVE
                         </span>
                       )}
+                      {!available && item.platformBadge && (
+                        <Lock className="size-3 text-zinc-600" />
+                      )}
                       {isActive && <Check className="size-4 text-cyan-400 shrink-0" />}
                     </div>
                   </button>
@@ -186,17 +213,23 @@ export function LiveReactorNav({
             const isActive = activeTab === item.id;
             const statusColor = getStatusColor(item.id);
             const Icon = item.icon;
+            const available = isTabAvailable(item);
 
             return (
               <button
                 key={item.id}
-                onClick={() => onTabChange(item.id)}
+                onClick={() => {
+                  if (available) onTabChange(item.id);
+                }}
+                disabled={!available}
                 className={cn(
                   "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all duration-200 relative group cursor-pointer",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900",
                   isActive
                     ? "bg-white/5 text-zinc-100"
-                    : "text-zinc-400 hover:bg-white/5 hover:text-zinc-200"
+                    : available
+                      ? "text-zinc-400 hover:bg-white/5 hover:text-zinc-200"
+                      : "text-zinc-600 opacity-50 cursor-not-allowed"
                 )}
               >
                 {isActive && (
@@ -217,7 +250,7 @@ export function LiveReactorNav({
                   <Icon
                     className={cn(
                       "size-4 shrink-0 transition-colors",
-                      isActive ? "text-cyan-400" : "text-zinc-500"
+                      isActive ? "text-cyan-400" : available ? "text-zinc-500" : "text-zinc-700"
                     )}
                   />
                   {statusColor && (
@@ -238,6 +271,9 @@ export function LiveReactorNav({
                   <span className="text-[10px] font-bold text-red-400 tracking-widest uppercase shrink-0">
                     Live
                   </span>
+                )}
+                {!available && item.platformBadge && (
+                  <span className="text-[9px] text-zinc-600 shrink-0">{item.platformBadge}</span>
                 )}
               </button>
             );

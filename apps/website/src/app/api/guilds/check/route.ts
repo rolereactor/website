@@ -1,19 +1,43 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { botFetch } from "@/lib/bot-fetch";
+import { botFetch, isBotUnavailableError } from "@/lib/bot-fetch";
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth();
-    if (!session) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+    // Check for internal API key first
+    const authHeader = request.headers.get("authorization");
+    const INTERNAL_API_KEY = process.env.INTERNAL_API_KEY;
+    let session: any = null;
+
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      const token = authHeader.split(" ")[1];
+      if (token === INTERNAL_API_KEY) {
+        // Authorized via internal key, create dummy session
+        session = { user: {} };
+      } else {
+        // Invalid token, reject request
+        return NextResponse.json(
+          { success: false, error: "Unauthorized" },
+          { status: 401 }
+        );
+      }
+    } else {
+      // No bearer token, use NextAuth session
+      session = await auth();
+      if (!session) {
+        return NextResponse.json(
+          { success: false, error: "Unauthorized" },
+          { status: 401 }
+        );
+      }
     }
 
     const body = await request.json();
-    const userId = session.user?.id;
+    // Ensure the payload always contains a guildIds array (empty if none)
+    if (!Array.isArray(body?.guildIds)) {
+      body.guildIds = [];
+    }
+    const userId = session?.user?.id;
 
     const response = await botFetch("/guilds/check", {
       method: "POST",
@@ -36,9 +60,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(data);
   } catch (error) {
     console.error("Guild check proxy error:", error);
-    return NextResponse.json(
-      { success: false, error: "Internal server error" },
-      { status: 500 }
-    );
+    if (isBotUnavailableError(error)) {
+      return NextResponse.json({ success: false, error: "Bot service unreachable" }, { status: 503 });
+    }
+    return NextResponse.json({ success: false, error: "Internal server error" }, { status: 500 });
   }
 }

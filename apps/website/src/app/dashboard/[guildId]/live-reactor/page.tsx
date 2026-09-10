@@ -18,6 +18,8 @@ import { FiltersPanel } from "./_components/filters-panel";
 import { QuotesPanel } from "./_components/quotes-panel";
 import { TimersPanel } from "./_components/timers-panel";
 import { DiagnosticsPanel } from "./_components/diagnostics-panel";
+import { OverlaysPanel } from "./_components/overlays-panel";
+import { LiveActivityFeed } from "./_components/live-activity-feed";
 
 interface StreamingPageProps {
   params: Promise<{ guildId: string }>;
@@ -107,7 +109,7 @@ export default function StreamingPage({ params }: StreamingPageProps) {
       case "connection":
         return <ConnectionPanel guildId={guildId} />;
       case "config":
-        return <ConfigPanel guildId={guildId} />;
+        return <ConfigPanel guildId={guildId} connections={connections} />;
       case "commands":
         return <CommandsPanel guildId={guildId} />;
       case "filters":
@@ -116,6 +118,10 @@ export default function StreamingPage({ params }: StreamingPageProps) {
         return <QuotesPanel guildId={guildId} />;
       case "timers":
         return <TimersPanel guildId={guildId} />;
+      case "overlays":
+        return <OverlaysPanel guildId={guildId} />;
+      case "activity":
+        return <LiveActivityFeed guildId={guildId} />;
       case "diagnostics":
         return <DiagnosticsPanel guildId={guildId} />;
       default:
@@ -139,6 +145,7 @@ export default function StreamingPage({ params }: StreamingPageProps) {
           onTabChange={handleTabChange}
           isConnected={isConnected}
           isLive={isLive}
+          connections={connections}
         />
 
         <div className="flex-1 min-w-0">{renderPanel()}</div>

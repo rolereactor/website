@@ -26,7 +26,9 @@ export function UserMenu(props: Partial<Props>) {
   // Handle session sync with store
   useEffect(() => {
     if (session?.user?.id) {
-      fetchUser(session.user.id);
+      // Delay to avoid overwhelming bot with concurrent requests
+      const timer = setTimeout(() => fetchUser(session.user.id), 500);
+      return () => clearTimeout(timer);
     } else if (status === "unauthenticated") {
       clearUser();
     }
@@ -45,7 +47,7 @@ export function UserMenu(props: Partial<Props>) {
       <SharedUserMenu
         user={session?.user}
         status={effectiveStatus}
-        coreImageUrl="/images/cores/core_energy.png"
+        coreImageUrl="/images/core_energy.png"
         onLogin={() => {
           const currentPath =
             typeof window !== "undefined" ? window.location.pathname : "/";

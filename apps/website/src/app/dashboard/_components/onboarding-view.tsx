@@ -203,7 +203,7 @@ export function OnboardingView({ inviteUrl }: OnboardingViewProps) {
               desc: "Unlock advanced features & limits.",
               icon: Zap,
               accent: "text-emerald-400",
-              href: "/dashboard/billing",
+              href: "/dashboard/balance",
               glow: "group-hover:shadow-emerald-500/10",
             },
           ].map((action, i) => (

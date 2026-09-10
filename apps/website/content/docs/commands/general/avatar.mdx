@@ -15,98 +15,37 @@ import { Cards, Card } from "fumadocs-ui/components/card";
     description="Describe the avatar you want to generate (e.g., 'cyberpunk hacker with neon hair', 'kawaii girl with pink cat ears')"
   />
   <Card
-    title="color_style (optional)"
-    description="Choose a color palette: vibrant, pastel, monochrome, neon, warm, or cool"
-  />
-  <Card
-    title="mood (optional)"
-    description="Choose the character's mood: happy, serious, mysterious, cute, cool, or elegant"
-  />
-  <Card
     title="art_style (optional)"
-    description="Choose the artistic style: studio ghibli, manga, modern, retro, realistic, chibi, or lo-fi"
+    description="Choose the artistic style: manga, modern, retro, realistic, chibi, or lofi"
   />
 </Cards>
 
-## Step-by-Step Example
+## Usage Examples
 
 1. Generate a basic avatar:
    ```bash
    /avatar prompt:cyberpunk hacker with neon hair
    ```
-2. Generate with style options:
+2. Generate with a specific art style:
    ```bash
-   /avatar prompt:kawaii girl with pink cat ears color_style:vibrant mood:cute art_style:chibi
+   /avatar prompt:kawaii girl with pink cat ears art_style:chibi
    ```
 3. The bot will generate your unique anime-style avatar using AI.
 
 ## Features
 
-- **AI-Powered Generation:** Uses advanced AI models to create unique anime-style avatars
-- **Multiple Styles:** Choose from Studio Ghibli, Manga, Modern, Retro, Realistic, Chibi, or Lo-fi styles
-- **Color Palettes:** Vibrant, Pastel, Monochrome, Neon, Warm, or Cool color schemes
-- **Mood Options:** Happy, Serious, Mysterious, Cute, Cool, or Elegant expressions
-- **Custom Prompts:** Describe exactly what you want in your avatar
-- **Core Credit System:** Uses 1 Core credit per generation (check balance with `/core balance`)
+- **AI-Powered Generation:** Uses advanced AI to create unique anime-style avatars based on your text prompt.
+- **Multiple Art Styles:** Choose from `manga`, `modern`, `retro`, `realistic`, `chibi`, or `lofi`.
+- **Core Credit System:** Uses 1 Core credit per avatar generation (check balance with `/core balance`).
 
 ## Permissions Required
 
-<Callout type="info">- **No special permissions required** — available to all users</Callout>
+<Callout type="info">
+  - **No special permissions required** — available to all users.
+</Callout>
 
 ## What You'll See
 
 <Callout type="info">
-  A unique AI-generated anime-style avatar based on your description, with
-  download options and generation details. Uses advanced AI to create custom
-  avatars tailored to your specifications!
-</Callout>
-
-## Troubleshooting
-
-<Callout type="warning">
-  - **Insufficient credits:** Check your Core balance with `/core balance`.
-  Purchase credits or subscribe to a membership tier.
-  <br />
-  - **Generation failed:** The AI service may be temporarily unavailable. Try
-  again in a few moments.
-  <br />
-  - **Prompt too long:** Keep prompts under 500 characters for best results.
-  <br />- **Content filtered:** Some prompts may be filtered for safety. Try
-  rephrasing your request.
-</Callout>
-
-## Related Commands
-
-<Cards>
-  <Card
-    title="/core balance"
-    description="Check your Core credit balance"
-    href="./core"
-  />
-  <Card
-    title="/core pricing"
-    description="View Core pricing and membership options"
-    href="./core"
-  />
-  <Card
-    title="/level"
-    description="Check user level and experience"
-    href="./level"
-  />
-</Cards>
-
-## Best Practices
-
-<Callout type="success">
-  - Be specific in your prompts for better results (e.g., "cyberpunk hacker with
-  neon hair" instead of "cool person").
-  <br />
-  - Combine style options for unique looks (e.g., vibrant colors + chibi style +
-  cute mood).
-  <br />
-  - Check your Core balance before generating to ensure you have enough credits.
-  <br />
-  - Experiment with different art styles to find your favorite.
-  <br />- Consider a Core membership subscription for regular avatar generation
-  needs.
+  A unique AI-generated avatar based on your description, complete with direct download buttons for PNG, JPG, and WebP formats.
 </Callout>

@@ -20,6 +20,7 @@ import {
 } from "@/store/use-streaming-store";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -216,15 +217,12 @@ export function CommandsPanel({ guildId }: CommandsPanelProps) {
         </CardHeader>
         <CardContent>
           {customCommands.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 mx-auto mb-4">
-                <LayoutGrid className="w-8 h-8" />
-              </div>
-              <p className="text-sm text-zinc-400 font-medium">No custom commands yet.</p>
-              <p className="text-xs text-zinc-600 mt-1">
-                Click &quot;Add Command&quot; to create your first one.
-              </p>
-            </div>
+            <EmptyState
+              icon={LayoutGrid}
+              color="cyan"
+              title="No custom commands yet"
+              description='Click "Add Command" to create your first one.'
+            />
           ) : (
             <div className="space-y-2">
               {customCommands.map((cmd) => (

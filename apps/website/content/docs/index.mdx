@@ -1,7 +1,7 @@
 ---
 title: Overview
-description: Create interactive role selection messages in Discord with emoji reactions. Simple setup, powerful features.
-keywords: role management, discord bot, self-assign roles, role messages, easy setup
+description: Create interactive role selection messages, manage support tickets, giveaways, starboards, moderation, and temporary roles in Discord.
+keywords: role management, discord bot, starboard, giveaway system, ticket bot, moderation bot, voice roles, temp roles
 ---
 
 import { Cards, Card } from "fumadocs-ui/components/card";
@@ -9,98 +9,89 @@ import { Callout } from "fumadocs-ui/components/callout";
 
 ## What is Role Reactor Bot?
 
-Role Reactor Bot is a powerful Discord bot that simplifies role management through interactive emoji reactions. Members click emoji reactions to assign or remove roles automatically, eliminating the need for complex commands.
+Role Reactor Bot is an all-in-one Discord community engine and role management system. Beyond interactive emoji role reactions, it powers support tickets, starboards, community giveaways, moderation auto-escalation, voice channel permissions, and credit-based AI avatar tools.
 
 **Core Features:**
 
-- **Self-Assignable Roles** - Click reactions to assign or remove roles
-- **Temporary Roles** - Auto-expire roles after set time periods
-- **Scheduled Roles** - Assign roles at specific times or intervals
-- **Welcome System** - Auto-welcome new members with custom messages
-- **Goodbye System** - Auto-goodbye messages when members leave
-- **Voice Channel Permissions** - Automatic enforcement of Connect/Speak restrictions
-- **XP System** - Track member activity with levels and leaderboards
-- **AI Avatar Generation** - Generate unique anime-style avatars using AI
-- **Core Credit System** - Credit-based economy for AI avatar generation
-- **Poll System** - Create and manage native Discord polls
-- **8ball Game** - Ask the magic 8ball questions for entertainment
-
-**Use Cases:**
-
-- Gaming platform preferences (PC, Console, Mobile)
-- Study subject groups and academic levels
-- Hobby and interest communities
-- Notification preferences
-- Event participation tracking
-- Time-limited access (temporary roles)
-- Automated member onboarding
+- **Self-Assignable Roles** - Click emoji reactions to assign or remove roles automatically (`/role-reactions`)
+- **Starboard System** - Highlight community-starred messages with dynamic heat-map embeds (`/starboard`)
+- **Giveaway System** - Host automated giveaways with role/booster weighted entries and claim timers (`/giveaway`)
+- **Ticket Management System** - Custom support ticket panels, role assignments, and HTML transcripts (`/ticket`)
+- **Moderation & Warning System** - Auto-escalation, warning history, bulk timeouts, bans, kicks, and purges (`/moderation`)
+- **Voice Control Roles** - Auto-disconnect, mute, deafen, or move members based on configured voice roles (`/voice-roles`)
+- **Temporary & Scheduled Roles** - Auto-expiring access and natural language time scheduling (`/temp-roles`, `/schedule-role`)
+- **Welcome & Goodbye Systems** - Customizable welcome and goodbye messages with member placeholders (`/welcome`, `/goodbye`)
+- **Web Dashboard Image Tools** - Web-based image resizing, compression, format conversion, and AI upscaling
+- **Core Credit System** - Credit-based economy for AI avatar generation and premium dashboard image tools (`/core balance`)
+- **XP & Leaderboards** - High-performance level tracking, custom rank titles, and leaderboards (`/level`, `/leaderboard`)
+- **Community Games & Polls** - Interactive minigames including Would You Rather (`/wyr`), Rock Paper Scissors (`/rps`), 8ball (`/8ball`), and native polls (`/poll`)
 
 ## Key Features
 
 <Cards>
   <Card
-    title="🎯 Easy Setup"
-    description="Create role messages with simple slash commands - no complex configuration needed"
+    title="⭐ Starboard System"
+    description="Highlight top community messages automatically with heat-map embed colors and attachment previews"
+    href="/docs/commands/admin/starboard"
   />
   <Card
-    title="📱 User Friendly"
-    description="Members click emoji reactions - no commands to learn or remember"
+    title="🎟️ Support Tickets"
+    description="Multi-panel support ticketing with HTML transcript downloads and staff performance tracking"
+    href="/docs/commands/admin/ticket"
+  />
+  <Card
+    title="🎁 Giveaway Suite"
+    description="Full-featured giveaway manager with bonus role weighting, server age requirements, and rerolls"
+    href="/docs/commands/admin/giveaway"
+  />
+  <Card
+    title="🛡️ Moderation & Warnings"
+    description="Comprehensive moderation suite with warning history, auto-escalation, and bulk user targeting"
+    href="/docs/commands/admin/moderation"
+  />
+  <Card
+    title="🎤 Voice Control Roles"
+    description="Manage voice channel access automatically with role-based mute, deafen, move, and disconnect actions"
+    href="/docs/commands/admin/voice-roles"
+  />
+  <Card
+    title="🎯 Emoji Reaction Roles"
+    description="Create self-assignable role panels with custom emojis, role bundles, and multi-role mapping"
+    href="/docs/commands/admin/role-reactions"
   />
   <Card
     title="⏰ Temporary Roles"
-    description="Auto-expire roles after set time periods with smart notifications"
+    description="Auto-expire roles after set durations with customizable removal DM notifications"
+    href="/docs/commands/admin/temp-roles"
   />
   <Card
     title="📅 Scheduled Roles"
-    description="Assign roles at specific times or create recurring schedules"
+    description="Schedule future role assignments using natural language like 'tomorrow 9am' or 'monday 6pm'"
+    href="/docs/commands/admin/schedule-role"
   />
   <Card
-    title="🎉 Welcome System"
-    description="Auto-welcome new members with customizable messages and auto-role assignment"
+    title="🎉 Welcome & Goodbye"
+    description="Auto-welcome and goodbye messages with custom placeholders, embeds, and auto-roles"
+    href="/docs/commands/admin/welcome"
   />
   <Card
-    title="👋 Goodbye System"
-    description="Auto-goodbye messages when members leave with customizable placeholders"
+    title="🖼️ Web Image Tools"
+    description="Resize, compress, convert, and AI-upscale images directly from the web dashboard"
   />
   <Card
-    title="🎤 Voice Permissions"
-    description="Automatically enforces Connect/Speak restrictions for all role assignments"
+    title="💎 Core Credit Economy"
+    description="Credit-based economy for AI avatar generation and premium dashboard tools with vote rewards"
+    href="/docs/commands/general/core"
   />
   <Card
-    title="📊 XP System"
-    description="Track member activity with configurable experience points and leaderboards"
+    title="📊 XP & Leaderboards"
+    description="Track server activity with rank titles, experience multipliers, and fast profile leaderboards"
+    href="/docs/commands/general/leaderboard"
   />
   <Card
-    title="🎨 AI Avatar Generation"
-    description="Generate unique anime-style avatars using AI with multiple style options"
-  />
-  <Card
-    title="💎 Core Credit System"
-    description="Credit-based economy for avatar generation with multiple acquisition options"
-  />
-  <Card
-    title="📊 Poll System"
-    description="Create and manage native Discord polls with interactive forms"
-  />
-  <Card
-    title="🎱 8ball Game"
-    description="Ask the magic 8ball questions and get random responses for entertainment"
-  />
-  <Card
-    title="🗂️ Organized Categories"
-    description="Group related roles with category headers for clean organization"
-  />
-  <Card
-    title="🎨 Customizable"
-    description="Choose colors, emojis, and formatting to match your server's style"
-  />
-  <Card
-    title="🔒 Secure"
-    description="Respects Discord's permission system and role hierarchy automatically"
-  />
-  <Card
-    title="⚡ Reliable"
-    description="Fast response times and automatic error handling for smooth operation"
+    title="🎮 Interactive Games"
+    description="Engage members with Would You Rather, Rock Paper Scissors, 8ball, and Polls"
+    href="/docs/commands/general/wyr"
   />
 </Cards>
 
@@ -109,57 +100,37 @@ Role Reactor Bot is a powerful Discord bot that simplifies role management throu
   className="my-12"
 />
 
-## How It Works
-
-### Basic Role Management
-
-1. **Create a role message** with `/role-reactions setup`
-2. **Select your roles** - list them with emojis like `🎮:Gaming,📚:Books`
-3. **Members click reactions** - they automatically assign or remove roles
-4. **Manage easily** - edit, delete, or refresh messages anytime
-
-### Advanced Features
-
-- **Temporary Roles** - Execute `/temp-roles assign` to provide time-limited access
-- **Scheduled Roles** - Execute `/schedule-role create` for future assignments
-- **Welcome System** - Execute `/welcome setup` to auto-welcome new members
-- **Goodbye System** - Execute `/goodbye setup` to send goodbye messages
-- **Voice Permissions** - Automatically enforced for all role assignments
-- **XP Tracking** - Members earn experience points for activity automatically
-- **AI Avatars** - Execute `/avatar` to generate unique anime-style avatars
-- **Core Credits** - Execute `/core balance` to view your credit balance
-- **Polls** - Execute `/poll create` to create native Discord polls
-
 ## Available Commands
 
 ### General Commands (All Users)
 
-- `/help` - Access help and command information
-- `/ping` - Verify bot latency and status
-- `/avatar` - Generate AI-powered avatars with custom prompts
-- `/level` - View your experience level and progress
-- `/leaderboard` - View server experience leaderboard
-- `/8ball` - Ask the magic 8ball a question
-- `/core balance` - View your current Core balance and tier status
-- `/core pricing` - View Core pricing and membership benefits
-- `/poll create` - Create a new poll using interactive form
-- `/poll list` - List all polls in the server
-- `/poll end` - End an active poll early
-- `/poll delete` - Delete a poll permanently
-- `/invite` - Get bot invite link
-- `/support` - Get support server link
-- `/sponsor` - Get information about sponsoring the bot
+- [`/core balance`](/docs/commands/general/core) - View your Core balance and tier status
+- [`/vote`](/docs/commands/general/vote) - Vote on top.gg to earn free daily Cores
+- [`/level`](/docs/commands/general/level) - View your rank title, level, and XP progress
+- [`/leaderboard`](/docs/commands/general/leaderboard) - Browse server member leaderboards
+- [`/wyr`](/docs/commands/general/wyr) - Play interactive Would You Rather questions
+- [`/rps`](/docs/commands/general/rps) - Challenge members to Rock Paper Scissors
+- [`/avatar`](/docs/commands/general/avatar) - Generate custom AI avatars
+- [`/poll create`](/docs/commands/general/poll) - Create interactive Discord polls
+- [`/userinfo`](/docs/commands/general/userinfo) - View detailed Discord member profiles & moderation history
+- [`/serverinfo`](/docs/commands/general/serverinfo) - View server statistics, boost level, and Pro Engine status
+- [`/help`](/docs/commands/general/help) - Interactive command guide with autocomplete
+- [`/ping`](/docs/commands/general/ping) - Check bot API latency and system status
 
 ### Admin Commands (Administrators)
 
-- `/role-reactions` - Create and manage role selection messages
-- `/temp-roles` - Assign and manage temporary roles
-- `/schedule-role` - Schedule future role assignments
-- `/welcome setup` - Configure the welcome system
-- `/welcome settings` - View and manage welcome settings
-- `/goodbye setup` - Configure the goodbye system
-- `/goodbye settings` - View and manage goodbye settings
-- `/xp settings` - Configure the experience system
+- [`/starboard setup`](/docs/commands/admin/starboard) - Configure starboard channel, emoji, and reaction thresholds
+- [`/giveaway`](/docs/commands/admin/giveaway) - Create, edit, list, end, or reroll giveaways
+- [`/ticket`](/docs/commands/admin/ticket) - Setup ticket panels, manage tickets, and export transcripts
+- [`/role-bundle`](/docs/commands/admin/role-bundle) - Create reusable role groups for reaction role setups
+- [`/role-reactions`](/docs/commands/admin/role-reactions) - Create and manage self-assignable role selection panels
+- [`/moderation`](/docs/commands/admin/moderation) - Perform bulk warnings, timeouts, bans, kicks, and purges
+- [`/voice-roles`](/docs/commands/admin/voice-roles) - Configure automated voice channel role rules
+- [`/temp-roles`](/docs/commands/admin/temp-roles) - Assign temporary roles with bulk role targeting
+- [`/schedule-role`](/docs/commands/admin/schedule-role) - Schedule one-time or recurring role assignments
+- [`/welcome setup`](/docs/commands/admin/welcome) - Configure welcome channel, embeds, and auto-roles
+- [`/goodbye setup`](/docs/commands/admin/goodbye) - Configure leave messages and goodbye embeds
+- [`/xp settings`](/docs/commands/admin/xp) - Toggle experience system and level-up announcements
 
 ## Documentation Sections
 
@@ -175,48 +146,14 @@ Role Reactor Bot is a powerful Discord bot that simplifies role management throu
     href="/docs/getting-started/setup"
   />
   <Card
-    title="📝 Examples"
-    description="Ready-to-use setups for gaming, study, and community servers"
-    href="/docs/examples"
-  />
-  <Card
     title="🔧 Troubleshooting"
     description="Solutions for common issues and helpful FAQ"
     href="/docs/troubleshooting"
   />
 </Cards>
 
-## Quick Examples
-
-### Gaming Server
-
-```bash
-/role-reactions setup title:Gaming Platforms description:Choose your preferred gaming platform! roles:🖥️:PC Gaming,🎮:PlayStation,🎯:Xbox,📱:Mobile
-```
-
-### Study Server
-
-```bash
-/role-reactions setup title:Study Groups description:Join subject-based study communities! roles:📊:Mathematics,🔬:Science,📚:English,🏛️:History
-```
-
-### Community Server
-
-```bash
-/role-reactions setup title:Community Interests description:Choose your interests! roles:🎨:Art,📸:Photography,🎵:Music,📚:Books
-```
-
-## Why Choose Role Reactor Bot?
-
-**Simple for Users:** No commands to learn - just click reactions  
-**Easy for Administrators:** Set up complex role systems with simple commands  
-**Flexible Design:** Works for any server size or purpose  
-**Always Reliable:** Built for stability with automatic error recovery
-
 ---
 
 <Callout type="success">
-  **Ready to get started?** Review the [Getting
-  Started](/docs/getting-started/introduction) guide to add Role Reactor Bot to
-  your server.
+  **Ready to get started?** Review the [Getting Started](/docs/getting-started/introduction) guide to add Role Reactor Bot to your server.
 </Callout>

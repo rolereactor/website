@@ -12,7 +12,7 @@ services:
         BOT_API_URL: ${BOT_API_URL}
         INTERNAL_API_KEY: ${INTERNAL_API_KEY}
         NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL}
-    container_name: role-reactor-website
+    container_name: rolereactor-website
     restart: unless-stopped
     ports:
       - "3000:3000"

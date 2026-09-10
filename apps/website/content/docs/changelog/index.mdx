@@ -7,275 +7,208 @@ keywords: changelog, version history, release notes, updates, features, bug fixe
 import { Callout } from "fumadocs-ui/components/callout";
 
 <Callout type="info">
-  **Current Version:** 1.4.0 **Latest Release:** November 9, 2025
+  **Current Version:** 1.8.0 **Latest Release:** July 23, 2026
 </Callout>
 
-## [Unreleased]
+## [1.8.0] - 2026-07-23
 
 ### Added
 
-- Live Reactor / Streaming Engine: Comprehensive Twitch integration for servers including real-time channel management, automated live status roles, stream timers, custom Twitch commands, chat filters, and stream quotes.
+- **Image Tools**: Introduced a suite of Image Tools to the web dashboard — **Resize**, **Compress**, **Convert**, and **Upscale**. Resize, Compress, and Convert include a free daily quota; additional usage and Upscale draw from your Core credits.
+- **Timeout List**: New [`/moderation timeouts`](/docs/commands/admin/moderation) command to see all currently timed-out members in your server at a glance.
+- **Starboard System**: New `/starboard` command to highlight the best messages in your server. Configure a dedicated channel, emoji, and reaction threshold. Starred messages are automatically posted with a dynamic heat-map embed color (gold → orange → red based on star count), reply context, image previews, and support for video, audio, and file attachments.
+
+### Fixed
+
+- **Schedule Role**: Fixed an issue where recurring schedules (`weekly`, `monthly`) failed to execute due to incorrect execution time comparisons, and corrected a display bug where they appeared as one-time "Pending" schedules showing `<t:NaN:F>`.
+
+## [1.7.1] - 2026-04-01
+
+### Security
+
+- **API Security Hardening**: Improved protection against unauthorized access to the bot's API:
+  - Added verification to ensure users can only access their own data
+  - Added permission checks so only server managers can modify server settings
+  - Added rate limits to prevent automated abuse
+  - Improved secure communication between the website and bot
+
+### Changed
+
+- **Enhanced Security**: Protected all API endpoints from unauthorized access
+- **Faster Monitoring**: Health check endpoint is now publicly accessible for monitoring tools
+
+### Fixed
+
+- Prevented unauthorized users from accessing sensitive API endpoints
+- Secured payment creation to prevent fraudulent transactions
+- Fixed potential data exposure in user account endpoints
+
+## [1.7.0] - 2026-03-28
+
+### Added
+
+- **Giveaway System**: Complete [`/giveaway`](/docs/commands/admin/giveaway) command with create, list, end, reroll, cancel, delete, and edit subcommands. Includes automatic timer-based ending, weighted random winner selection, bonus entries for roles/boosters, claim periods, account/server age requirements, and rate limiting.
+- **Role Bundles**: Create reusable groups of roles with [`/role-bundle create`](/docs/commands/admin/role-bundle), [`/role-bundle delete`](/docs/commands/admin/role-bundle), and [`/role-bundle list`](/docs/commands/admin/role-bundle). Use bundles directly in [`/role-reactions setup`](/docs/commands/admin/role-reactions) with the `bundle:` parameter and autocomplete support.
+- **Web Dashboard Notifications**: Added a notification bell to the web dashboard for tracking Core balance changes, recent purchases, and Pro Engine status.
+- **Voting Rewards**: Support the bot by voting on top.gg using the [`/vote`](/docs/commands/general/vote) command to earn 1 free Core Credit every 12 hours.
+- **Ticketing System**: Complete support ticket system with [`/ticket setup`](/docs/commands/admin/ticket), [`/ticket info`](/docs/commands/admin/ticket), [`/ticket claim`](/docs/commands/admin/ticket), [`/ticket close`](/docs/commands/admin/ticket), [`/ticket add`](/docs/commands/admin/ticket), and [`/ticket remove`](/docs/commands/admin/ticket) commands.
+- **Ticket Panels**: Multiple custom panels with customizable titles, branding, and categorizations.
+- **Scalable Transcripts**: High-performance transcript system supporting rich HTML layouts for Pro servers and Markdown for free servers, with user-accessible download logs.
+- **Guild Data Purge**: Administrative tool to securely wipe all ticket history and reset the global counter from a simplified dashboard.
+- **Multi-Role Reactions**: A single emoji can now grant multiple roles at once in role-reaction setups.
+- **Interactive Help Menu**: All command names in the [`/help`](/docs/commands/general/help) menu are now clickable slash command mentions, allowing you to directly trigger commands from the help guide.
+- **High-Performance Leaderboards**: Complete refactor of the leaderboard system to use database-driven profile storage. Eliminates page load latency by removing sequential Discord API calls during rendering.
+- **Bulk Member Enrichment**: Resolved issues where the bot would frequently hit Discord rate limits during leaderboard rendering, ensuring smoother and more consistent data displays.
+- **Auto-Merging Mappings**: New backend system automatically identifies and merges duplicate role-emoji mappings for cleaner server configurations.
+
+### Changed
+
+- **Admin Command Styling**: Standardized the visual design and color schemes across all `/admin` command messages to provide a more cohesive and professional experience.
+- **Pro Engine Benefits**: Unlock 10x monthly ticket capacity, HTML transcripts/exports, unlimited retention, and staff performance analytics.
+- **Advanced Role Management**: 20x scheduled role capacity (500 active slots) and 10x bulk action targeting (250 members) for Pro servers.
+- **Serverinfo Redesign**: [`/serverinfo`](/docs/commands/general/serverinfo) command has been redesigned with a fresh look, including Pro Engine status display.
+- **Goodbye System**: General performance improvements in goodbye message processing.
+- **Core Balance Display**: [`/core balance`](/docs/commands/general/core) now shows vote statistics, next vote countdown with Discord dynamic timestamps, server Pro Engine status, and quick-action buttons for "Vote & Earn" and "Upgrade Center."
+- **Bulk Action Limits**: [`/temp-roles`](/docs/commands/admin/temp-roles) and [`/schedule-role`](/docs/commands/admin/schedule-role) now correctly support up to **250 users** per action on Pro Engine servers and **25 users** on Free servers (previously capped at 20 for all servers).
+- **Faster Moderation**: [`/moderation`](/docs/commands/admin/moderation) bulk operations (timeout, warn, ban, kick) are now significantly faster and more responsive when processing user lists.
+
+### Fixed
+
+- **Bulk Action on Pro Servers**: Fixed an issue where [`/temp-roles assign`](/docs/commands/admin/temp-roles) and [`/schedule-role create`](/docs/commands/admin/schedule-role) would not process more than 20 users, even on Pro Engine servers entitled to 250 users.
+- **Experience Calculations**: Fixed an error in the experience manager where leveling progress could occasionally fail to calculate correctly under specific conditions.
+- **Leaderboard Search**: Improved the accuracy of leaderboard search filters, ensuring more reliable server discovery for the public index.
+
+## [1.6.3] - 2026-03-04
+
+### Added
+
+- **Enhanced Rank Titles**: Server levels now come with evocative rank titles that reflect growing status and contribution to the community.
+- **Role Reactions**: Added an optional `hide_list` toggle to [`/role-reactions setup`](/docs/commands/admin/role-reactions) and `update` commands, allowing administrators to hide the automated roles list and fully customize their own menus in the description field.
+
+### Changed
+
+- **Flexible Pro Subscription**: The Pro Engine has moved to a simpler weekly billing cycle (20 Cores per week), making it easier to manage premium features.
+- **Modern Leaderboards**: Level and leaderboard messages have been redesigned with a fresh look and better readability.
+- **Improved Dashboard Reliability**: Web settings and balance tracking are now faster and more accurate.
+- **Enhanced Configuration Sync**: Bot settings now update more reliably across all server management commands.
+- **Role-Reaction Descriptions**: Support added for literal newlines (`\n`) directly in role-reaction setups for deeper customization options.
+
+### Fixed
+
+- **Message Spying**: Prevented the bot from accidentally tracking `@everyone` and `@here` mentions in general chat logs.
+
+## [1.6.2] - 2026-02-12
+
+### Added
+
+- **Server Growth Tracking**: New automated system to track member joins and leaves for improved community oversight.
+- **Enhanced Server Statistics**: View detailed real-time information about server activity, 14-day growth trends, and top member leaderboards.
+
+### Changed
+
+- **Smart Troubleshooting**: Added clearer guidance for larger bots (100+ servers) encountering Discord verification limits, with direct steps on how to resolve them.
+- **Improved Message Layouts**: Refined the appearance and spacing of instructions in role scheduling messages for better readability.
+- **Schedule Role Efficiency**: Significantly improved the speed and reliability of role assignments and removals, especially for large servers.
+
+## [1.6.1] - 2026-01-30
+
+### Changed
+
+- **Unified UI**: Role management now features a consistent "Success" theme, minimalist embeds, and quick "View Message" shortcuts.
+- **Human-Only Counts**: Welcome and goodbye messages now strictly count human members, excluding bots.
+
+### Fixed
+
+- **Reaction Sync**: Updating role configurations now instantly syncs and orders emoji reactions.
+- **Member Counting**: Fixed bots being incorrectly counted as humans in welcome/goodbye statistics.
+- **Stability**: Resolved interaction failures and sluggishness in slash commands.
+
+## [1.6.0] - 2026-01-17
+
+### Added
+
+- **Voice Roles Command**: New [`/voice-roles`](/docs/commands/admin/voice-roles) command to automatically manage users in voice channels based on roles.
+- **Voice Roles Subcommands**: [`/voice-roles disconnect`](/docs/commands/admin/voice-roles), [`/voice-roles mute`](/docs/commands/admin/voice-roles), [`/voice-roles deafen`](/docs/commands/admin/voice-roles), [`/voice-roles move`](/docs/commands/admin/voice-roles), and [`/voice-roles list`](/docs/commands/admin/voice-roles) subcommands for complete voice management.
+- **Voice Roles Auto-Apply**: Voice control actions automatically apply to users already in voice channels when roles are first configured.
+- **Voice Roles List**: View all configured voice control roles with indicators for deleted roles or channels that need cleanup.
+- **Would You Rather Command**: New [`/wyr`](/docs/commands/general/wyr) command with interactive voting system for engaging server discussions.
+- **WYR Interactive Voting**: Users can vote on questions with real-time vote counts and percentages displayed.
+- **WYR Question Database**: 100+ curated questions organized into categories including Pop Culture and Technology.
+- **Rock Paper Scissors Command**: New [`/rps`](/docs/commands/general/rps) command to play Rock Paper Scissors against the bot or challenge other users.
+- **RPS Multiplayer Challenges**: Challenge other users to Rock Paper Scissors with interactive button responses.
+
+### Changed
+
+- **Help System**: Improved help documentation with more detailed information for all commands. Help content is now automatically kept up to date with command features.
+
+### Removed
+
+- **Voice Restrictions**: Removed automatic voice restriction enforcement feature. The bot no longer automatically disconnects or mutes users based on role permissions.
+- **Sponsor Command**: Removed standalone `/sponsor` command. Sponsorships and credit purchases have been consolidated into the [`/core`](/docs/commands/general/core) command.
+
+### Fixed
+
+- **Role Reactions**: Fixed issue where invalid emojis (like symbols ♡, ⚡) could be used, causing reaction failures. Added strict validation to reject non-Discord emojis upfront.
+- **Role Reactions**: Fixed role name parsing to require explicit emojis for all roles, preventing ambiguity and ensuring correct reaction assignment.
+- **Role Reactions**: Fixed issue where reaction messages were left behind if reaction addition failed. Messages are now automatically deleted to prevent confusion.
+- **Error Handling**: Improved error messages for invalid emoji detection in role-reactions setup command.
+
+## [1.5.0] - 2025-12-15
+
+### Added
+
+- **Moderation Commands**: Complete moderation system with [`/moderation`](/docs/commands/admin/moderation) command supporting timeout, warn, ban, kick, unban, purge, history, remove-warn, and list-bans subcommands.
+- **Moderation Bulk Operations**: Support for moderating multiple users at once (up to 15 users) for timeout, warn, ban, kick, and unban actions.
+- **Moderation History**: View moderation history for individual users or entire server with pagination support.
+- **Moderation Auto-Escalation**: Automatic timeout or kick based on warning thresholds (configurable).
+- **Moderation DM Notifications**: Users receive direct messages when warned, timed out, banned, kicked, or unbanned.
+- **Moderation Bot Protection**: Moderation commands prevent moderating bots to avoid breaking bot functionality.
+- **Warning System**: Track and manage user warnings with automatic escalation to timeout or kick.
+- **Userinfo Command**: New [`/userinfo`](/docs/commands/general/userinfo) command to view detailed information about Discord users including account details, badges, roles, join date, timeout status, and current voice channel. Warning count now appears for users with moderation history.
+- **Serverinfo Command**: Added [`/serverinfo`](/docs/commands/general/serverinfo) command to view comprehensive server information including member statistics, channel counts, server description, and boost level.
+- **Bot Statistics**: Public bot statistics including server count and user count are now available.
+- **Payment Integration**: Added support for Buy Me a Coffee and cryptocurrency payments.
+
+### Changed
+
+- **Core Payment System**: Updated Core payment system to only accept one-time cryptocurrency payments. Subscriptions are no longer available, and all payments are processed as one-time purchases that never expire.
+- **Minimum Payment Amount**: Increased minimum payment amount from $1 to $10 for Core credit purchases.
+
+### Fixed
+
+- **Avatar Credit Breakdown**: Restored credit deduction breakdown display in avatar generation success message.
+- **Level-Up Notifications**: Improved error handling and diagnostics for level-up message posting. Bot now provides better error messages when it cannot post to the configured level-up channel.
+- **Payment Validation**: Added minimum payment validation in crypto webhook to prevent credits from being granted for payments below $10.
+- **Moderation Unban Operations**: Improved speed of bulk unban operations.
+- **Bot Statistics**: Improved response times by caching statistics for 24 hours.
+
+### Security
+
+- **Webhook Security**: Enhanced webhook token verification to prevent security vulnerabilities.
 
 ## [1.4.0] - 2025-11-09
 
 ### Added
 
-- Schedule Role Command: Restored `/schedule-role` command with full functionality including one-time and recurring schedules
-- Voice Restrictions: Automatic voice restriction enforcement when assigning/removing roles with Connect or Speak permissions disabled
-- Voice Restrictions for Temp-Roles: Users are automatically disconnected or muted when assigned restrictive temporary roles
-- Voice Restrictions for Schedule-Role: Automatic voice restriction enforcement for scheduled role assignments
-- Voice Restrictions for Existing Members: Voice restrictions now apply to members who already have restrictive roles when they join voice channels
-- Temp-Roles Bulk Targeting: Added support for targeting multiple users by role in `/temp-roles` command with Core member benefits
+- **Schedule Role Command**: Restored [`/schedule-role`](/docs/commands/admin/schedule-role) command with full functionality including one-time and recurring schedules.
+- **Voice Restrictions**: Automatic voice restriction enforcement when assigning/removing roles with Connect or Speak permissions disabled.
+- **Voice Restrictions for Temp-Roles**: Users are automatically disconnected or muted when assigned restrictive temporary roles.
+- **Voice Restrictions for Schedule-Role**: Automatic voice restriction enforcement for scheduled role assignments.
+- **Voice Restrictions for Existing Members**: Voice restrictions now apply to members who already have restrictive roles when they join voice channels.
+- **Temp-Roles Bulk Targeting**: Added support for targeting multiple users by role in [`/temp-roles`](/docs/commands/admin/temp-roles) command with Core member benefits.
 
 ### Changed
 
-- Temp-Roles Documentation: Updated to include voice restrictions feature
+- **Temp-Roles Documentation**: Updated to include voice restrictions feature.
 
 ### Performance
 
-- Voice Operations: Significantly improved voice restriction enforcement speed and efficiency, especially for servers with many members
-- Voice Operations Queue: Optimized voice operation processing to handle high concurrency scenarios faster
-- Voice Restrictions: Reduced delays and improved response times when muting or disconnecting users with restrictive roles
-
-## [1.3.1] - 2025-11-02
-
-### Fixed
-
-- Role Reactions: Custom emojis (including animated) now correctly grant and remove roles. This fix ensures reactions using server emojis work the same as standard Unicode emojis, with no setup changes required.
-- Core Credits Storage: Fixed issue where core credits were saved to local files but not immediately synchronized to MongoDB database, ensuring credits persist correctly after donations and subscriptions
-- Webhooks: Fixed webhook reception issues in production by binding server to 0.0.0.0, configuring trust proxy, and simplifying webhook handler to properly process all webhook events
-
-## [1.3.0] - 2025-10-28
-
-### Added
-
-- Temp-Roles Removal Notifications: Added `notify` option to `/temp-roles remove` command to send DM notifications to users when their roles are manually removed
-- Temp-Roles Notification System: Comprehensive notification system with removal details including who removed the role, reason, and timestamp
-- Webhook Verification API: Added webhook verification endpoint for improved security
-- PNG Fallback System: Implemented PNG fallback image system after removing Canvas dependency
-
-### Changed
-
-- XP Command Structure: Converted `/xp` command to use `/xp settings` subcommand pattern for consistency with other admin commands
-- Admin Command UI: Standardized button layouts across goodbye/welcome/xp commands with consistent ordering and styling
-- Button Design: Removed emojis from configuration buttons and made back buttons icon-only across all admin commands
-- Level-Up Messages Button: Updated to show "Enable"/"Disable" with primary/secondary color styling
-- Help Documentation: Updated XP command examples to reflect new subcommand structure
-- Welcome System Embeds: Redesigned welcome embeds and resolved interaction errors for better user experience
-- Goodbye System Embeds: Redesigned goodbye embeds and resolved interaction errors for improved functionality
-- General Command Embeds: Simplified invite, poll, 8ball, avatar, core, support, sponsor, ping, level, and leaderboard command embeds for cleaner design
-- Help System: Simplified button layout and removed redundant buttons for better user experience
-- Role-Reactions Color System: Updated color options with cyberpunk-themed colors and improved consistency
-- Core Management: Merged `/verify` command into `/core-management` for streamlined credit management
-- Temp-Roles Embeds: Enhanced embeds and simplified DM messages for better user experience
-
-### Removed
-
-- Schedule Role System: Removed `/schedule-role` command and all related functionality due to low usage and maintenance complexity
-- Schedule Role Database: Removed `scheduled_roles` and `recurring_schedules` collections
-- Schedule Role Background Processing: Removed RoleScheduler and all schedule execution logic
-- Schedule Role Help Documentation: Removed all schedule-role references from help system
-- Level-Up Messages Footer: Removed footer from Level-Up Messages configuration page for cleaner design
-
-### Fixed
-
-- Channel Display Logic: Fixed channel selection pages to properly show current channel status instead of always "Not Set"
-- XP Button Navigation: Fixed "back_to_settings" button error that occurred after XP command simplification
-- Database Index Conflicts: Resolved MongoDB duplicate key errors in temp-roles
-- Interaction Stability: Fixed bot stability issues and interaction timeouts
-- Webhook Processing: Resolved webhook processing limitations
-- Member Permission Errors: Fixed permission checking across commands
-- Help Command Examples: Fixed incorrect command examples in help system (removed quotes from parameters)
-- Role Parsing: Resolved role parsing issue with emoji variation selectors
-
-## [1.2.0] - 2025-10-15
-
-### Added
-
-- AI Avatar Generation: Complete AI-powered avatar generation system with `/avatar` command
-- Avatar Content Filter: Advanced content filtering with 97.6% accuracy for inappropriate content detection
-- Avatar Style Options: Multiple style choices including color_style, mood, and art_style parameters
-- Core Credit System: New credit-based economy for avatar generation with recurring support options
-- Core Command: New `/core` command with clean UI and Core Energy branding
-- Core Tier Benefits: Priority processing and increased rate limits for Core subscribers
-- Poll System: Create and manage native Discord polls with `/poll` command
-- Poll Commands: `/poll create`, `/poll list`, `/poll end`, `/poll delete` for full poll management
-- Interactive Poll Creation: Easy-to-use forms for creating polls with custom duration and vote types
-
-### Fixed
-
-- Command Timeouts: Fixed "Unknown interaction" errors that occurred when commands took too long to respond
-- Database Commands: Improved response times for /leaderboard and /level commands
-- Role Parser: Fixed role parsing to properly strip @ symbol from role names (e.g., "@Gamer" → "Gamer")
-- Button Interactions: Fixed "This interaction failed" errors on various system buttons
-
-## [1.1.0] - 2025-10-05
-
-### Added
-
-- Goodbye System: Complete goodbye system with auto-goodbye messages when members leave
-- Goodbye System Commands: Added `/goodbye` command with comprehensive configuration options
-- Goodbye Message Placeholders: Support for `{user}`, `{user.name}`, `{user.tag}`, `{user.id}`, `{server}`, `{server.id}`, `{memberCount}`, `{memberCount.ordinal}`
-- Goodbye Embed Support: Rich embed format for goodbye messages with member information
-- Goodbye System Storage: Automatic saving of goodbye settings for each server
-- Goodbye System Security: Enhanced permission checks for configuration access
-- Goodbye System Features: Improved message formatting and placeholder support
-- Channel Selection Dropdown: Interactive channel selection for goodbye system configuration
-- Two-Step Configuration: Channel select → modal configuration flow for better UX
-- Welcome System Improvements: Enhanced welcome system with better button layout and organization
-- Welcome System Test: Real role assignment testing in welcome system test functionality
-- Role List Pagination: Added page navigation for role lists (4 items per page)
-- Server Validation: Improved server-specific data handling
-
-### Removed
-
-- Serverinfo Command: Removed `/serverinfo` command and all related files to reduce bot complexity and remove dependency on presence data
-
-### Changed
-
-- Welcome System Architecture: Consolidated welcome commands into unified `/welcome` command structure
-- Welcome Button Layout: Reorganized button layout with Reset button moved to Configure page
-- Welcome Test Functionality: Improved test accuracy by using real interaction.member instead of mock data
-- Goodbye Message Format: Updated to modern format with bold user/server names and improved layout
-
-### Fixed
-
-- Welcome System Test: Fixed test functionality to use authentic user data and enable real role assignment
-- Goodbye Message Consistency: Fixed old goodbye message format across all components
-- Back to Settings Button: Fixed 'Back to Settings' button to show actual settings interface
-- Role Reactions Delete Command: Fixed "Message Not Found" error by properly validating guildId in getRoleMapping function
-- Permission Parameter Issues: Fixed incorrect permission parameter usage in temp-roles and welcome commands
-- Button Router: Updated pagination button routing to use correct custom ID prefix (rolelist\_)
-- Cache Invalidation: Fixed potential cache issues between list and delete commands
-- Role Reactions Setup Permission Error: Fixed Discord API Error 50013 (Missing Permissions) in role-reactions setup command
-- Channel Permission Validation: Added proper channel-specific permission checks for SendMessages and EmbedLinks
-
-## [1.0.2] - 2025-09-16
-
-### Added
-
-- Support Funding: Added funding options to GitHub FUNDING.yml for additional support channels
-- Comprehensive Deployment Solution: Added new deployment scripts and solutions to fix version mismatch issues
-- Enhanced Docker Update Scripts: Improved docker update scripts for more reliable deployments
-- Quick Deployment Guide: Added QUICK-DEPLOY.md for streamlined deployment process
-
-### Changed
-
-- Documentation Structure: Reorganized deployment documentation by moving DEPLOYMENT.md and QUICK-DEPLOY.md to docs/ directory
-- Documentation Consolidation: Updated DEPLOYMENT.md with latest content and improved organization
-- Package Configuration: Updated package.json with latest dependencies and configuration
-- Bot Invite System: Enhanced invite functionality for better bot setup experience
-
-### Fixed
-
-- Bot Permissions: Added missing bot permissions for full functionality
-- Permission Detection: Improved permission handling and validation system
-
-## [1.0.1] - 2025-09-16
-
-### Fixed
-
-- Role Reactions Permission Error: Fixed "Unknown Permission" error in role-reactions setup command when bot member data is unavailable
-- Permission Error Messages: Enhanced error messages with detailed permission explanations and step-by-step fix instructions
-- Bot Permission Detection: Improved getMissingBotPermissions() to return all required permissions when guild.members.me is unavailable
-
-## [1.0.0] - 2025-09-07
-
-### Added
-
-- Schedule Role System: Comprehensive role scheduling with one-time and recurring assignments
-- Natural Language Scheduling: Support for human-readable time formats like "tomorrow 9am" and "monday 6pm"
-- 8ball Game: Ask the magic 8ball questions and get random responses for fun and entertainment
-- Bulk Role Removal: Enhanced temp-roles remove command with comprehensive multi-user support
-- Interactive Sponsor Button: Direct "Become a Sponsor" button linking to sponsor page
-- Interactive Support Buttons: Discord support server and GitHub repository buttons
-- Modular Command Architecture: All commands refactored into organized folder structures with dedicated handlers, embeds, and utilities
-- Enhanced Help System: Comprehensive help documentation with autocomplete, interactive UI, and dynamic content generation
-- XP Settings Management: Interactive XP system configuration with real-time embed updates
-- Role Reactions Consolidation: Unified role-reaction management under single command with setup, list, update, and delete subcommands
-
-### Changed
-
-- Command Structure: All commands now follow modular pattern with dedicated files for handlers, embeds, utils, and components
-- Help Command: Complete redesign with autocomplete support, interactive dropdowns, and comprehensive command documentation
-- Role Reactions System: Consolidated from multiple commands into single `/role-reactions` command with subcommands
-- Temporary Role System: Modernized embeds, improved user experience, and enhanced bulk operations
-- XP Settings Interface: Buttons now update embeds in place instead of sending separate confirmation messages
-- 8ball Command Design: Redesigned with mystical theme and random response system
-- Sponsor Command: Updated to focus on development support rather than premium features
-- Support Command: Enhanced with interactive buttons for better user engagement
-- Interaction System: Centralized interaction management with dedicated button and modal routers
-
-### Fixed
-
-- Help Command Undefined Emojis: Fixed missing emoji constants causing "undefined" placeholders in help output
-- Button Emoji Visibility: Fixed black emojis not visible in Discord dark theme
-- Temporary Role Expiration Notifications: Fixed DM notifications not being sent when roles expire
-- 8ball Response Selection: Fixed bug in response selection logic
-- Command Placeholder Content: Replaced placeholder text with actual useful content in sponsor and support commands
-- XP Settings Button Behavior: Fixed buttons sending new messages instead of updating the original embed
-- Temporary Role Bulk Removal: Fixed "Invalid User List" error in multi-user removal operations
-
-## [0.4.1] - 2025-01-22
-
-### Changed
-
-- XP System Configuration: Simplified from complex command-based configuration to button-driven toggles
-- XP System Default: XP system is now disabled by default and requires admin activation
-- Experience Manager: Now checks guild settings before awarding XP
-- Development Tools: Enhanced testing and build processes
-
-## [0.4.0] - 2025-08-11
-
-### Added
-
-- Enhanced Avatar Command: Added direct download buttons for PNG, JPG, and WebP formats
-- Experience (XP) System: Complete XP system with leveling, leaderboards, and user profiles
-- New General Commands: Added `/8ball`, `/avatar`, `/leaderboard`, `/level` for member engagement
-- Interactive Leaderboard: Added time filters (All Time, Daily, Weekly, Monthly) with interactive buttons
-- Message XP: Users earn 15-25 XP for messages with 60-second cooldown
-- Command XP: Users earn 3-15 XP for command usage with 30-second cooldown
-- Role XP: Users earn 50 XP for role assignments
-- Database Integration: XP data stored in MongoDB with UserExperienceRepository
-- Server Rank Display: Level command now shows actual server rank instead of "Coming soon..."
-- Welcome System: Complete welcome system with auto-welcome messages and auto-role assignment
-- Auto-Welcome Messages: Automatically send welcome messages when new members join
-- Custom Welcome Messages: Support for customizable welcome messages with placeholders
-- Auto-Role Assignment: Automatically assign roles to new members upon joining
-- Welcome System Commands: Added `/welcome setup` and `/welcome settings` for configuration
-- Welcome Message Placeholders: Support for `{user}`, `{user.name}`, `{user.tag}`, `{user.id}`, `{server}`, `{server.id}`, `{memberCount}`, `{memberCount.ordinal}`
-- Welcome Embed Support: Rich embed format for welcome messages with member information
-- Welcome System Database: MongoDB integration for storing welcome settings per guild
-- Welcome System Validation: Comprehensive permission and configuration validation
-- Welcome System Utilities: Dedicated utility functions for message processing and embed creation
-
-### Changed
-
-- Avatar Command UI: Replaced interactive buttons with direct URL download buttons for better UX
-- Avatar Command Colors: Changed embed color from SUCCESS to PRIMARY theme
-- Avatar Command Information: Removed misleading image size claims and unnecessary download text
-- Experience System Storage: Migrated XP data from file storage to MongoDB database
-- Leaderboard UI: Enhanced with time filters and cleaner presentation
-- Theme Consistency: Fixed all hardcoded emojis to use centralized theme.js exports
-
-### Fixed
-
-- Avatar Download Formats: Fixed Discord CDN format parameters for proper PNG/JPG/WebP downloads
-- Experience System Integration: Fixed storage manager to use database for XP data
-- Command Handler: Fixed interactionCreate to use commandHandler for proper XP awarding
-- Theme Emojis: Resolved "undefined" emoji issues by using proper theme.js references
-- Leaderboard Linter Errors: Fixed string concatenation and variable usage issues
-- Database Migration: Successfully migrated existing XP data from files to MongoDB
-
-### Removed
-
-- Storage Command Cleanup Features: Removed "Cleanup Expired Roles" and "Test Auto Cleanup" buttons from developer storage command for improved security
-- Avatar Command Redundancy: Removed unnecessary download options text and misleading image size information
+- **Voice Operations**: Significantly improved voice restriction enforcement speed and efficiency, especially for servers with many members.
+- **Voice Operations Queue**: Optimized voice operation processing to handle high concurrency scenarios faster.
+- **Voice Restrictions**: Reduced delays and improved response times when muting or disconnecting users with restrictive roles.
 
 ---
 
 <Callout type="info">
-  **Want to stay updated?** Join our [support
-  server](https://discord.gg/D8tYkU75Ry) to get notified about new releases and
-  updates!
+  **Want to stay updated?** Join our [support server](https://discord.gg/D8tYkU75Ry) to get notified about new releases and updates!
 </Callout>

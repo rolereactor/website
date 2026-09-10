@@ -80,26 +80,34 @@ Suitable for:
   />
 </Cards>
 
-## Step-by-Step Examples
+## Usage Examples
 
 <Tabs items={["Assign Role", "Bulk Assignment", "List Roles", "Remove Role"]}>
   <Tab value="Assign Role">
-    1. Assign a temporary role: ```bash /temp-roles assign users:@user1,@user2
-    role:@EventRole duration:2h reason:Tournament participation notify:true ```
-    2. The bot will assign the role and automatically remove it after the
-    duration.
+    Assign a temporary role to specific users:
+    ```bash
+    /temp-roles assign users:@user1,@user2 role:@EventRole duration:2h reason:Tournament participation notify:true
+    ```
+    The bot will assign the role and automatically remove it after the 2-hour duration.
   </Tab>
   <Tab value="Bulk Assignment">
-    Assign to multiple users with expiry notification: ```bash /temp-roles
-    assign users:@RoleName role:@Mute duration:5m notify-expiry:true ```
+    Assign to all users with a specific role:
+    ```bash
+    /temp-roles assign users:@RoleName role:@Mute duration:5m notify-expiry:true
+    ```
   </Tab>
   <Tab value="List Roles">
-    1. List all temporary roles: ```bash /temp-roles list ``` 2. List for
-    specific user: ```bash /temp-roles list user:@user1 ```
+    List all active temporary roles or check a specific user:
+    ```bash
+    /temp-roles list
+    /temp-roles list user:@user1
+    ```
   </Tab>
   <Tab value="Remove Role">
-    1. Remove a temporary role early: ```bash /temp-roles remove
-    users:@user1,@user2 role:@EventRole reason:Early removal notify:true ```
+    Remove a temporary role early before expiration:
+    ```bash
+    /temp-roles remove users:@user1,@user2 role:@EventRole reason:Early removal notify:true
+    ```
   </Tab>
 </Tabs>
 
@@ -122,44 +130,5 @@ Suitable for:
 ## Permissions Required
 
 <Callout type="info">
-  - **Manage Roles:** Required to assign/remove temporary roles
-</Callout>
-
-## Troubleshooting
-
-<Callout type="warning">
-  - **Role not removed after duration:** Verify the bot is online and has Manage
-  Roles permission.
-  <br />
-  - **User not found:** Verify user IDs or mentions.
-  <br />
-  - **Invalid duration:** Use supported formats (e.g., 1h, 2d, 1w).
-  <br />- **Permission denied:** You require Manage Roles permission to manage
-  temporary roles.
-</Callout>
-
-## Related Commands
-
-<Cards>
-  <Card
-    title="/role-reactions"
-    description="Create role reaction messages"
-    href="./role-reactions"
-  />
-  <Card
-    title="/schedule-role"
-    description="Schedule role assignments"
-    href="./schedule-role"
-  />
-</Cards>
-
-## Use Cases
-
-<Callout type="success">
-  - Events, tournaments, giveaways, VIP access
-  <br />
-  - Beta testing, temporary mutes, or any temporary special access
-  <br />
-  - Time-limited access or moderation actions
-  <br />- Enable notifications to keep users informed
+  - **Manage Roles** permission required
 </Callout>

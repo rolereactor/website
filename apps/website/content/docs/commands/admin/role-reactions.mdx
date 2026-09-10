@@ -125,26 +125,37 @@ import { Cards, Card } from "fumadocs-ui/components/card";
 
 ## Step-by-Step Example
 
-<Tabs
-  items={["Basic Setup", "With @ Symbol", "Update Message", "List Messages"]}
->
+<Tabs items={["Basic Setup", "With @ Symbol", "Update Message", "List Messages"]}>
   <Tab value="Basic Setup">
     1. Select roles and emojis for your message.
-    <br />
-    2. Execute the command: ```bash /role-reactions setup title:Choose Your
-    Roles description:React to get roles! roles:🎮:@Gamer, 🎨:@Artist ``` 3. The
-    bot will create an interactive message that users can react to.
+    2. Execute the command:
+
+    ```bash
+    /role-reactions setup title:Choose Your Roles description:React to get roles! roles:🎮:@Gamer, 🎨:@Artist
+    ```
+
+    3. The bot will create an interactive message that users can react to.
   </Tab>
   <Tab value="With @ Symbol">
-    Using @ symbol for role mentions: ```bash /role-reactions setup title:Game
-    Roles description:Pick your role! roles:🎮:Gamer, 🎨:Artist ```
+    Using role names or mentions:
+
+    ```bash
+    /role-reactions setup title:Game Roles description:Pick your role! roles:🎮:Gamer, 🎨:Artist
+    ```
   </Tab>
   <Tab value="Update Message">
-    Update an existing message: ```bash /role-reactions update
-    message_id:1234567890 title:Updated Title ```
+    Update an existing message:
+
+    ```bash
+    /role-reactions update message_id:1234567890 title:Updated Title
+    ```
   </Tab>
   <Tab value="List Messages">
-    List all role-reaction messages: ```bash /role-reactions list ```
+    List all role-reaction messages:
+
+    ```bash
+    /role-reactions list
+    ```
   </Tab>
 </Tabs>
 

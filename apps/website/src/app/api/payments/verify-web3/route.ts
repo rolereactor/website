@@ -49,6 +49,7 @@ export async function POST(request: NextRequest) {
     const botResponse = await botFetch("/payments/web3/verify", {
       method: "POST",
       userId,
+      signal: AbortSignal.timeout(60000),
       body: JSON.stringify({
         txHash,
         packageId,

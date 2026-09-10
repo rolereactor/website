@@ -14,7 +14,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { NodeLoader } from "@/components/common/node-loader";
-import { ErrorView } from "@/components/common/error-view";
+import { StatePanel } from "@/components/common/state-panel";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -103,11 +103,13 @@ export function SystemHealthViewer() {
 
   if (error && !data) {
     return (
-      <ErrorView
+      <StatePanel
+        variant="error"
+        icon={AlertTriangle}
         title="Connection Failed"
-        message={error}
-        onRetry={fetchHealth}
-        showHome={false}
+        description={error}
+        actionLabel="Try Again"
+        onAction={fetchHealth}
       />
     );
   }

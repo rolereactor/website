@@ -77,7 +77,7 @@ function ResizeOptions({
   return (
     <div className="space-y-3">
       {/* Mode toggle */}
-      <div className="flex gap-2 rounded-lg border border-white/8 bg-white/3 p-1">
+      <div className="flex gap-2 rounded-lg border border-white/10 bg-white/5 p-1">
         {(["pixels", "percentage"] as const).map((m) => (
           <button
             key={m}
@@ -115,7 +115,7 @@ function ResizeOptions({
                 onChange({ ...options, width: parseInt(e.target.value) || 0 })
               }
               disabled={disabled}
-              className="h-9 bg-white/5 text-white border-white/10 focus:border-cyan-500/50"
+              variant="cyber"
               placeholder="800"
             />
           </div>
@@ -130,7 +130,7 @@ function ResizeOptions({
                 onChange({ ...options, height: parseInt(e.target.value) || 0 })
               }
               disabled={disabled}
-              className="h-9 bg-white/5 text-white border-white/10 focus:border-cyan-500/50"
+              variant="cyber"
               placeholder="600"
             />
           </div>
@@ -150,7 +150,7 @@ function ResizeOptions({
               })
             }
             disabled={disabled}
-            className="h-9 bg-white/5 text-white border-white/10 focus:border-cyan-500/50"
+            variant="cyber"
             placeholder="50"
           />
         </div>
@@ -222,7 +222,7 @@ function CompressOptions({
             "cursor-pointer flex flex-col items-center gap-1.5 rounded-lg p-3 text-center transition-all duration-200",
             level === l.value
               ? "bg-cyan-500/15 text-cyan-400 ring-1 ring-cyan-500/40 shadow-[0_0_12px_rgba(34,211,238,0.08)]"
-              : "bg-white/5 text-white/50 hover:bg-white/8 hover:text-white/70"
+              : "bg-white/5 text-white/50 hover:bg-white/10 hover:text-white/70"
           )}
         >
           <span className="text-[10px] tracking-widest opacity-60">
@@ -266,7 +266,7 @@ function ConvertOptions({
             "cursor-pointer flex items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-all duration-200",
             target === f.value
               ? "bg-cyan-500/15 ring-1 ring-cyan-500/40 shadow-[0_0_12px_rgba(34,211,238,0.08)]"
-              : "bg-white/5 hover:bg-white/8"
+              : "bg-white/5 hover:bg-white/10"
           )}
         >
           <span
@@ -312,7 +312,7 @@ function UpscaleOptions({
             "cursor-pointer flex flex-col items-center gap-1 rounded-lg p-4 text-center transition-all duration-200",
             multiplier === s.value
               ? "bg-amber-500/10 ring-1 ring-amber-500/40 shadow-[0_0_16px_rgba(245,158,11,0.1)]"
-              : "bg-white/5 hover:bg-white/8"
+              : "bg-white/5 hover:bg-white/10"
           )}
         >
           <span

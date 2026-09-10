@@ -34,7 +34,7 @@ export const baseOptions: BaseLayoutProps = {
       type: "custom",
       secondary: true,
       children: (
-        <div className="flex items-center ml-3">
+        <div className="flex items-center ml-3 gap-3">
           <NotificationBell />
           <UserMenu />
         </div>

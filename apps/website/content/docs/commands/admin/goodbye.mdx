@@ -37,84 +37,40 @@ You can use these placeholders in your goodbye message:
 - `{user.name}` - Username
 - `{user.tag}` - User tag
 - `{server}` - Server name
-- `{memberCount}` - Total member count
+- `{memberCount}` - Total member count (human members only)
 - `{memberCount.ordinal}` - Ordinal member count (e.g., "1st", "2nd", "3rd")
 
-## Step-by-Step Example
+## Usage Examples
 
 <Tabs items={["Basic Setup", "Advanced Setup", "With Embed"]}>
   <Tab value="Basic Setup">
-    1. Select a channel for goodbye messages.
-    <br />
-    2. Execute the command: ```bash /goodbye setup channel:#general message:**
-    {user}** left the server! Thanks for being part of **{server}**! 👋
-    enabled:true ``` 3. The bot will configure the goodbye system.
+    Configure basic goodbye greetings:
+    ```bash
+    /goodbye setup channel:#goodbye message:**{user}** left the server! Thanks for being part of **{server}**! 👋
+    ```
   </Tab>
   <Tab value="Advanced Setup">
-    Set up with embed and custom message: ```bash /goodbye setup
-    channel:#general message:**{user}** left the server! Thanks for being part
-    of **{server}**! 👋 enabled:true ```
+    Custom message with member count placeholder:
+    ```bash
+    /goodbye setup channel:#goodbye message:Goodbye **{user.name}**! We now have {memberCount} members in **{server}**.
+    ```
   </Tab>
   <Tab value="With Embed">
-    View and manage settings: ```bash /goodbye settings ```
+    Send goodbye messages as rich embeds:
+    ```bash
+    /goodbye setup channel:#goodbye embed:true message:**{user}** left **{server}**. We hope to see you again!
+    ```
   </Tab>
 </Tabs>
 
 ## Permissions Required
 
 <Callout type="info">
-  - **Manage Server:** Required to configure goodbye system
+  - **Manage Server** permission required to configure settings
 </Callout>
 
-## Troubleshooting
-
-<Callout type="warning">
-  - **Permission denied:** You require Manage Server permissions to configure
-  goodbye system.
-  <br />
-  - **Channel not found:** Verify the channel exists and the bot can access it.
-  <br />
-  - **Message not sending:** Verify bot permissions in the goodbye channel.
-  <br />- **Placeholders not working:** Ensure placeholders are spelled
-  correctly (case-sensitive).
-</Callout>
-
-## What You'll See
+## Note on Human-Only Member Counts
 
 <Callout type="info">
-  Interactive goodbye system with channel selection, message customization, and
-  real-time settings management for members leaving!
-</Callout>
-
-## Related Commands
-
-<Cards>
-  <Card
-    title="/goodbye settings"
-    description="View and manage goodbye system settings"
-    href="./goodbye"
-  />
-  <Card
-    title="/welcome"
-    description="Configure the welcome system"
-    href="./welcome"
-  />
-  <Card
-    title="/role-reactions"
-    description="Create role selection messages"
-    href="./role-reactions"
-  />
-</Cards>
-
-## Best Practices
-
-<Callout type="success">
-  - Use a dedicated channel for goodbye messages for better organization.
-  <br />
-  - Test the goodbye system with a test account before deployment.
-  <br />
-  - Use placeholders to make messages more personal.
-  <br />
-  - Consider using embeds for a more polished appearance.
-  <br />- Keep messages friendly and welcoming, even for members leaving.
+  Member count placeholders strictly count human members, excluding bots for accurate community statistics.
 </Callout>

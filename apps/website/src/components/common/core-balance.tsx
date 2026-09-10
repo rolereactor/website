@@ -26,7 +26,7 @@ export interface CoreBalanceProps {
 export function CoreBalance({
   variant = "full",
   className,
-  coreImageUrl = "/images/cores/core_energy.png",
+  coreImageUrl = "/images/core_energy.png",
   onClick,
   showPlusButton = true,
 }: CoreBalanceProps) {
@@ -108,7 +108,7 @@ export function CoreBalance({
                 )}
               >
                 <Image
-                  src="/images/cores/core_icon.png"
+                  src="/images/core_energy.png"
                   width={16}
                   height={16}
                   alt="Cores"
@@ -123,7 +123,7 @@ export function CoreBalance({
                 )}
               >
                 <Image
-                  src="/images/cores/spark_icon.png"
+src="/images/spark_energy.png"
                   width={14}
                   height={14}
                   alt="Sparks"
@@ -244,7 +244,7 @@ export function CoreBalance({
       <div className="hidden sm:flex items-center gap-1">
         <div className="relative w-4 h-4 shrink-0">
           <Image
-            src="/images/cores/spark_icon.png"
+            src="/images/spark_energy.png"
             alt="Sparks"
             fill
             sizes="16px"

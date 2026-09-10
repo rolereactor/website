@@ -32,18 +32,26 @@ import { ReferralSection } from "@/components/account/referral-section";
 
 interface Transaction {
   paymentId: string;
-  provider: "plisio" | "top.gg" | "premium_system" | "admin_adjustment";
+  provider: string;
   type?: string;
   amount: number;
   coresGranted: number;
+  sparksGranted: number;
   status: string;
   createdAt: string;
   currency?: string;
+  metadata?: {
+    direction?: "sent" | "received";
+    targetUsername?: string;
+    senderUsername?: string;
+    taxAmount?: number;
+    netAmount?: number;
+  };
 }
 
 export function BillingSection() {
   const { data: session } = useSession();
-  const { cores, sparks, mutate } = useCoreBalance();
+  const { cores, sparks, isLoading, mutate } = useCoreBalance();
   const [redeemCode, setRedeemCode] = useState("");
   const [isRedeeming, setIsRedeeming] = useState(false);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -51,10 +59,12 @@ export function BillingSection() {
   const [visibleTransactions, setVisibleTransactions] = useState(5);
 
   useEffect(() => {
-    if (session?.user?.id) {
-      fetchTransactions();
+    if (session?.user?.id && !isLoading) {
+      // Delay to avoid overwhelming bot with concurrent requests
+      const timer = setTimeout(() => fetchTransactions(), 1000);
+      return () => clearTimeout(timer);
     }
-  }, [session?.user?.id]);
+  }, [session?.user?.id, isLoading]);
 
   const fetchTransactions = async () => {
     setIsLoadingTransactions(true);
@@ -77,7 +87,7 @@ export function BillingSection() {
   };
 
   const activeTransactions = transactions.filter(
-    (tx) => tx.coresGranted !== 0 || tx.amount > 0
+    (tx) => tx.coresGranted !== 0 || tx.sparksGranted !== 0 || tx.amount > 0
   );
 
   const hasMoreTransactions = visibleTransactions < activeTransactions.length;
@@ -157,10 +167,38 @@ export function BillingSection() {
         </Badge>
       );
     }
+    if (provider === "vault") {
+      return (
+        <Badge className="bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 hover:bg-indigo-500/10 hover:text-indigo-400 hover:border-indigo-500/30">
+          Vault
+        </Badge>
+      );
+    }
     if (provider === "admin_adjustment") {
       return (
         <Badge className="bg-blue-500/10 text-blue-400 border border-blue-500/30 hover:bg-blue-500/10 hover:text-blue-400 hover:border-blue-500/30">
           Admin
+        </Badge>
+      );
+    }
+    if (provider === "buymeacoffee") {
+      return (
+        <Badge className="bg-orange-500/10 text-orange-400 border border-orange-500/30 hover:bg-orange-500/10 hover:text-orange-400 hover:border-orange-500/30">
+          BMAC
+        </Badge>
+      );
+    }
+    if (provider === "transfer") {
+      return (
+        <Badge className="bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 hover:bg-cyan-500/10 hover:text-cyan-400 hover:border-cyan-500/30">
+          Transfer
+        </Badge>
+      );
+    }
+    if (provider === "referral_bonus") {
+      return (
+        <Badge className="bg-green-500/10 text-green-400 border border-green-500/30 hover:bg-green-500/10 hover:text-green-400 hover:border-green-500/30">
+          Referral
         </Badge>
       );
     }
@@ -188,7 +226,7 @@ export function BillingSection() {
                   Cores &amp; Sparks Balance
                 </CardTitle>
                 <CardDescription className="text-zinc-400 mt-1">
-                  Manage Paid Cores for Pro Engine and reward Sparks across servers
+                  Manage Cores for Pro Engine and reward Sparks across servers
                 </CardDescription>
               </div>
               <PricingDialog>
@@ -209,7 +247,7 @@ export function BillingSection() {
                 <div className="relative shrink-0">
                   <div className="w-12 h-12 relative z-10 overflow-hidden rounded-full">
                     <Image
-                      src="/images/cores/core_icon.png"
+                      src="/images/core_energy.png"
                       alt="Cores"
                       fill
                       className="object-contain"
@@ -220,7 +258,7 @@ export function BillingSection() {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-1 mb-1">
                     <span className="text-xs font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1">
-                      Paid Cores
+Cores
                     </span>
                     <Badge className="bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-[10px] px-1.5 py-0 font-mono shrink-0">
                       Transferable
@@ -247,7 +285,7 @@ export function BillingSection() {
                 <div className="relative shrink-0">
                   <div className="w-12 h-12 relative z-10 overflow-hidden rounded-full">
                     <Image
-                      src="/images/cores/spark_icon.png"
+                      src="/images/spark_energy.png"
                       alt="Sparks"
                       fill
                       className="object-contain"
@@ -287,7 +325,7 @@ export function BillingSection() {
                 <AlertCircle className="w-4 h-4 text-cyan-400 mt-0.5 shrink-0" />
                 <div className="text-xs text-zinc-400 space-y-0.5">
                   <p>
-                    <strong className="text-cyan-300">Paid Cores</strong> are transferable energy credits for Pro Engine &amp; custom branding. <strong className="text-amber-300">Sparks</strong> are earned via Top.gg voting &amp; referral gifts for personal rewards.
+                    <strong className="text-cyan-300">Cores</strong> are transferable energy credits for Pro Engine &amp; custom branding. <strong className="text-amber-300">Sparks</strong> are earned via Top.gg voting &amp; referral gifts for personal rewards.
                   </p>
                 </div>
               </div>
@@ -378,18 +416,43 @@ export function BillingSection() {
                         {getProviderBadge(tx.provider)}
                       </div>
                       <div>
-                        <div
-                          className={cn(
-                            "font-bold text-xs",
-                            tx.coresGranted < 0
-                              ? "text-rose-400"
-                              : tx.coresGranted > 0
-                              ? "text-emerald-400"
-                              : "text-zinc-400"
+                        <div className="flex items-center gap-2">
+                          {tx.coresGranted !== 0 && (
+                            <span
+                              className={cn(
+                                "font-bold text-xs",
+                                tx.coresGranted < 0
+                                  ? "text-rose-400"
+                                  : tx.coresGranted > 0
+                                  ? "text-emerald-400"
+                                  : "text-zinc-400"
+                              )}
+                            >
+                              {tx.coresGranted > 0 ? "+" : ""}
+                              {tx.coresGranted.toLocaleString()} Cores
+                              {tx.provider === "transfer" && tx.metadata?.direction === "sent" && tx.metadata?.targetUsername && (
+                                <span className="text-zinc-500 font-normal"> → @{tx.metadata.targetUsername}</span>
+                              )}
+                              {tx.provider === "transfer" && tx.metadata?.direction === "received" && tx.metadata?.senderUsername && (
+                                <span className="text-zinc-500 font-normal"> from @{tx.metadata.senderUsername}</span>
+                              )}
+                            </span>
                           )}
-                        >
-                          {tx.coresGranted > 0 ? "+" : ""}
-                          {tx.coresGranted.toLocaleString()} Cores
+                          {tx.sparksGranted !== 0 && (
+                            <span
+                              className={cn(
+                                "font-bold text-xs",
+                                tx.sparksGranted < 0
+                                  ? "text-rose-400"
+                                  : tx.sparksGranted > 0
+                                  ? "text-amber-400"
+                                  : "text-zinc-400"
+                              )}
+                            >
+                              {tx.sparksGranted > 0 ? "+" : ""}
+                              {tx.sparksGranted.toLocaleString()} Sparks
+                            </span>
+                          )}
                         </div>
                         <div className="text-[11px] text-zinc-500">
                           {formatDate(tx.createdAt)}

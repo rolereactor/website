@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { botFetch } from "@/lib/bot-fetch";
+import { botFetch, isBotUnavailableError } from "@/lib/bot-fetch";
 
 /**
  * Get user's transaction history
@@ -51,7 +51,15 @@ export async function GET() {
       error: "Invalid response from bot",
     });
   } catch (error) {
-    console.error("Error fetching transactions:", error);
+    const err = error as Error;
+    if (isBotUnavailableError(err)) {
+      return NextResponse.json({
+        success: true,
+        transactions: [],
+        total: 0,
+      });
+    }
+    console.error("Error fetching transactions:", err.message ?? err);
     return NextResponse.json(
       { success: false, error: "Internal server error" },
       { status: 500 }

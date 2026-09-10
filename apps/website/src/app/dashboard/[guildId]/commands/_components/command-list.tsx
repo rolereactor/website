@@ -4,10 +4,10 @@ import { PremiumGuard } from "../../../_components/premium-guard";
 import { DiscordCommand } from "@/types/discord";
 
 import { useState, useEffect } from "react";
-import { ErrorView } from "@/components/common/error-view";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { StatePanel } from "@/components/common/state-panel";
 import { NodeLoader } from "@/components/common/node-loader";
 import { useProEngineStore } from "@/store/use-pro-engine-store";
 import {
@@ -31,6 +31,7 @@ import {
   Terminal,
   Lock,
   Crown,
+  AlertTriangle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
@@ -302,14 +303,14 @@ export function CommandList({ guildId }: CommandListProps) {
 
         <div className="relative space-y-8">
           {(isError && !data) || (data && data.status !== "success") ? (
-            <div className="space-y-6">
-              <ErrorView
-                title="System Alert"
-                message="We were unable to synchronize command settings. Please try again."
-                onRetry={() => fetchSettings(guildId, true)}
-                showHome={false}
-              />
-            </div>
+            <StatePanel
+              variant="error"
+              icon={AlertTriangle}
+              title="Data Synchronization Failed"
+              description="Failed to load command settings. Please try again later."
+              actionLabel="Try Again"
+              onAction={() => fetchSettings(guildId, true)}
+            />
           ) : (
             <>
               {sortedCategories.map((category) => {
@@ -416,23 +417,14 @@ export function CommandList({ guildId }: CommandListProps) {
               })}
 
               {filteredCommands.length === 0 && (
-                <div className="text-center py-20 bg-zinc-900/20 rounded-3xl border border-dashed border-white/10 group">
-                  <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 mx-auto mb-4 group-hover:scale-110 transition-transform duration-500 relative">
-                    <div className="absolute inset-0 bg-cyan-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <Search className="w-8 h-8 relative z-10" />
-                  </div>
-                  <p className="text-sm text-zinc-400 font-medium">No results found</p>
-                  <p className="text-zinc-500 text-xs font-bold mt-1 max-w-xs mx-auto mb-6">
-                    We couldn&apos;t find any commands matching your search.
-                  </p>
-                  <Button
-                    variant="link"
-                    onClick={() => setSearch("")}
-                    className="text-cyan-500 hover:text-cyan-400 uppercase tracking-widest font-bold"
-                  >
-                    Clear Search
-                  </Button>
-                </div>
+                <StatePanel
+                  variant="empty"
+                  icon={Search}
+                  title="No results found"
+                  description="We couldn't find any commands matching your search."
+                  actionLabel="Clear Search"
+                  onAction={() => setSearch("")}
+                />
               )}
             </>
           )}

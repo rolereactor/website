@@ -7,6 +7,23 @@ interface BotFetchOptions extends RequestInit {
 }
 
 /**
+ * Returns true for errors that mean the bot service is down/unreachable:
+ * connection refused, fetch failure, or request timeout.
+ */
+export function isBotUnavailableError(err: unknown): boolean {
+  if (!(err instanceof Error)) return false;
+  const name = (err as { name?: string }).name ?? "";
+  const msg = err.message ?? "";
+  return (
+    name === "TimeoutError" ||
+    name === "AbortError" ||
+    msg.includes("ECONNREFUSED") ||
+    msg.includes("fetch failed") ||
+    msg.includes("aborted")
+  );
+}
+
+/**
  * Bot API Fetcher
  * Centralized utility to handle authorized requests from website to bot.
  * Returns the raw Response object.
@@ -42,9 +59,12 @@ export async function botFetch(
     ...(fetchOptions.headers as Record<string, string>),
   };
 
+  const signal = fetchOptions.signal || AbortSignal.timeout(30000);
+
   return fetch(url, {
     ...fetchOptions,
     headers,
+    signal,
   });
 }
 

@@ -17,12 +17,13 @@ import {
   Users,
   Server,
   Activity,
+  AlertTriangle,
   Terminal,
   ArrowUpRight,
   ShieldCheck,
 } from "lucide-react";
 import { cn, formatCompactNumber } from "@/lib/utils";
-import { StatsChart } from "./_components/stats-chart";
+import { StatePanel } from "@/components/common/state-panel";
 import { Suspense, lazy } from "react";
 import { NodeLoader } from "@/components/common/node-loader";
 
@@ -161,16 +162,12 @@ async function StatsContent() {
 
   if (!stats) {
     return (
-      <Card variant="cyberpunk" className="border-red-500/50 bg-red-500/5">
-        <CardContent className="pt-6">
-          <div className="flex items-center gap-3 text-red-500">
-            <Activity className="size-5 animate-pulse" />
-            <p className="font-mono text-sm uppercase font-bold">
-              Service Unavailable // Unable to fetch data
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+      <StatePanel
+        variant="error"
+        icon={AlertTriangle}
+        title="Service Unavailable"
+        description="Unable to fetch dashboard statistics from the bot."
+      />
     );
   }
 

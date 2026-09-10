@@ -1,6 +1,6 @@
 ---
 title: Role Bundle
-description: Create and manage reusable role bundles for quick multi-role assignments. Group roles together and apply them to users in one action.
+description: Create and manage reusable role bundles. Group multiple roles together for easy inclusion in role reaction menus and admin setups.
 keywords: role-bundle, bundles, role pack, groups, bulk roles, role management
 ---
 
@@ -11,72 +11,58 @@ import { Cards, Card } from "fumadocs-ui/components/card";
 ## Subcommands
 
 <Cards>
-  <Card title="create" description="Create a new role bundle with a name and roles" />
-  <Card title="delete" description="Delete an existing role bundle" />
-  <Card title="list" description="List all role bundles in the server" />
-  <Card title="apply" description="Apply a bundle's roles to a user" />
+  <Card title="create" description="Create a new role bundle with a unique name and roles" />
+  <Card title="view" description="View all roles inside a specific role bundle" />
+  <Card title="list" description="List all role bundles created in this server" />
+  <Card title="delete" description="Delete a role bundle from the server" />
 </Cards>
 
 ## Usage Examples
 
-<Tabs items={["Create", "Apply", "Manage"]}>
-  <Tab value="Create">
-    Create a role bundle:
+<Tabs items={["Create Bundle", "View & List", "Delete"]}>
+  <Tab value="Create Bundle">
+    Create a role bundle with space-separated roles:
+
     ```bash
-    /role-bundle create name:VIP roles:@VIP,@Supporter,@Donator
+    /role-bundle create name:StarterPack roles:@Gamer @Member "Community Supporter"
     ```
-    Groups multiple roles under one reusable name.
+
+    - Role mentions, role names, and Role IDs are supported.
+    - Role names with spaces must be wrapped in double quotes.
   </Tab>
-  <Tab value="Apply">
-    Apply a bundle to a user:
-    ```bash
-    /role-bundle apply name:VIP user:@member
-    ```
-    All roles in the bundle are assigned at once.
-  </Tab>
-  <Tab value="Manage">
-    List or delete bundles:
+  <Tab value="View & List">
+    List all server bundles or view roles inside a specific bundle:
+
     ```bash
     /role-bundle list
-    /role-bundle delete name:VIP
+    /role-bundle view name:StarterPack
+    ```
+  </Tab>
+  <Tab value="Delete">
+    Delete a bundle by name:
+
+    ```bash
+    /role-bundle delete name:StarterPack
     ```
   </Tab>
 </Tabs>
 
+## Integrating Bundles into Reaction Role Menus
+
+Once a role bundle is created, you can use it directly inside `/role-reactions setup` or `/role-reactions update` by using the `bundle:` option or formatting:
+```bash
+/role-reactions setup title:Get Roles description:Click reaction to get all starter roles! bundle:StarterPack emoji:🎮
+```
+
 ## Permissions Required
 
 <Callout type="info">
-  - **Manage Roles** permission required
+  - **Manage Server** or **Manage Roles** permission required
 </Callout>
 
-## What You'll See
+## Limits
 
 <Callout type="info">
-  Confirmation of bundle creation, deletion, or application. When applying a
-  bundle, the bot assigns all included roles to the target user in one action.
+  - **Free Tier:** Up to 5 roles per bundle.
+  - **Pro Engine:** Up to 15 roles per bundle.
 </Callout>
-
-## Troubleshooting
-
-<Callout type="warning">
-  - **Role not assigned:** The bot's highest role must be above the roles in the
-  bundle.
-  <br />- **Bundle not found:** Use `/role-bundle list` to see all available
-  bundles.
-  <br />- **Cannot create:** Make sure you have Manage Roles permission.
-</Callout>
-
-## Related Commands
-
-<Cards>
-  <Card
-    title="/role-reactions"
-    description="Create role selection messages"
-    href="./role-reactions"
-  />
-  <Card
-    title="/temp-roles"
-    description="Assign temporary roles"
-    href="./temp-roles"
-  />
-</Cards>

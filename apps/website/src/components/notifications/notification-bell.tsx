@@ -170,7 +170,8 @@ export function NotificationBell() {
   useEffect(() => {
     if (!session?.user?.id) return;
 
-    fetchNotifications();
+    // Delay initial fetch to avoid overwhelming bot with concurrent requests
+    const timer = setTimeout(() => fetchNotifications(), 2000);
 
     let lastActivityTime = Date.now();
     let lastPollTime = Date.now();
@@ -185,7 +186,8 @@ export function NotificationBell() {
     window.addEventListener("click", handleActivity, { passive: true });
     window.addEventListener("scroll", handleActivity, { passive: true });
 
-    fetchUnreadCount();
+    // Delay unread count to avoid overwhelming bot with concurrent requests
+    const unreadTimer = setTimeout(() => fetchUnreadCount(), 2500);
 
     // The base "tick" runs every 30 seconds
     const interval = setInterval(() => {
@@ -204,6 +206,8 @@ export function NotificationBell() {
     }, 30_000);
 
     return () => {
+      clearTimeout(timer);
+      clearTimeout(unreadTimer);
       clearInterval(interval);
       window.removeEventListener("mousemove", handleActivity);
       window.removeEventListener("keydown", handleActivity);

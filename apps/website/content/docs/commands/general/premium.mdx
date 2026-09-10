@@ -1,43 +1,73 @@
 ---
 title: Premium
-description: View Pro Engine premium features and compare free vs Pro limits for all bot systems.
-keywords: premium, pro engine, upgrade, cores, subscription, features, limits
+description: View Pro Engine premium features, start a 7-day free trial, or compare free vs Pro limits.
+keywords: premium, pro engine, upgrade, cores, subscription, features, limits, trial
 ---
 
 import { Callout } from "fumadocs-ui/components/callout";
+import { Tabs, Tab } from "fumadocs-ui/components/tabs";
 import { Cards, Card } from "fumadocs-ui/components/card";
 
-## Overview
+## Subcommands
 
-The Premium command displays a comprehensive comparison of free vs Pro Engine limits for all bot systems. Use it to see what features are available at each tier and what you unlock by upgrading.
+<Cards>
+  <Card
+    title="display"
+    description="View all free vs Pro Engine limits"
+  />
+  <Card
+    title="trial"
+    description="Start a 7-day free Pro Engine trial for this server"
+  />
+</Cards>
+
+## Usage Examples
+
+<Tabs items={["Display Features", "Start Trial"]}>
+  <Tab value="Display Features">
+    View feature comparison and limit differences:
+
+    ```bash
+    /premium display
+    ```
+  </Tab>
+  <Tab value="Start Trial">
+    Activate a 7-day free Pro Engine trial:
+
+    ```bash
+    /premium trial
+    ```
+
+    - One free trial per server.
+    - Unlocks all Pro Engine features for 7 days without spending Cores.
+  </Tab>
+</Tabs>
+
+## Pro Engine Features & Pricing
+
+Pro Engine costs **20 Cores per week** (~$5/month). You can purchase Cores on the web dashboard or earn them for free by voting.
+
+## Permissions Required
+
+<Callout type="info">
+  - **Manage Server:** Required to execute `/premium trial`
+</Callout>
 
 ## What You'll See
 
 <Callout type="info">
-  - **Feature Comparison** — Side-by-side free vs Pro limits - **Upgrade
-  Instructions** — How to purchase Cores and activate Pro Engine - **Voting
-  Rewards** — How to earn free Cores by voting on top.gg
+  - **Feature Comparison** — Side-by-side free vs Pro limits
+  - **Upgrade Options** — How to purchase Cores and activate Pro Engine
+  - **Voting Rewards** — How to earn free Cores by voting on Top.gg
 </Callout>
-
-## Usage
-
-```bash
-/premium
-```
-
-No additional parameters required.
-
-## Pro Engine Pricing
-
-Pro Engine costs **20 Cores per week**. You can purchase Cores on the [website](https://rolereactor.xyz) or earn them for free by voting.
 
 ## Related Commands
 
 <Cards>
   <Card
-    title="/core"
-    description="View your Core balance and purchase options"
-    href="./core"
+    title="/engine"
+    description="Manage server Pro Engine status and Guild Vault reserve"
+    href="./engine"
   />
   <Card
     title="/vote"

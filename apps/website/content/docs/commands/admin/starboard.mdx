@@ -1,0 +1,62 @@
+---
+title: Starboard
+description: Highlight the best community messages with dynamic heat-map embed colors, reaction thresholds, and attachment previews.
+keywords: starboard, star reactions, highlight messages, discord starboard, reaction threshold
+---
+
+import { Callout } from "fumadocs-ui/components/callout";
+
+## Overview
+
+The `/starboard` command allows server administrators to set up a dedicated channel where messages with enough star reactions are automatically highlighted in a community hall of fame.
+
+Starboard embeds feature a **dynamic heat-map color system**:
+- ⭐ **Gold** (3-4 stars)
+- 🟧 **Orange** (5-9 stars)
+- 🔥 **Red** (10+ stars)
+
+It supports reply context snippets, image previews, non-image attachment links, and direct jump buttons back to original messages.
+
+---
+
+## Required Permissions
+
+* **Administrator** or **Manage Server** (`ManageGuild`) permission required.
+
+---
+
+## Slash Commands & Subcommands
+
+### `/starboard setup`
+Configure or update your server's starboard system.
+
+| Option | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `channel` | Channel | Yes | The channel where starred messages will be posted |
+| `emoji` | String | No | Custom emoji to use (default: `⭐`) |
+| `threshold` | Integer | No | Number of reactions required to post (min: 1, max: 100, default: 3) |
+
+**Example:**
+```bash
+/starboard setup channel:#starboard threshold:5 emoji:⭐
+```
+
+---
+
+### `/starboard enable`
+Enable the starboard feature for your server using saved settings.
+
+---
+
+### `/starboard disable`
+Disable the starboard feature for your server.
+
+---
+
+## Key Rules & Features
+
+- **Dynamic Colors:** Embed colors dynamically shift from Gold (3+), to Orange (5+), to Red (10+) as star reactions grow.
+- **Auto Removal:** If star reactions fall back below the configured threshold, the starboard post is automatically deleted.
+- **Reply Context:** Displays a snippet of the parent message if the starred message was a reply.
+- **Attachment Previews:** Automatically embeds image attachments and lists non-image files with direct download links.
+- **Bot Protection:** Bot messages are ignored by default.

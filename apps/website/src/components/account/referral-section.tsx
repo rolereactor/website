@@ -108,7 +108,9 @@ export function ReferralSection() {
             "rr_ref_code=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
         }
       }
-      fetchReferralInfo();
+      // Delay to avoid overwhelming bot with concurrent requests
+      const timer = setTimeout(() => fetchReferralInfo(), 1500);
+      return () => clearTimeout(timer);
     };
 
     autoClaimCookie();

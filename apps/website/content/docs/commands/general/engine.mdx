@@ -1,0 +1,81 @@
+---
+title: Engine
+description: Manage server Pro Engine status, Guild Core Reserve balance, and community fueling.
+keywords: engine, pro, vault, fuel, pool, cores, reserve, tier, pro engine
+---
+
+import { Callout } from "fumadocs-ui/components/callout";
+import { Tabs, Tab } from "fumadocs-ui/components/tabs";
+import { Cards, Card } from "fumadocs-ui/components/card";
+
+## Subcommands
+
+<Cards>
+  <Card
+    title="status"
+    description="View server Pro Engine subscription status and active limits"
+  />
+  <Card
+    title="vault"
+    description="View Guild Core Reserve balance, funded weeks remaining, and top sponsors"
+  />
+  <Card
+    title="fuel"
+    description="Deposit personal Cores into this server's Guild Vault"
+  />
+</Cards>
+
+## Usage Examples
+
+<Tabs items={["Status & Vault", "Fuel Vault"]}>
+  <Tab value="Status & Vault">
+    View server engine status or Guild Vault balance:
+
+    ```bash
+    /engine status
+    /engine vault
+    ```
+  </Tab>
+  <Tab value="Fuel Vault">
+    Deposit Cores into the server's Vault:
+
+    ```bash
+    /engine fuel cores:5
+    ```
+
+    - **cores** (required): Amount of Cores to deposit into Guild Vault (minimum: 1).
+  </Tab>
+</Tabs>
+
+## How Pro Engine Works
+
+1. **Community Fueling**: Anyone in the server can deposit personal Cores into the server's Guild Vault using `/engine fuel`.
+2. **Automated Coverage**: As long as the Vault contains enough Cores, the server retains Pro Engine benefits automatically.
+3. **Top Sponsors**: View the top contributors who fueled the server using `/engine vault`.
+
+## Permissions Required
+
+<Callout type="info">
+  - **No special permissions required** — status, vault, and fueling are available to all server members.
+</Callout>
+
+## What You'll See
+
+<Callout type="info">
+  Embeds detailing subscription status, active Pro features, remaining funded weeks, and top server sponsors.
+</Callout>
+
+## Related Commands
+
+<Cards>
+  <Card
+    title="/premium"
+    description="Check premium features and server status"
+    href="./premium"
+  />
+  <Card
+    title="/vote"
+    description="Vote for the bot to earn rewards"
+    href="./vote"
+  />
+</Cards>

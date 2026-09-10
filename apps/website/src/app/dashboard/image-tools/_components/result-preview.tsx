@@ -91,7 +91,7 @@ export function ResultPreview({
   // ─── Processing State ───────────────────────────────────────────────────────
   if (isProcessing) {
     return (
-      <div className="flex min-h-80 flex-col items-center justify-center gap-4 rounded-2xl border border-white/10 bg-white/3">
+      <div className="flex min-h-80 flex-col items-center justify-center gap-4 rounded-2xl border border-white/10 bg-white/5">
         <Loader2 className="h-10 w-10 animate-spin text-cyan-400" />
         <div className="text-center">
           <p className="text-sm font-medium text-white/60">
@@ -122,7 +122,7 @@ export function ResultPreview({
         </div>
 
         {/* Show original preview */}
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/3">
+        <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/5">
           {originalUrl && (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -168,7 +168,7 @@ export function ResultPreview({
       {/* ── View mode toggle ───────────────────────────────────────────────── */}
       <div className="flex items-center justify-between">
         <span className="text-xs text-white/40">Before / After comparison</span>
-        <div className="flex gap-1 rounded-lg border border-white/8 bg-white/3 p-1">
+        <div className="flex gap-1 rounded-lg border border-white/10 bg-white/5 p-1">
           <button
             type="button"
             onClick={() => setViewMode("slider")}
@@ -280,7 +280,7 @@ function StatCard({
           : "text-white/80";
 
   return (
-    <div className="rounded-xl border border-white/8 bg-white/3 px-3 py-3">
+    <div className="rounded-xl border border-white/10 bg-white/5 px-3 py-3">
       <p className="text-[10px] font-medium uppercase tracking-wide text-white/30">
         {label}
       </p>

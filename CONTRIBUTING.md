@@ -43,8 +43,8 @@ The main website application is located in `apps/website/`.
 1. **Fork and clone the repository:**
 
    ```bash
-   git clone https://github.com/YOUR_USERNAME/role-reactor-website.git
-   cd role-reactor-website
+   git clone https://github.com/rolereactor/website.git
+   cd website
    ```
 
 2. **Install dependencies:**

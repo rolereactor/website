@@ -200,7 +200,7 @@ export function PricingDialog({
                   className="gap-2 bg-zinc-900 border border-white/5 hover:border-cyan-500/30 transition-all rounded-xl h-9"
                 >
                   <Image
-                    src="/images/cores/core_energy.png"
+                    src="/images/core_energy.png"
                     width={18}
                     height={18}
                     alt="Core"

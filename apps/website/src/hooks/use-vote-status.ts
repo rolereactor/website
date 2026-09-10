@@ -1,7 +1,7 @@
 "use client";
 
 import useSWR from "swr";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import type { VoteStatusResponse } from "@/app/api/user/vote-status/route";
 
@@ -35,10 +35,12 @@ export function useVoteStatus() {
     session?.user ? "/api/user/vote-status" : null,
     fetcher,
     {
-      // SWR accepts a function for refreshInterval — evaluated each cycle
-      refreshInterval: () => (canVoteRef.current ? 30_000 : 5 * 60_000),
+      // SWR accepts a function for refreshInterval — evaluated each cycle.
+      // 45s when user can vote (staggered from balance@60s and notifications@30s to avoid thundering herd).
+      refreshInterval: () => (canVoteRef.current ? 45_000 : 5 * 60_000),
       revalidateOnFocus: true,
       revalidateOnReconnect: true,
+      revalidateOnMount: false,
       dedupingInterval: 5_000,
       keepPreviousData: true,
       onSuccess: (result) => {
@@ -46,6 +48,13 @@ export function useVoteStatus() {
       },
     }
   );
+
+  // Delay initial fetch to avoid overwhelming bot with concurrent requests
+  useEffect(() => {
+    if (!session?.user) return;
+    const timer = setTimeout(() => mutate(), 1000);
+    return () => clearTimeout(timer);
+  }, [session?.user, mutate]);
 
   const isLoading = status === "loading" || isSWRLoading;
 

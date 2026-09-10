@@ -3,6 +3,7 @@ import { Audiowide } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { StatePanel } from "@/components/common/state-panel";
 
 const audiowide = Audiowide({
   subsets: ["latin"],
@@ -59,30 +60,11 @@ export function WelcomeDisabledState({ onEnable }: WelcomeDisabledStateProps) {
 
 export function WelcomeEmptyState() {
   return (
-    <Card
-      variant="cyberpunk"
-      className="border-zinc-700/30 bg-zinc-800/5 backdrop-blur-sm"
-    >
-      <CardContent className="p-12">
-        <div className="flex flex-col items-center text-center space-y-6">
-          <div className="p-4 rounded-2xl bg-zinc-700/10 border border-zinc-600/20">
-            <Bell className="w-12 h-12 text-zinc-500" />
-          </div>
-          <div className="space-y-2">
-            <h3
-              className={cn(
-                "text-xl font-black text-white uppercase tracking-widest",
-                audiowide.className
-              )}
-            >
-              No Welcome Messages Yet
-            </h3>
-            <p className="text-sm text-zinc-400 font-medium max-w-md">
-              Once new members join, their welcome messages will appear here.
-            </p>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+    <StatePanel
+      variant="empty"
+      icon={Bell}
+      title="No Welcome Messages Yet"
+      description="Once new members join, their welcome messages will appear here."
+    />
   );
 }

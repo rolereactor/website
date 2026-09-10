@@ -1,7 +1,7 @@
 ---
 title: Commands
 description: Complete reference guide for all available bot commands organized by category. Find the appropriate command for your needs.
-keywords: commands, discord bot, slash commands, help, reference, documentation
+keywords: commands, discord bot, slash commands, help, reference, documentation, starboard, giveaway, ticket, moderation
 ---
 
 import { Cards, Card } from "fumadocs-ui/components/card";
@@ -12,12 +12,12 @@ import { Cards, Card } from "fumadocs-ui/components/card";
   <Card
     title="General Commands (17)"
     description="Basic bot commands available to all users"
-    href="./general"
+    href="./commands/general"
   />
   <Card
-    title="Admin Commands (12)"
+    title="Admin Commands (13)"
     description="Server management commands for administrators"
-    href="./admin"
+    href="./commands/admin"
   />
 </Cards>
 
@@ -25,114 +25,65 @@ import { Cards, Card } from "fumadocs-ui/components/card";
 
 ### General Commands
 
-- `/help` - Access help and information about bot commands
-- `/premium` - View Pro Engine premium features and limits
-- `/stats` - View bot statistics and command usage
-- `/ping` - Verify bot latency and connection status
-- `/invite` - Retrieve the bot invite link
-- `/support` - Access the support server link
-- `/avatar` - Generate AI-powered avatars with custom prompts
-- `/imagine` - Generate AI images from text descriptions
-- `/ask` - Ask questions with AI-powered responses
-- `/8ball` - Ask the magic 8ball a question
-- `/core balance` - View your current Core balance and tier status
-- `/poll create` - Create a new poll using interactive form
-- `/poll list` - List all polls in the server
-- `/poll end` - End an active poll early
-- `/poll delete` - Delete a poll permanently
-- `/level` - View your level and experience
-- `/leaderboard` - View the server experience leaderboard
-- `/rps` - Challenge someone to Rock Paper Scissors
-- `/serverinfo` - Display detailed information about the server
-- `/userinfo` - Display detailed information about a user
-- `/vote` - Vote for the bot on top.gg and earn rewards
-- `/wyr` - Get a random "Would You Rather" question
+- [`/core`](./commands/general/core) - View your Core balance and credit store options
+- [`/help`](./commands/general/help) - Access help and information about bot commands
+- [`/premium`](./commands/general/premium) - View Pro Engine premium features and limits
+- [`/stats`](./commands/general/stats) - View bot statistics and command usage
+- [`/ping`](./commands/general/ping) - Verify bot latency and connection status
+- [`/invite`](./commands/general/invite) - Retrieve the bot invite link
+- [`/support`](./commands/general/support) - Access the support server link
+- [`/avatar`](./commands/general/avatar) - Generate AI-powered avatars with custom prompts
+- [`/8ball`](./commands/general/8ball) - Ask the magic 8ball a question
+- [`/poll create`](./commands/general/poll) - Create a new poll using interactive form
+- [`/level`](./commands/general/level) - View your level and experience
+- [`/leaderboard`](./commands/general/leaderboard) - View the server experience leaderboard
+- [`/rps`](./commands/general/rps) - Challenge someone to Rock Paper Scissors
+- [`/serverinfo`](./commands/general/serverinfo) - Display detailed information about the server
+- [`/userinfo`](./commands/general/userinfo) - Display detailed user profile and warning history
+- [`/vote`](./commands/general/vote) - Vote for the bot on top.gg and earn rewards
+- [`/wyr`](./commands/general/wyr) - Get a random "Would You Rather" question
 
 ### Admin Commands
 
-- `/role-reactions` - Manage role reaction messages
-- `/temp-roles` - Manage temporary role assignments
-- `/schedule-role` - Schedule role assignments
-- `/welcome` - Configure the welcome system and settings
-- `/goodbye` - Configure the goodbye system and settings
-- `/xp` - Manage the XP system, settings, and level rewards
-- `/giveaway` - Create and manage server giveaways
-- `/moderation` - Timeout, warn, ban, kick, and purge members
-- `/moderation timeouts` - View all currently timed out members
-- `/ticket` - Manage the ticket support system
-- `/automod` - Configure auto-moderation filters
-- `/role-bundle` - Manage reusable role bundles
-- `/voice-roles` - Auto-control users in voice based on roles
+- [`/starboard`](./commands/admin/starboard) - Configure community starboard channel, emoji, and thresholds
+- [`/giveaway`](./commands/admin/giveaway) - Create and manage server giveaways with role weighting
+- [`/ticket`](./commands/admin/ticket) - Manage the support ticket system, panels, and transcripts
+- [`/role-bundle`](./commands/admin/role-bundle) - Manage reusable role bundles
+- [`/role-reactions`](./commands/admin/role-reactions) - Manage self-assignable role selection messages
+- [`/moderation`](./commands/admin/moderation) - Timeout, warn, ban, kick, and purge members
+- [`/voice-roles`](./commands/admin/voice-roles) - Auto-control users in voice channels based on roles
+- [`/temp-roles`](./commands/admin/temp-roles) - Manage temporary role assignments with bulk targeting
+- [`/schedule-role`](./commands/admin/schedule-role) - Schedule future role assignments
+- [`/welcome`](./commands/admin/welcome) - Configure the welcome system and settings
+- [`/goodbye`](./commands/admin/goodbye) - Configure the goodbye system and settings
+- [`/xp`](./commands/admin/xp) - Manage the XP system, settings, and level rewards
+- [`/automod`](./commands/admin/automod) - Configure auto-moderation filters
 
 ## Quick Reference
 
 ### Frequently Used Commands
 
-- `/help` - Access help and command information
-- `/role-reactions setup` - Create role selection messages
-- `/temp-roles assign` - Assign temporary roles
-- `/welcome` - Configure welcome system
-- `/goodbye` - Configure goodbye system
-- `/level` - View user experience and level
-- `/leaderboard` - View experience leaderboard
-- `/avatar` - Generate AI-powered avatars
-- `/poll create` - Create native Discord polls
-- `/core balance` - View Core credit balance
-- `/ticket setup` - Set up ticket support system
-- `/moderation timeout` - Timeout a user
-- `/giveaway create` - Start a new giveaway
-- `/automod` - Set up auto-moderation filters
+- [`/starboard setup`](./commands/admin/starboard) - Configure starboard channel & threshold
+- [`/giveaway create`](./commands/admin/giveaway) - Start a new giveaway
+- [`/ticket setup`](./commands/admin/ticket) - Set up ticket support system
+- [`/role-reactions setup`](./commands/admin/role-reactions) - Create role selection messages
+- [`/moderation`](./commands/admin/moderation) - Issue warnings, timeouts, bans, or kicks
+- [`/temp-roles assign`](./commands/admin/temp-roles) - Assign temporary roles
+- [`/welcome`](./commands/admin/welcome) - Configure welcome system
+- [`/goodbye`](./commands/admin/goodbye) - Configure goodbye system
+- [`/level`](./commands/general/level) - View user experience and level
+- [`/leaderboard`](./commands/general/leaderboard) - View experience leaderboard
+- [`/avatar`](./commands/general/avatar) - Generate AI-powered avatars
 
 ### Command Permissions
 
 - **General Commands:** Available to all users
 - **Admin Commands:** Require "Manage Roles" or "Manage Server" permission (varies by command)
 
-## Getting Started
-
-### For New Users
-
-1. **Begin with `/help`** - View all available commands and their descriptions
-2. **Test basic commands** - Execute `/ping` to verify bot functionality
-3. **Explore features** - Execute `/level` to view your experience points
-4. **Access support** - Execute `/support` if you require assistance
-
-### For Server Administrators
-
-1. **Configure roles** - Execute `/role-reactions setup` to create role selection messages
-2. **Configure welcome** - Execute `/welcome` to welcome new members
-3. **Configure goodbye** - Execute `/goodbye` to send goodbye messages
-4. **Manage XP** - Execute `/xp` to configure the experience system
-5. **Schedule roles** - Execute `/schedule-role` for automated role assignments
-6. **Set up tickets** - Execute `/ticket setup` to create a support system
-7. **Configure moderation** - Use `/moderation` for timeout, warn, ban, and kick
-8. **Set up auto-mod** - Execute `/automod` to protect your server
-
-## Common Use Cases
-
-### Setting Up a New Server
-
-1. **Welcome new members:** Execute `/welcome` to configure automatic greetings
-2. **Goodbye messages:** Execute `/goodbye` to configure goodbye messages
-3. **Create role selection:** Execute `/role-reactions setup` for self-assignable roles
-4. **Enable XP system:** Execute `/xp` to configure experience points
-5. **Set up tickets:** Execute `/ticket setup` for organized support
-6. **Configure auto-mod:** Execute `/automod` to filter spam and unwanted content
-7. **Verify functionality:** Execute `/ping` and `/help` to confirm the bot is operational
-
-### Managing an Active Server
-
-1. **Monitor activity:** Execute `/leaderboard` to view most active members
-2. **Assign temporary roles:** Execute `/temp-roles assign` for events or moderation
-3. **Schedule role changes:** Execute `/schedule-role` for automated role assignments
-4. **Moderate members:** Execute `/moderation` for timeout, warn, ban, or kick
-5. **Run giveaways:** Execute `/giveaway create` for community events
-6. **Voice control:** Execute `/voice-roles` to manage voice channel behavior
-
 ## Additional Resources
 
 If you cannot locate the information you need:
 
-- Execute `/help` for a complete command list
+- Execute `/help` for an interactive command guide
 - Review the [troubleshooting guide](/docs/troubleshooting)
 - Join our [support server](https://discord.gg/D8tYkU75Ry)

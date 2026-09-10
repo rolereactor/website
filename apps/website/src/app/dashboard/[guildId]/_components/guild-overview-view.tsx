@@ -25,6 +25,7 @@ import { motion } from "motion/react";
 import { cn, getDiscordImageUrl } from "@/lib/utils";
 import { audiowide, orbitron } from "@/lib/fonts";
 import { CyberpunkBackground } from "@/components/common/cyberpunk-background";
+import { CryptoCheckout } from "@/components/crypto/crypto-checkout";
 import dynamic from "next/dynamic";
 
 function getPastDays(days: number) {
@@ -518,6 +519,36 @@ export function GuildOverviewView({
             <div className="h-75 w-full">
               <GuildGrowthChart data={growthData} />
             </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      {/* Web3 Checkout Demo */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.55, duration: 0.4 }}
+        className="space-y-4"
+      >
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-bold text-white flex items-center gap-2">
+            <Zap className="text-blue-500 w-5 h-5" /> Crypto Checkout Demo
+          </h2>
+        </div>
+        <Card variant="glass">
+          <CyberpunkBackground
+            gridSize={24}
+            gridOpacity={0.02}
+            gridColor="#3b82f6"
+            showGlows={true}
+            glowOpacity={0.4}
+          />
+          <CardContent className="p-8 relative z-10 flex justify-center">
+             <CryptoCheckout 
+               usdAmount={10.00} 
+               packageId="$10"
+               receiverAddress={process.env.NEXT_PUBLIC_WEB3_RECEIVER_ADDRESS || "0xC850f03295Bb614d52038FB83f78f72ed8f7c65d"} 
+             />
           </CardContent>
         </Card>
       </motion.div>

@@ -16,6 +16,7 @@ import {
 import {
   Terminal,
   Activity,
+  AlertTriangle,
   Cpu,
   Layers,
   Zap,
@@ -24,7 +25,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { CommandUsageChart } from "./_components/command-chart";
+import { StatePanel } from "@/components/common/state-panel";
 import { Suspense, lazy } from "react";
 import { NodeLoader } from "@/components/common/node-loader";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -89,14 +90,12 @@ async function CommandsContent() {
 
   if (!usage) {
     return (
-      <Card variant="cyberpunk" className="border-red-500/50 bg-red-500/5">
-        <CardContent className="pt-6">
-          <div className="flex items-center gap-3 text-red-500 font-mono text-sm font-black uppercase">
-            <Activity className="size-5 animate-pulse" />
-            <span>Unable to load data // Service Unavailable</span>
-          </div>
-        </CardContent>
-      </Card>
+      <StatePanel
+        variant="error"
+        icon={AlertTriangle}
+        title="Service Unavailable"
+        description="Unable to load command usage data from the bot."
+      />
     );
   }
 

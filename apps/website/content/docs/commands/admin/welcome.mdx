@@ -26,9 +26,11 @@ import { Cards, Card } from "fumadocs-ui/components/card";
 <Tabs items={["Basic Setup", "Manage Settings"]}>
   <Tab value="Basic Setup">
     Configure the welcome system:
+
     ```bash
     /welcome setup channel:#welcome message:Welcome {user} to {server}! 🎉
     ```
+
     Optional settings:
     - `auto-role` - A role to assign to new members automatically
     - `enabled` - Toggle the system on/off (default: true)
@@ -36,9 +38,11 @@ import { Cards, Card } from "fumadocs-ui/components/card";
   </Tab>
   <Tab value="Manage Settings">
     View and toggle settings:
+
     ```bash
     /welcome settings
     ```
+
     Opens an interactive dashboard to test your welcome message, toggle features, and update the configuration.
   </Tab>
 </Tabs>

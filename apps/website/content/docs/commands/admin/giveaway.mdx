@@ -22,26 +22,27 @@ import { Cards, Card } from "fumadocs-ui/components/card";
 
 <Tabs items={["Create", "Manage"]}>
   <Tab value="Create">
-    Create a giveaway with all options:
+    Create a giveaway with required parameters:
     ```bash
     /giveaway create prize:Nitro winners:1 duration:24h
     ```
-    Optional filters:
-    - `channel` — Channel to post in
-    - `description` — Additional details
-    - `required-role` — Role required to enter
-    - `min-level` — Minimum XP level to enter
-    - `require-vote` — Require a top.gg vote to enter
-    - `claim-period` — Time winners have to claim (e.g. `24h`)
-    - `min-account-age` — Minimum Discord account age
-    - `min-server-age` — Minimum time in server
+    Optional configuration filters:
+    - `channel` — Channel to post the giveaway in (default: current channel)
+    - `description` — Additional details or instructions
+    - `required-role` — Specific role required to enter
+    - `min-level` — Minimum XP level required to enter
+    - `require-vote` — Require a top.gg vote in the last 12 hours (`true`/`false`)
+    - `claim-period` — Hours winners have to claim their prize (integer, e.g. `24` or `48`)
+    - `min-account-age` — Minimum Discord account age in days (integer)
+    - `min-server-age` — Minimum server membership time in days (integer)
   </Tab>
   <Tab value="Manage">
     Manage existing giveaways:
     ```bash
-    /giveaway end giveaway-id:abc123
-    /giveaway reroll giveaway-id:abc123
     /giveaway list
+    /giveaway end giveaway-id:abc123
+    /giveaway reroll giveaway-id:abc123 winners:1
+    /giveaway cancel giveaway-id:abc123
     /giveaway delete giveaway-id:abc123
     ```
   </Tab>
@@ -53,35 +54,8 @@ import { Cards, Card } from "fumadocs-ui/components/card";
   - **Manage Server** permission required
 </Callout>
 
-## What You'll See
+## Features & Winner Selection
 
 <Callout type="info">
-  An interactive giveaway embed with a reaction-based entry system, live
-  participant count, countdown timer, and automatic winner selection. Winners
-  are pinged when the giveaway ends.
+  Giveaways feature automatic countdown timers, reaction/button entry, bot exclusion, and weighted winner selection based on role multipliers.
 </Callout>
-
-## Troubleshooting
-
-<Callout type="warning">
-  - **No winners picked:** Ensure there are valid entries that meet all
-  requirements.
-  <br />- **Cannot reroll:** Only ended giveaways can be rerolled.
-  <br />- **Entry requirements not working:** Double-check that the required
-  role, level, or vote settings are correct.
-</Callout>
-
-## Related Commands
-
-<Cards>
-  <Card
-    title="/role-reactions"
-    description="Create role selection messages"
-    href="./role-reactions"
-  />
-  <Card
-    title="/schedule-role"
-    description="Schedule role assignments"
-    href="./schedule-role"
-  />
-</Cards>

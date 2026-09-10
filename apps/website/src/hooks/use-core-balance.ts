@@ -35,7 +35,7 @@ export function useCoreBalance() {
     error,
     mutate,
   } = useSWR(session?.user ? "/api/user/balance" : null, fetcher, {
-    refreshInterval: 30000, // Refresh every 30s
+    refreshInterval: 60_000, // Refresh every 60s — staggered from vote-status (45s) and notifications (30s)
     revalidateOnFocus: true, // Refetch when window gains focus
     revalidateOnReconnect: true, // Refetch on reconnect
     dedupingInterval: 5000, // Dedupe requests within 5s

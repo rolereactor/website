@@ -12,6 +12,7 @@ import {
   ChevronDown,
   FileSpreadsheet,
   FileJson,
+  AlertTriangle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useServerStore } from "@/store/use-server-store";
@@ -26,7 +27,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { PageHeader } from "@/app/dashboard/_components/page-header";
-import { ErrorView } from "@/components/common/error-view";
+import { StatePanel } from "@/components/common/state-panel";
 import { NodeLoader } from "@/components/common/node-loader";
 import { PremiumGuard } from "@/app/dashboard/_components/premium-guard";
 import { toast } from "@/lib/toast";
@@ -277,10 +278,13 @@ export default function AnalyticsPage({ params }: AnalyticsPageProps) {
           description="Track server growth and activity for"
           serverName={guildName}
         />
-        <ErrorView
+        <StatePanel
+          variant="error"
+          icon={AlertTriangle}
           title="Data Unavailable"
-          message="Failed to load analytics data. The bot may be offline."
-          showHome={false}
+          description="Failed to load analytics data. The bot may be offline."
+          actionLabel="Try Again"
+          onAction={() => window.location.reload()}
         />
       </div>
     );

@@ -17,14 +17,14 @@ const withBundleAnalyzer = bundleAnalyzer({
 const config = {
   transpilePackages: [],
   reactStrictMode: true,
-  // Essential performance optimizations
-  compress: true,
+  // Disable compression for SSE streaming (proxied from bot API)
+  compress: false,
   poweredByHeader: false,
   generateEtags: false,
 
   // Output standalone for self-hosted deployment (Docker/VPS)
   // Vercel uses its own infrastructure, so standalone is not needed there
-  ...(process.env.STANDALONE === "true" ? { output: "standalone" } : {}),
+  ...( { output: "standalone" } ),
 
   // Image optimization
   images: {
@@ -63,11 +63,27 @@ const config = {
 
   // Webpack cache optimization
   webpack: (config, { isServer, dev }) => {
-    // Suppress webpack cache warnings and optimize for large strings
-    if (!isServer && !dev) {
-      // Use memory cache to avoid filesystem serialization issues
-      config.cache = false;
+    // Fallbacks for optional Web3 dynamic dependencies
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+      net: false,
+      tls: false,
+      accounts: false,
+    };
 
+    // Ignore benign Web3 optional dependency warnings
+    config.ignoreWarnings = [
+      ...(config.ignoreWarnings || []),
+      { module: /@wagmi\/core/ },
+      { module: /@reown\/appkit/ },
+      { module: /ox/ },
+      { message: /PackFileCacheStrategy/ },
+      { message: /Critical dependency/ },
+      { message: /Can't resolve 'accounts'/ },
+    ];
+
+    if (!isServer && !dev) {
       // Optimize chunk splitting to reduce large strings
       config.optimization = {
         ...config.optimization,
@@ -83,13 +99,6 @@ const config = {
             },
           },
         },
-      };
-
-      // Suppress webpack performance hints
-      config.stats = {
-        ...config.stats,
-        warnings: false,
-        warningsFilter: [/PackFileCacheStrategy/],
       };
     }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   Settings,
   Save,
@@ -8,12 +8,16 @@ import {
   Hash,
   Bell,
   Terminal,
-  Megaphone,
   UserMinus,
   UserPlus,
   Gift,
   Swords,
   RotateCcw,
+  AlertTriangle,
+  Megaphone,
+  DollarSign,
+  Sticker,
+  Lock,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -22,6 +26,10 @@ import {
   useStreamingStore,
   type StreamConfig,
 } from "@/store/use-streaming-store";
+import {
+  PLATFORM_REGISTRY,
+  type PlatformAlertType,
+} from "@/lib/platform-registry";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -30,57 +38,30 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  TwitchIcon,
+  YouTubeIcon,
+  KickIcon,
+} from "@/components/icons/platform-icons";
 
 interface ConfigPanelProps {
   guildId: string;
+  connections?: Array<{ platform: string; isConnected: boolean }>;
 }
 
-const ALERT_TYPE_CONFIG = [
-  {
-    key: "goLive" as const,
-    label: "Go Live",
-    icon: Megaphone,
-    color: "text-cyan-400",
-  },
-  {
-    key: "offline" as const,
-    label: "Offline",
-    icon: UserMinus,
-    color: "text-red-400",
-  },
-  {
-    key: "follow" as const,
-    label: "Follow",
-    icon: UserPlus,
-    color: "text-purple-400",
-  },
-  {
-    key: "subscribe" as const,
-    label: "Subscribe",
-    icon: Bell,
-    color: "text-emerald-400",
-  },
-  {
-    key: "giftSub" as const,
-    label: "Gift Sub",
-    icon: Gift,
-    color: "text-yellow-400",
-  },
-  {
-    key: "raid" as const,
-    label: "Raid",
-    icon: Swords,
-    color: "text-fuchsia-400",
-  },
-  {
-    key: "resub" as const,
-    label: "Resub",
-    icon: RotateCcw,
-    color: "text-blue-400",
-  },
-] as const;
+const ALERT_ICON_MAP: Record<string, { icon: React.ElementType; color: string }> = {
+  goLive: { icon: Megaphone, color: "text-cyan-400" },
+  offline: { icon: UserMinus, color: "text-red-400" },
+  follow: { icon: UserPlus, color: "text-purple-400" },
+  subscribe: { icon: Bell, color: "text-emerald-400" },
+  giftSub: { icon: Gift, color: "text-yellow-400" },
+  raid: { icon: Swords, color: "text-fuchsia-400" },
+  resub: { icon: RotateCcw, color: "text-blue-400" },
+  superChat: { icon: DollarSign, color: "text-yellow-400" },
+  superSticker: { icon: Sticker, color: "text-pink-400" },
+};
 
-export function ConfigPanel({ guildId }: ConfigPanelProps) {
+export function ConfigPanel({ guildId, connections = [] }: ConfigPanelProps) {
   const { configCache, isLoading, fetchConfig, updateConfig } =
     useStreamingStore();
   const [isSaving, setIsSaving] = useState(false);
@@ -102,6 +83,40 @@ export function ConfigPanel({ guildId }: ConfigPanelProps) {
 
   const config = configCache[guildId];
   const configLoading = isLoading[`config:${guildId}`];
+
+  const connectedPlatforms = useMemo(() => {
+    return connections
+      .filter((c) => c.isConnected)
+      .map((c) => PLATFORM_REGISTRY[c.platform])
+      .filter(Boolean);
+  }, [connections]);
+
+  const availableAlertTypes = useMemo(() => {
+    const seen = new Set<string>();
+    const alerts: Array<PlatformAlertType & { icon: React.ElementType; color: string }> = [];
+
+    for (const platform of connectedPlatforms) {
+      for (const alert of platform.features.alerts) {
+        if (!seen.has(alert.id)) {
+          seen.add(alert.id);
+          const iconConfig = ALERT_ICON_MAP[alert.id] || { icon: Bell, color: "text-zinc-400" };
+          alerts.push({ ...alert, ...iconConfig });
+        }
+      }
+    }
+
+    return alerts;
+  }, [connectedPlatforms]);
+
+  const isFeatureAvailable = useMemo(() => {
+    return (feature: string): boolean => {
+      for (const platform of connectedPlatforms) {
+        const f = platform.features[feature as keyof typeof platform.features];
+        if (f && !Array.isArray(f) && f.available) return true;
+      }
+      return false;
+    };
+  }, [connectedPlatforms]);
 
   useEffect(() => {
     fetchConfig(guildId);
@@ -231,6 +246,9 @@ export function ConfigPanel({ guildId }: ConfigPanelProps) {
                 <Label variant="cyber" className="flex items-center gap-2">
                   <Terminal className="w-3.5 h-3.5" />
                   Commands Enabled
+                  {!isFeatureAvailable("commands") && (
+                    <span className="text-[10px] text-zinc-500 font-normal">(Twitch only)</span>
+                  )}
                 </Label>
                 <p className="text-xs text-zinc-500">
                   Allow chat commands in your stream channel.
@@ -245,6 +263,7 @@ export function ConfigPanel({ guildId }: ConfigPanelProps) {
                     commandsEnabled: checked,
                   }))
                 }
+                disabled={!isFeatureAvailable("commands")}
               />
             </div>
           </div>
@@ -254,6 +273,9 @@ export function ConfigPanel({ guildId }: ConfigPanelProps) {
             <Label variant="cyber" className="flex items-center gap-2">
               <Terminal className="w-3.5 h-3.5" />
               Command Prefix
+              {!isFeatureAvailable("commands") && (
+                <span className="text-[10px] text-zinc-500 font-normal">(Twitch only)</span>
+              )}
             </Label>
             <Input
               variant="cyber"
@@ -267,6 +289,7 @@ export function ConfigPanel({ guildId }: ConfigPanelProps) {
               }
               maxLength={1}
               className="w-16 text-center text-lg"
+              disabled={!isFeatureAvailable("commands")}
             />
             <p className="text-xs text-zinc-500">
               Single character used to trigger commands.
@@ -283,38 +306,71 @@ export function ConfigPanel({ guildId }: ConfigPanelProps) {
               <Bell className="w-4 h-4 text-emerald-400" />
             </div>
             Alert Types
+            {connectedPlatforms.length > 0 && (
+              <div className="flex items-center gap-1.5 ml-auto">
+                {connectedPlatforms.map((p) => {
+                  const Icon = p.id === "twitch" ? TwitchIcon : p.id === "youtube" ? YouTubeIcon : KickIcon;
+                  return (
+                    <span
+                      key={p.id}
+                      className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 text-zinc-400"
+                    >
+                      <Icon className="w-3 h-3 inline mr-1" />
+                      {p.name}
+                    </span>
+                  );
+                })}
+              </div>
+            )}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {ALERT_TYPE_CONFIG.map(({ key, label, icon: Icon, color }) => (
-              <div
-                key={key}
-                className={cn(
-                  "flex items-center justify-between p-3 rounded-lg border border-white/5 bg-black/20 transition-all",
-                  localConfig.alertTypes[key] &&
-                    "border-cyan-500/20 bg-cyan-500/5"
-                )}
-              >
-                <div className="flex items-center gap-3">
-                  <Icon className={cn("w-4 h-4", color)} />
-                  <span className="text-sm text-white font-medium">
-                    {label}
-                  </span>
+          {availableAlertTypes.length === 0 ? (
+            <div className="flex items-center gap-3 p-4 rounded-lg border border-white/5 bg-black/20 text-zinc-500 text-sm">
+              <AlertTriangle className="w-4 h-4" />
+              Connect a platform to configure alert types.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {availableAlertTypes.map(({ id, label, description, available, icon: Icon, color }) => (
+                <div
+                  key={id}
+                  className={cn(
+                    "flex items-center justify-between p-3 rounded-lg border border-white/5 bg-black/20 transition-all",
+                    available && localConfig.alertTypes[id] &&
+                      "border-cyan-500/20 bg-cyan-500/5",
+                    !available && "opacity-50"
+                  )}
+                >
+                  <div className="flex items-center gap-3">
+                    <Icon className={cn("w-4 h-4", available ? color : "text-zinc-600")} />
+                    <div>
+                      <span className="text-sm text-white font-medium">
+                        {label}
+                      </span>
+                      {description && (
+                        <p className="text-[10px] text-zinc-500 mt-0.5">{description}</p>
+                      )}
+                    </div>
+                  </div>
+                  {available ? (
+                    <Switch
+                      variant="cyan"
+                      checked={localConfig.alertTypes[id] ?? false}
+                      onCheckedChange={(checked) =>
+                        setLocalConfig((prev) => ({
+                          ...prev,
+                          alertTypes: { ...prev.alertTypes, [id]: checked },
+                        }))
+                      }
+                    />
+                  ) : (
+                    <Lock className="w-3.5 h-3.5 text-zinc-600" />
+                  )}
                 </div>
-                <Switch
-                  variant="cyan"
-                  checked={localConfig.alertTypes[key]}
-                  onCheckedChange={(checked) =>
-                    setLocalConfig((prev) => ({
-                      ...prev,
-                      alertTypes: { ...prev.alertTypes, [key]: checked },
-                    }))
-                  }
-                />
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
 

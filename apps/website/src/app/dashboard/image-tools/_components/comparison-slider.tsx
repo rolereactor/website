@@ -126,7 +126,7 @@ export function ComparisonSlider({
               transform: `translate(-50%, -50%) scale(${isDragging ? 1.1 : 1})`,
             }}
           >
-            <ChevronsLeftRight className="h-4 w-4 text-gray-500" />
+            <ChevronsLeftRight className="h-4 w-4 text-zinc-500" />
           </div>
         </div>
 

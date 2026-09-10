@@ -174,7 +174,7 @@ export default function OverlayPage({ params }: OverlayPageProps) {
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [verified, isDemo, widget]);
+  }, [verified, isDemo, widget, isDemoAll]);
 
   const { isConnected: _isConnected } = useSSE(verified ? guildId : null, (eventType, data) => {
     switch (eventType) {

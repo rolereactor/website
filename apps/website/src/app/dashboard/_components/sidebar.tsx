@@ -483,7 +483,7 @@ export function DashboardSidebar({
   };
 
   const isAccountPage =
-    pathname === "/dashboard/profile" || pathname === "/dashboard/billing";
+    pathname === "/dashboard/profile" || pathname === "/dashboard/balance";
 
   // Custom trigger following shadcn sidebar pattern
   const sidebarUserTrigger = (
@@ -574,7 +574,7 @@ export function DashboardSidebar({
             <UserMenu
               user={user}
               status="authenticated"
-              coreImageUrl="/images/cores/core_energy.png"
+              coreImageUrl="/images/core_energy.png"
               dashboardUrl="/dashboard"
               showDashboardLink={developerAccess || Boolean(contextId)}
               dashboardLabel={

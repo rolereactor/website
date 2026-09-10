@@ -18,6 +18,7 @@ import {
   LayoutGrid,
   ShieldCheck,
   Zap,
+  AlertTriangle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -35,7 +36,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PageHeader } from "@/app/dashboard/_components/page-header";
-import { ErrorView } from "@/components/common/error-view";
+import { StatePanel } from "@/components/common/state-panel";
 import { NodeLoader } from "@/components/common/node-loader";
 import { SetupWizard } from "./_components/setup-wizard";
 import { SectionSettings } from "./_components/section-settings";
@@ -477,15 +478,17 @@ function TicketsPageContent({ params }: TicketsPageProps) {
           description="Manage support tickets and track community issues for"
           serverName={guildName}
         />
-        <ErrorView
+        <StatePanel
+          variant="error"
+          icon={AlertTriangle}
           title={isBotOffline ? "Bot Service Offline" : "System Alert"}
-          message={
+          description={
             isBotOffline
               ? "The bot service is currently unavailable. Please ensure the bot is running and try again."
               : isError.message || "Failed to load ticket data."
           }
-          onRetry={() => fetchTicketData(guildId, true)}
-          showHome={false}
+          actionLabel="Try Again"
+          onAction={() => fetchTicketData(guildId, true)}
         />
       </div>
     );

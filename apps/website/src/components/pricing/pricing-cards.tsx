@@ -111,7 +111,7 @@ export function PricingCards({
                     </span>
                     <div className="relative group-hover:scale-110 transition-transform duration-300">
                       <Image
-                        src="/images/cores/core_energy.png"
+                        src="/images/core_energy.png"
                         width={20}
                         height={20}
                         alt="Cores"

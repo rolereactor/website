@@ -5,6 +5,7 @@ import { Trophy, Lock, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { StatePanel } from "@/components/common/state-panel";
 
 const audiowide = Audiowide({
   subsets: ["latin"],
@@ -139,35 +140,11 @@ export function XPDisabledState({ onEnable }: { onEnable: () => void }) {
 
 export function EmptyState() {
   return (
-    <Card
-      variant="cyberpunk"
-      className="relative overflow-hidden min-h-112.5 group"
-      contentClassName="flex flex-col items-center justify-center p-8 text-center grow"
-      showGrid={true}
-    >
-      <div className="relative z-10 flex flex-col items-center">
-        <div className="relative mb-8">
-          <div className="absolute -inset-10 bg-cyan-500/10 blur-[60px] rounded-full" />
-          <div className="relative w-24 h-24 rounded-3xl bg-zinc-950/80 border border-white/10 flex items-center justify-center shadow-2xl group-hover:border-cyan-500/30 transition-colors duration-500">
-            <Trophy className="w-10 h-10 text-cyan-500" />
-          </div>
-        </div>
-
-        <div className="space-y-3 max-w-sm">
-          <h3
-            className={cn(
-              "text-3xl font-black text-white uppercase tracking-widest",
-              audiowide.className
-            )}
-          >
-            No Rankings
-          </h3>
-          <p className="text-zinc-500 font-medium text-sm leading-relaxed">
-            The database is currently clear. Rankings will propagate as users
-            synchronize with the engagement network.
-          </p>
-        </div>
-      </div>
-    </Card>
+    <StatePanel
+      variant="empty"
+      icon={Trophy}
+      title="No Rankings"
+      description="The database is currently clear. Rankings will propagate as users synchronize with the engagement network."
+    />
   );
 }

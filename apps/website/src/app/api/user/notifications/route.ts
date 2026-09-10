@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { botFetch } from "@/lib/bot-fetch";
+import { botFetch, isBotUnavailableError } from "@/lib/bot-fetch";
 
 /**
  * Get user notifications
@@ -53,11 +53,15 @@ export async function GET(req: Request) {
       unreadCount: 0,
     });
   } catch (error) {
-    console.error("Error fetching notifications:", error);
-    return NextResponse.json(
-      { success: false, error: "Internal server error" },
-      { status: 500 }
-    );
+    const err = error as Error;
+    if (!isBotUnavailableError(err)) {
+      console.error("Error fetching notifications:", err.message ?? err);
+    }
+    return NextResponse.json({
+      success: false,
+      notifications: [],
+      unreadCount: 0,
+    });
   }
 }
 
@@ -95,7 +99,10 @@ export async function PATCH() {
       markedRead: data.markedRead || 0,
     });
   } catch (error) {
-    console.error("Error marking all notifications as read:", error);
+    const err = error as Error;
+    if (!isBotUnavailableError(err)) {
+      console.error("Error marking all notifications as read:", err.message ?? err);
+    }
     return NextResponse.json(
       { success: false, error: "Internal server error" },
       { status: 500 }

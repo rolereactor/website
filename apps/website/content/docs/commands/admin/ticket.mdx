@@ -14,11 +14,11 @@ import { Cards, Card } from "fumadocs-ui/components/card";
   <Card title="setup" description="Set up the ticket system with a support channel and panel" />
   <Card title="info" description="View ticket system statistics and configuration" />
   <Card title="settings" description="Interactive dashboard to manage ticket settings" />
-  <Card title="panel" description="Manage ticket panels (list, delete)" />
-  <Card title="transcript" description="Export a ticket transcript in various formats" />
-  <Card title="close" description="Close the current ticket (staff)" />
-  <Card title="add / remove" description="Add or remove users from a ticket (staff)" />
-  <Card title="transfer" description="Transfer a ticket to another staff member" />
+  <Card title="panel list / delete" description="List or delete ticket panels by ID" />
+  <Card title="transcript" description="Export a ticket transcript in HTML, JSON, or Markdown format" />
+  <Card title="close" description="Close the current ticket channel" />
+  <Card title="add / remove" description="Add or remove members from an active ticket" />
+  <Card title="transfer" description="Transfer ticket ownership to another staff member" />
   <Card title="rename" description="Rename the current ticket channel" />
 </Cards>
 
@@ -31,74 +31,38 @@ import { Cards, Card } from "fumadocs-ui/components/card";
     /ticket setup channel:#support title:Support description:Click to open a ticket
     ```
     Options:
-    - `channel` — Where to post the ticket panel
-    - `title` — Panel embed title
-    - `description` — Panel embed description
-    - `color` — Embed color (hex format)
+    - `channel` — Channel where the panel embed will be created (required)
+    - `title` — Custom panel title
+    - `description` — Custom panel description
+    - `color` — Select embed theme color (Primary, Success, Danger, Warning, Cyberpunk, etc.)
   </Tab>
   <Tab value="Management">
-    Manage the system:
+    Manage panels and system settings:
     ```bash
     /ticket info
     /ticket settings
     /ticket panel list
-    /ticket panel delete panel-id:abc123
+    /ticket panel delete panel-id:1
     ```
-    The `/ticket settings` command opens an interactive dashboard where you can
-    configure staff roles, naming format, and more.
+    The `/ticket settings` command opens an interactive dashboard to configure staff roles, ticket categories, and auto-archiving.
   </Tab>
   <Tab value="Staff Tools">
-    Staff commands (used inside ticket channels):
+    Commands executed inside ticket channels:
     ```bash
-    /ticket close
+    /ticket close reason:Issue resolved
     /ticket add member:@member
     /ticket remove member:@member
     /ticket transfer staff:@staff
-    /ticket rename name:vip-support-123
-    /ticket transcript ticket-id:abc123 format:html
+    /ticket rename name:bug-report-101
+    /ticket transcript ticket-id:1 format:html
     ```
-    Transcript formats: `html`, `json`, `text`
+    Transcript formats: `html` (Rich HTML), `json`, `md` (Markdown)
   </Tab>
 </Tabs>
 
 ## Permissions Required
 
 <Callout type="info">
-  - **Manage Server** — Required for setup and settings
-  - **Staff Role** — Required for close, add, remove, transfer, rename
-  - **No permissions** — Users can open tickets via the panel button
+  - **Manage Server** permission required for setup, info, and settings.
+  - **Manage Messages** or Staff role required for add, remove, transfer, and rename tools.
 </Callout>
-
-## What You'll See
-
-<Callout type="info">
-  A complete ticket system with panel buttons for users to open tickets,
-  private ticket channels with staff access, transcript exports, and an
-  interactive settings dashboard for configuration.
-</Callout>
-
-## Troubleshooting
-
-<Callout type="warning">
-  - **Panel not showing:** Make sure the bot has Send Messages and Embed Links
-  permissions in the target channel.
-  <br />- **Cannot close ticket:** Only users with the configured staff role can
-  close tickets.
-  <br />- **Transcript empty:** The ticket channel must have messages to
-  generate a transcript.
-</Callout>
-
-## Related Commands
-
-<Cards>
-  <Card
-    title="/moderation"
-    description="Moderate server members"
-    href="./moderation"
-  />
-  <Card
-    title="/role-reactions"
-    description="Create role selection messages"
-    href="./role-reactions"
-  />
-</Cards>

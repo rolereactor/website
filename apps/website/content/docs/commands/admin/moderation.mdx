@@ -1,7 +1,7 @@
 ---
 title: Moderation
-description: Moderate server members with timeout, warn, ban, kick, purge, and moderation history. Supports bulk actions on multiple users.
-keywords: moderation, timeout, warn, ban, kick, purge, mod, admin, discipline
+description: Moderate server members with timeout, warn, ban, kick, unban, purge, history, and timeouts list. Supports bulk actions up to 15 users.
+keywords: moderation, timeout, warn, ban, kick, purge, unban, history, timeouts, mod, admin, discipline
 ---
 
 import { Callout } from "fumadocs-ui/components/callout";
@@ -11,44 +11,62 @@ import { Cards, Card } from "fumadocs-ui/components/card";
 ## Subcommands
 
 <Cards>
-  <Card title="timeout" description="Timeout one or more users for a specified duration" />
-  <Card title="warn" description="Issue a warning to one or more users" />
+  <Card title="timeout" description="Timeout (mute) one or more users for a specified duration" />
+  <Card title="warn" description="Issue a warning with automated history logging" />
   <Card title="ban" description="Ban one or more users from the server" />
   <Card title="kick" description="Kick one or more users from the server" />
-  <Card title="purge" description="Bulk-delete messages from a channel" />
-  <Card title="history" description="View a user's moderation history" />
+  <Card title="unban" description="Unban previously banned users" />
+  <Card title="purge" description="Bulk-delete messages from a channel (1-100)" />
+  <Card title="history" description="View moderation history for a user or the entire server" />
+  <Card title="remove-warn" description="Remove a specific warning from a user by case ID" />
+  <Card title="list-bans" description="List all banned users in the server" />
+  <Card title="timeouts" description="List all currently timed out members in the server" />
 </Cards>
 
 ## Usage Examples
 
-<Tabs items={["Timeout", "Warn", "Ban/Kick", "Purge"]}>
+<Tabs items={["Timeout", "Warn & History", "Ban & Kick", "Purge", "List Timeouts"]}>
   <Tab value="Timeout">
-    Timeout a user:
+    Timeout one or multiple users:
+
     ```bash
-    /moderation timeout users:@user duration:1h reason:Spamming
+    /moderation timeout users:@user1,@user2 duration:1h reason:Spamming in main chat
     ```
-    - Supports multiple users separated by commas
-    - Duration format: `10s`, `5m`, `1h`, `1d`, `1w` (max 28 days)
+
+    - Supports up to 15 users in a single command
+    - Duration format: `10s`, `5m`, `1h`, `1d`, `1w` (maximum 28 days)
   </Tab>
-  <Tab value="Warn">
-    Warn a user:
+  <Tab value="Warn & History">
+    Warn a user or check moderation history:
+
     ```bash
-    /moderation warn users:@user reason:Breaking rules
+    /moderation warn users:@user1 reason:Breaking rule #3
+    /moderation history user:@user1
+    /moderation remove-warn user:@user1 case-id:abc123
     ```
-    Warnings are logged in the user's moderation history.
   </Tab>
-  <Tab value="Ban/Kick">
-    Ban or kick users:
+  <Tab value="Ban & Kick">
+    Ban, unban, or kick users:
+
     ```bash
-    /moderation ban users:@user reason:Repeated violations
-    /moderation kick users:@user reason:Inappropriate behavior
+    /moderation ban users:@user1 reason:Repeated violations delete-days:1
+    /moderation unban users:123456789012345678
+    /moderation kick users:@user1 reason:Inappropriate behavior
+    /moderation list-bans
     ```
   </Tab>
   <Tab value="Purge">
     Bulk delete messages:
+
     ```bash
     /moderation purge amount:50
-    /moderation purge amount:100 user:@spammer
+    ```
+  </Tab>
+  <Tab value="List Timeouts">
+    View all currently timed-out members:
+
+    ```bash
+    /moderation timeouts
     ```
   </Tab>
 </Tabs>
@@ -57,7 +75,7 @@ import { Cards, Card } from "fumadocs-ui/components/card";
 
 <Callout type="info">
   - **Moderate Members** — Required for timeout
-  - **Ban Members** — Required for ban
+  - **Ban Members** — Required for ban and unban
   - **Kick Members** — Required for kick
   - **Manage Messages** — Required for purge
 </Callout>
@@ -65,32 +83,13 @@ import { Cards, Card } from "fumadocs-ui/components/card";
 ## What You'll See
 
 <Callout type="info">
-  Confirmation embeds for each moderation action with details about who was
-  moderated, the reason, and duration. Actions are logged in the user's
-  moderation history for future reference.
+  Confirmation embeds for each moderation action with details about who was moderated, case ID, reason, and duration. Actions are logged in the user's moderation history for future reference.
 </Callout>
 
-## Troubleshooting
+## Restrictions & Limits
 
 <Callout type="warning">
-  - **Cannot moderate user:** You can only moderate users with a lower role than
-  yours. Server owners and bots cannot be moderated.
-  <br />- **Duration too long:** Timeouts have a maximum of 28 days.
-  <br />- **Purge limit:** Discord only allows purging messages less than 14
-  days old.
+  - **Role Hierarchy:** You can only moderate users with a lower role than yours. Server owners and bot accounts cannot be moderated.
+  - **Duration Cap:** Timeouts have a maximum limit of 28 days.
+  - **Purge Limit:** Discord only allows purging messages less than 14 days old.
 </Callout>
-
-## Related Commands
-
-<Cards>
-  <Card
-    title="/ticket"
-    description="Manage the ticket support system"
-    href="./ticket"
-  />
-  <Card
-    title="/temp-roles"
-    description="Assign temporary roles"
-    href="./temp-roles"
-  />
-</Cards>

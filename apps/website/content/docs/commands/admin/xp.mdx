@@ -1,6 +1,6 @@
 ---
-title: XP
-description: Manage the server XP system. Configure experience point rewards, level requirements, settings, and XP system behavior.
+title: XP Settings & Rewards
+description: Manage the server XP system. Configure experience point rewards, level requirements, settings, and level-up role rewards.
 keywords: xp, experience, settings, level, configuration, rewards, roles
 ---
 
@@ -12,72 +12,48 @@ import { Cards, Card } from "fumadocs-ui/components/card";
 
 <Cards>
   <Card title="settings" description="Interactive dashboard to manage XP system settings and toggles" />
-  <Card title="rewards" description="Add, remove, or list role rewards for reaching specific levels" />
-  <Card title="mode" description="Change how XP and levels are calculated (e.g. Chat vs Voice focus)" />
+  <Card title="rewards add" description="Add a role reward for reaching a specific level" />
+  <Card title="rewards remove" description="Remove a level role reward" />
+  <Card title="rewards list" description="List all configured level role rewards" />
+  <Card title="rewards mode" description="Set reward mode to stack (keep old roles) or replace" />
 </Cards>
 
 ## Usage Examples
 
-<Tabs items={["Settings", "Rewards", "Mode"]}>
+<Tabs items={["Settings", "Role Rewards", "Reward Mode"]}>
   <Tab value="Settings">
-    Open the XP settings dashboard:
+    Open the interactive XP settings dashboard:
     ```bash
     /xp settings
     ```
-    The bot will display an interactive interface allowing you to toggle message XP, voice XP, edit cooldown modifiers, and reset settings easily.
+    The bot will display an interactive interface allowing you to toggle message XP, command XP, role XP, and voice XP.
   </Tab>
-  <Tab value="Rewards">
+  <Tab value="Role Rewards">
     Manage role rewards for leveling up:
     ```bash
     /xp rewards add level:10 role:@ActiveMember
     /xp rewards remove level:10 role:@ActiveMember
     /xp rewards list
     ```
-    When users reach the specified level, they will automatically be granted the chosen role.
+    When users reach the specified level, they automatically receive the reward role.
   </Tab>
-  <Tab value="Mode">
-    Adjust the XP progression curve:
+  <Tab value="Reward Mode">
+    Configure whether level roles stack or replace lower roles:
     ```bash
-    /xp mode mode:classic
+    /xp rewards mode mode:stack
+    /xp rewards mode mode:replace
     ```
-    Available calculation modes dictate how difficult it is to level up.
   </Tab>
 </Tabs>
 
 ## Permissions Required
 
 <Callout type="info">
-  - **Manage Server:** Required for settings and mode
-  - **Manage Roles:** Required for role rewards
+  - **Manage Server** permission required
 </Callout>
 
 ## What You'll See
 
 <Callout type="info">
-  Interactive management interfaces with toggles. Role rewards are stored securely and applied automatically as users chat and participate in the server.
+  Interactive management interfaces with toggles. Role rewards are stored securely and applied automatically as users chat and gain experience in the server.
 </Callout>
-
-## Troubleshooting
-
-<Callout type="warning">
-  - **Permission denied:** Ensure you have Manage Server or Manage Roles permissions depending on the subcommand.
-  <br />
-  - **Rewards not applying:** Ensure the bot's role is higher in the hierarchy than the reward roles it tries to grant.
-  <br />
-  - **No XP earned:** Check `/xp settings` to verify the XP system is enabled for the correct activities (messages, voice).
-</Callout>
-
-## Related Commands
-
-<Cards>
-  <Card
-    title="/level"
-    description="Check user level and experience"
-    href="../general/level"
-  />
-  <Card
-    title="/leaderboard"
-    description="View server experience leaderboard"
-    href="../general/leaderboard"
-  />
-</Cards>

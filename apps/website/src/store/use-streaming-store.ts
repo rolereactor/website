@@ -33,6 +33,7 @@ export interface StreamConfig {
     giftSub: boolean;
     raid: boolean;
     resub: boolean;
+    [key: string]: boolean;
   };
 }
 
@@ -90,6 +91,10 @@ export interface Diagnostics {
 
 // ─── State ──────────────────────────────────────────────────────────────────
 
+interface PlatformAvailability {
+  enabled: boolean;
+}
+
 interface StreamingState {
   // Per-guild caches
   statusCache: Record<string, StreamConnection[]>;
@@ -99,6 +104,9 @@ interface StreamingState {
   quotesCache: Record<string, TwitchQuote[]>;
   timersCache: Record<string, TwitchTimer[]>;
   diagCache: Record<string, Diagnostics>;
+
+  // Platform availability (from bot config)
+  platforms: Record<string, PlatformAvailability>;
 
   // Loading/error
   isLoading: Record<string, boolean>;
@@ -118,8 +126,8 @@ interface StreamingState {
     guildId: string,
     config: Partial<StreamConfig>
   ) => Promise<void>;
-  connect: (guildId: string) => Promise<string>;
-  disconnect: (guildId: string) => Promise<void>;
+  connect: (guildId: string, platform?: string) => Promise<string>;
+  disconnect: (guildId: string, platform?: string) => Promise<void>;
   testAlert: (guildId: string, type: string) => Promise<void>;
 
   addCommand: (
@@ -196,6 +204,7 @@ export const useStreamingStore = create<StreamingState>()(
       quotesCache: {},
       timersCache: {},
       diagCache: {},
+      platforms: {},
       isLoading: {},
       isError: {},
       lastFetched: {},
@@ -208,11 +217,15 @@ export const useStreamingStore = create<StreamingState>()(
 
         set({ isLoading: { ...get().isLoading, [`status:${guildId}`]: true } });
         try {
-          const data = await apiFetch<{ connections: StreamConnection[] }>(
+          const data = await apiFetch<{
+            connections: StreamConnection[];
+            platforms: Record<string, PlatformAvailability>;
+          }>(
             `/api/stream/${guildId}/status`
           );
           set({
             statusCache: { ...get().statusCache, [guildId]: data.connections },
+            platforms: data.platforms || get().platforms,
             lastFetched: {
               ...get().lastFetched,
               [`status:${guildId}`]: Date.now(),
@@ -442,16 +455,25 @@ export const useStreamingStore = create<StreamingState>()(
         await get().fetchConfig(guildId, true);
       },
 
-      connect: async (guildId) => {
+      connect: async (guildId, platform = "twitch") => {
         const data = await apiFetch<{ url: string }>(
-          `/api/stream/${guildId}/connect`,
+          `/api/stream/${guildId}/connect?platform=${platform}`,
           { method: "POST" }
         );
         return data.url;
       },
 
-      disconnect: async (guildId) => {
-        await fetch(`/api/stream/${guildId}/disconnect`, { method: "DELETE" });
+      disconnect: async (guildId, platform = "twitch") => {
+        const res = await fetch(
+          `/api/stream/${guildId}/disconnect?platform=${platform}`,
+          { method: "DELETE" }
+        );
+        if (!res.ok) {
+          const data = await res.json().catch(() => null);
+          throw new Error(
+            (data?.error as string) || `Disconnect failed (${res.status})`
+          );
+        }
         await get().fetchStatus(guildId, true);
       },
 
@@ -569,7 +591,6 @@ export const useStreamingStore = create<StreamingState>()(
       name: "live-reactor-store",
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
-        statusCache: state.statusCache,
         configCache: state.configCache,
       }),
     }

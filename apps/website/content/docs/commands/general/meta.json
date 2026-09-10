@@ -2,21 +2,21 @@
   "title": "General",
   "pages": [
     "help",
+    "engine",
+    "vote",
+    "level",
+    "leaderboard",
+    "userinfo",
+    "serverinfo",
+    "wyr",
+    "rps",
+    "8ball",
+    "avatar",
+    "poll",
     "premium",
     "stats",
     "support",
     "invite",
-    "ping",
-    "8ball",
-    "avatar",
-    "core",
-    "poll",
-    "level",
-    "leaderboard",
-    "rps",
-    "serverinfo",
-    "userinfo",
-    "vote",
-    "wyr"
+    "ping"
   ]
 }

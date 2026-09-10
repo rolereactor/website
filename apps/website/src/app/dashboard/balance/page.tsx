@@ -10,8 +10,8 @@ export default function BillingPage() {
       <PageHeader
         category="Account"
         categoryIcon={Zap}
-        title="Core & Sparks"
-        description="Manage your Paid Cores, reward Sparks, and redeem promo codes"
+        title="Balance"
+        description="Manage your Cores, Sparks, and redeem promo codes"
       />
 
       <BillingSection />

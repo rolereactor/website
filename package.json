@@ -1,5 +1,5 @@
 {
-  "name": "role-reactor-monorepo",
+  "name": "rolereactor",
   "private": true,
   "scripts": {
     "build": "turbo build",

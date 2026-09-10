@@ -339,7 +339,7 @@ export function ToolPageClient({ tool }: ToolPageClientProps) {
 
           {/* Fix #6: File info in sidebar */}
           {selectedFile && !resultBlob && !isProcessing && (
-            <div className="flex items-center gap-2 rounded-lg border border-white/8 bg-white/3 px-3 py-2 text-xs">
+            <div className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs">
               <FileImage className="h-3.5 w-3.5 shrink-0 text-white/30" />
               <div className="min-w-0 flex-1">
                 <p className="truncate font-medium text-white/60">
@@ -357,14 +357,14 @@ export function ToolPageClient({ tool }: ToolPageClientProps) {
             onClick={handleProcess}
             disabled={isProcessDisabled}
             size="lg"
-            className={cn(
-              "w-full font-semibold transition-all",
+            variant={
               selectedFile && !hasInsufficientBalance
                 ? isUpscale
-                  ? "bg-amber-500 text-white hover:bg-amber-400 shadow-[0_0_20px_rgba(245,158,11,0.25)]"
-                  : "bg-cyan-600 text-white hover:bg-cyan-500 shadow-[0_0_20px_rgba(34,211,238,0.2)]"
-                : "bg-white/5 text-white/30"
-            )}
+                  ? "premium"
+                  : "cyber"
+                : "secondary"
+            }
+            className="w-full"
           >
             {isProcessing ? (
               <>
@@ -388,7 +388,7 @@ export function ToolPageClient({ tool }: ToolPageClientProps) {
                 variant="outline"
                 size="lg"
                 onClick={handleReset}
-                className="w-full border-white/10 bg-white/5 text-white hover:bg-white/10 font-semibold"
+                className="w-full"
               >
                 <RotateCcw className="mr-2 h-4 w-4" />
                 Choose Different Image
@@ -401,12 +401,8 @@ export function ToolPageClient({ tool }: ToolPageClientProps) {
               <Button
                 onClick={handleDownload}
                 size="lg"
-                className={cn(
-                  "w-full font-semibold transition-all",
-                  isUpscale
-                    ? "bg-amber-500 text-white hover:bg-amber-400 shadow-[0_0_20px_rgba(245,158,11,0.25)]"
-                    : "bg-cyan-600 text-white hover:bg-cyan-500 shadow-[0_0_20px_rgba(34,211,238,0.2)]"
-                )}
+                variant={isUpscale ? "premium" : "cyber"}
+                className="w-full"
               >
                 <Download className="mr-2 h-4 w-4" />
                 Download Result
@@ -415,7 +411,7 @@ export function ToolPageClient({ tool }: ToolPageClientProps) {
                 variant="outline"
                 size="lg"
                 onClick={handleReset}
-                className="w-full border-white/10 bg-white/5 text-white hover:bg-white/10 font-semibold"
+                className="w-full"
               >
                 <RotateCcw className="mr-2 h-4 w-4" />
                 New Image

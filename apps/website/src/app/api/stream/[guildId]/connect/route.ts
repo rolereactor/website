@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { streamProxy } from "../../_lib/proxy";
+import { auth } from "@/auth";
+import { botFetch } from "@/lib/bot-fetch";
 import { isValidSnowflake } from "@/lib/api-validation";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ guildId: string }> }
 ) {
   const { guildId } = await params;
@@ -17,5 +18,42 @@ export async function POST(
     );
   }
 
-  return streamProxy("POST", guildId, `/stream/guilds/${guildId}/connect`);
+  const session = await auth();
+  if (!session) {
+    return NextResponse.json(
+      { success: false, error: "Unauthorized" },
+      { status: 401 }
+    );
+  }
+
+  const ALLOWED_PLATFORMS = ["twitch", "youtube", "kick"];
+  const requested = request.nextUrl.searchParams.get("platform") || "twitch";
+  const platform = ALLOWED_PLATFORMS.includes(requested) ? requested : "twitch";
+  const userId = session.user?.id;
+
+  const response = await botFetch(
+    `/stream/guilds/${guildId}/connect?platform=${platform}`,
+    { method: "POST", userId }
+  );
+
+  const text = await response.text();
+  let data: Record<string, unknown> | null = null;
+  try {
+    if (text) data = JSON.parse(text);
+  } catch {
+    // not JSON
+  }
+
+  if (!response.ok) {
+    const message =
+      data && typeof data === "object" && "message" in data
+        ? String((data as Record<string, unknown>).message)
+        : `Bot returned ${response.status}`;
+    return NextResponse.json(
+      { success: false, error: message },
+      { status: response.status }
+    );
+  }
+
+  return NextResponse.json(data ?? { success: true });
 }

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { botFetch } from "@/lib/bot-fetch";
+import { botFetch, isBotUnavailableError } from "@/lib/bot-fetch";
 
 /**
  * GET /api/user/referral
@@ -47,8 +47,8 @@ export async function GET() {
     return NextResponse.json(data);
   } catch (error) {
     const err = error as Error;
-    console.error("Referral fetch error:", err);
-    if (err.message?.includes("ECONNREFUSED") || err.message?.includes("fetch failed")) {
+    console.error("Referral fetch error:", err.message ?? err);
+    if (isBotUnavailableError(err)) {
       return NextResponse.json(
         { success: false, error: "Bot service unreachable" },
         { status: 503 }

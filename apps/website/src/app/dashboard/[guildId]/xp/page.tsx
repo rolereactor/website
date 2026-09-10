@@ -8,6 +8,7 @@ import {
   Search,
   Save,
   Loader2,
+  AlertTriangle,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -18,7 +19,7 @@ import { useProEngineStore } from "@/store/use-pro-engine-store";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PageHeader } from "@/app/dashboard/_components/page-header";
-import { ErrorView } from "@/components/common/error-view";
+import { StatePanel } from "@/components/common/state-panel";
 import { Button } from "@/components/ui/button";
 
 import { NodeLoader } from "@/components/common/node-loader";
@@ -112,11 +113,13 @@ export default function XPPage({ params }: XPPageProps) {
           description="Monitor community activity and manage leveling rewards for"
           serverName={guildName}
         />
-        <ErrorView
+        <StatePanel
+          variant="error"
+          icon={AlertTriangle}
           title="System Alert"
-          message={isError.message || "Failed to load XP data."}
-          onRetry={() => fetchXPData(guildId, true)}
-          showHome={false}
+          description={isError.message || "Failed to load XP data."}
+          actionLabel="Try Again"
+          onAction={() => fetchXPData(guildId, true)}
         />
       </div>
     );

@@ -12,10 +12,10 @@ import {
   Cpu,
   Activity,
   Lock,
-  Wallet,
   Server,
+  AlertTriangle,
 } from "lucide-react";
-import { ErrorView } from "@/components/common/error-view";
+import { StatePanel } from "@/components/common/state-panel";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -127,11 +127,13 @@ export function ConfigViewer() {
 
   if (error) {
     return (
-      <ErrorView
+      <StatePanel
+        variant="error"
+        icon={AlertTriangle}
         title="Access Failed"
-        message={error}
-        onRetry={fetchConfig}
-        showHome={false}
+        description={error}
+        actionLabel="Try Again"
+        onAction={fetchConfig}
       />
     );
   }

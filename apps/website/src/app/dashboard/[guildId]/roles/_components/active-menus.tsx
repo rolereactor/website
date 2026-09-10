@@ -1,6 +1,7 @@
 "use client";
 
 import { NodeLoader } from "@/components/common/node-loader";
+import { StatePanel } from "@/components/common/state-panel";
 
 import { useState, useCallback, useEffect, useMemo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -33,9 +34,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { CyberpunkBackground } from "@/components/common/cyberpunk-background";
-import { cn } from "@/lib/utils";
-import { audiowide } from "@/lib/fonts";
 import { toast } from "@/lib/toast";
 import { useGuildStore } from "@/store/use-guild-store";
 import { BundleSection } from "./bundle-section";
@@ -209,19 +207,13 @@ export function ActiveMenus({
 
   if (error) {
     return (
-      <div className="absolute inset-0 z-40 flex items-center justify-center bg-background">
-        <Card className="border-red-500/20 bg-red-500/5 max-w-lg w-full">
-          <CardContent className="p-8 flex flex-col items-center text-center">
-            <AlertTriangle className="size-8 text-red-500 mb-4 animate-pulse" />
-            <p className="text-red-400 font-mono text-sm uppercase tracking-widest font-bold">
-              Data Synchronization Failed
-            </p>
-            <p className="text-zinc-500 text-xs mt-2">
-              Failed to load active setups. Please refresh the page or try again
-              later.
-            </p>
-          </CardContent>
-        </Card>
+      <div className="space-y-6">
+        <StatePanel
+          variant="error"
+          icon={AlertTriangle}
+          title="Data Synchronization Failed"
+          description="Failed to load active setups. Please refresh the page or try again later."
+        />
       </div>
     );
   }
@@ -239,30 +231,12 @@ export function ActiveMenus({
 
   if (roleMappings.length === 0) {
     return (
-      <Card variant="cyberpunk" className="overflow-hidden relative group">
-        <CyberpunkBackground
-          gridSize={20}
-          gridOpacity={0.03}
-          gridColor="#06b6d4"
-        />
-        <CardContent className="p-12 flex flex-col items-center text-center relative z-10 space-y-4">
-          <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 mb-2">
-            <Activity className="w-8 h-8" />
-          </div>
-          <h3
-            className={cn(
-              "text-xl text-white tracking-wider",
-              audiowide.className
-            )}
-          >
-            No Active Setups
-          </h3>
-          <p className="text-zinc-400 text-sm max-w-sm">
-            You haven&apos;t created any Reaction Role setups yet. Switch to the
-            &quot;Create Setup&quot; tab to get started.
-          </p>
-        </CardContent>
-      </Card>
+      <StatePanel
+        variant="empty"
+        icon={Activity}
+        title="No Active Setups"
+        description='You haven&apos;t created any Reaction Role setups yet. Switch to the "Create Setup" tab to get started.'
+      />
     );
   }
 

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { CyberpunkBackground } from "@/components/common/cyberpunk-background";
+import { StatePanel } from "@/components/common/state-panel";
 
 const audiowide = Audiowide({
   subsets: ["latin"],
@@ -219,41 +220,21 @@ interface LockedStateProps {
 
 export function LockedState({ onActivate }: LockedStateProps) {
   return (
-    <Card
-      variant="cyberpunk"
-      showGrid
-      className="flex flex-col items-center justify-center text-center border-dashed"
+    <StatePanel
+      variant="locked"
+      icon={Lock}
+      title="Pro Engine Locked"
+      description="No active subscription found. Activate Pro Engine to manage premium settings for this server."
     >
-      <div className="absolute inset-0 bg-linear-to-b from-amber-500/5 to-transparent pointer-events-none" />
-      <div className="relative z-10 py-24 w-full flex flex-col items-center justify-center">
-        <div className="p-8 bg-zinc-900 rounded-2xl border border-white/5 shadow-2xl relative group">
-          <div className="absolute -inset-4 bg-amber-500/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
-          <Lock className="w-16 h-16 text-zinc-700 group-hover:text-amber-500 transition-colors" />
-        </div>
-        <div className="max-w-md space-y-3 mt-6">
-          <h3
-            className={cn(
-              "text-3xl font-black text-white uppercase tracking-widest",
-              audiowide.className
-            )}
-          >
-            Pro Engine Locked
-          </h3>
-          <p className="text-zinc-500 font-bold text-sm leading-relaxed">
-            No active subscription found. Activate Pro Engine to manage premium
-            settings for this server.
-          </p>
-        </div>
-        <Button
-          variant="cyber"
-          onClick={onActivate}
-          className="cursor-pointer h-14 px-10 tracking-widest mt-6"
-        >
-          Activate Now
-          <Zap className="ml-2 w-4 h-4 fill-black group-hover:animate-pulse" />
-        </Button>
-      </div>
-    </Card>
+      <Button
+        variant="cyber"
+        onClick={onActivate}
+        className="cursor-pointer h-14 px-10 tracking-widest mt-2"
+      >
+        Activate Now
+        <Zap className="ml-2 w-4 h-4 fill-black group-hover:animate-pulse" />
+      </Button>
+    </StatePanel>
   );
 }
 

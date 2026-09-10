@@ -30,6 +30,8 @@ const buttonVariants = cva(
           "text-red-500 hover:text-red-400 hover:bg-red-950/30 hover:shadow-[0_0_15px_-5px_rgba(239,68,68,0.4)] font-mono tracking-wide hover-glitch border border-red-900/0 hover:border-red-500/30 rounded-lg text-xs uppercase",
         cyber:
           "bg-cyan-500 text-black font-bold uppercase tracking-wide text-xs hover:bg-cyan-400 hover:shadow-[0_0_25px_-5px_rgba(6,182,212,0.6)] rounded-lg shadow-[0_0_15px_-3px_rgba(6,182,212,0.4)]",
+        premium:
+          "bg-amber-500 text-black font-bold uppercase tracking-wide text-xs hover:bg-amber-400 hover:shadow-[0_0_25px_-5px_rgba(245,158,11,0.6)] rounded-lg shadow-[0_0_15px_-3px_rgba(245,158,11,0.4)]",
         discord:
           "bg-[#5865F2] text-white font-bold uppercase tracking-wide text-xs hover:bg-[#4752C4] hover:shadow-[0_0_25px_-5px_rgba(88,101,242,0.6)] rounded-lg shadow-[0_0_15px_-3px_rgba(88,101,242,0.4)]",
         plasma:

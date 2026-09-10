@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter, useParams } from "next/navigation";
-import { Crown, Zap } from "lucide-react";
+import { Crown, Zap , AlertTriangle} from "lucide-react";
 import { toast } from "@/lib/toast";
 import { useSWRConfig } from "swr";
 
@@ -11,7 +11,7 @@ import { useServerStore } from "@/store/use-server-store";
 import { useUserStore } from "@/store/use-user-store";
 import { useProEngineStore } from "@/store/use-pro-engine-store";
 import { useSession } from "next-auth/react";
-import { ErrorView } from "@/components/common/error-view";
+import { StatePanel } from "@/components/common/state-panel";
 import { PremiumGuard } from "@/app/dashboard/_components/premium-guard";
 
 import { ProEngineSettings } from "./_components/settings";
@@ -205,11 +205,13 @@ export default function ProEnginePage() {
           serverName={guildName}
           description={""}
         />
-        <ErrorView
+        <StatePanel
+          variant="error"
+          icon={AlertTriangle}
           title="Failed to Load Settings"
-          message={isError.message || "Could not retrieve Pro Engine status."}
-          onRetry={() => fetchSettings(guildId, true)}
-          showHome={false}
+          description={isError.message || "Could not retrieve Pro Engine status."}
+          actionLabel="Try Again"
+          onAction={() => fetchSettings(guildId, true)}
         />
       </div>
     );

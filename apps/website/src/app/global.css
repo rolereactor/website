@@ -1205,6 +1205,13 @@
     @apply bg-background text-foreground;
   }
 
+  /* Overlay pages: force transparent background for OBS */
+  html.overlay-page,
+  body.overlay-page,
+  body.overlay-page > * {
+    background: transparent !important;
+  }
+
   /* Hide number input spinners */
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button {

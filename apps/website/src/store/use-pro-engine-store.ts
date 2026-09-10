@@ -71,8 +71,13 @@ export const useProEngineStore = create<ProEngineState>()(
               errorMsg = `Error ${res.status}: ${res.statusText}`;
             }
             console.warn(`[Pro Engine] API returned ${res.status}:`, errorMsg);
-            // Keep cached data, don't throw error
-            set({ isLoading: false });
+            // Keep cached data; surface error only when nothing to show
+            set({
+              isLoading: false,
+              ...(cachedSettings
+                ? {}
+                : { isError: new Error(errorMsg) }),
+            });
             return;
           }
 
@@ -85,7 +90,16 @@ export const useProEngineStore = create<ProEngineState>()(
               result.error.format()
             );
             // Keep cached data on validation error
-            set({ isLoading: false });
+            set({
+              isLoading: false,
+              ...(cachedSettings
+                ? {}
+                : {
+                    isError: new Error(
+                      "Received invalid settings data from the bot."
+                    ),
+                  }),
+            });
             return;
           }
 
@@ -96,16 +110,23 @@ export const useProEngineStore = create<ProEngineState>()(
             lastFetched: { ...get().lastFetched, [guildId]: now },
             currentGuildId: guildId,
             isLoading: false,
+            isError: null,
           });
         } catch (error) {
-          // Network error - keep cached data
+          // Network error - keep cached data; surface error only when nothing to show
           console.warn(
             "[Pro Engine] Network error, keeping cached data:",
             error instanceof Error ? error.message : error
           );
           set({
             isLoading: false,
-            // Don't set isError to prevent UI from showing error state
+            ...(cachedSettings
+              ? {}
+              : {
+                  isError: new Error(
+                    "Could not reach the bot service. Please try again."
+                  ),
+                }),
           });
         }
       },

@@ -1,7 +1,7 @@
 import "server-only";
 import { cache } from "react";
 import { auth } from "@/auth";
-import { botFetchJson } from "@/lib/bot-fetch";
+import { botFetchJson, isBotUnavailableError } from "@/lib/bot-fetch";
 import type { DiscordGuild } from "@/store/use-server-store";
 import { unstable_cache } from "next/cache";
 
@@ -138,15 +138,19 @@ export const getManageableGuilds = cache(async () => {
       // Save last known good state
       BOT_INSTALL_CACHE.set(cacheKey, installedGuildIds);
     } catch (e) {
-      console.warn(
-        "[Server] Bot API /guilds/check failed. Attempting to use memory fallback...",
-        e
-      );
-      if (BOT_INSTALL_CACHE.has(cacheKey)) {
-        installedGuildIds = BOT_INSTALL_CACHE.get(cacheKey) || [];
+      if (isBotUnavailableError(e)) {
+        console.warn(
+          "[Server] Bot API /guilds/check timed out or is unreachable. Using memory fallback..."
+        );
       } else {
-        throw e; // No fallback available, propagate error
+        console.warn(
+          "[Server] Bot API /guilds/check failed. Attempting to use memory fallback...",
+          e
+        );
       }
+      // Use cached value if available, otherwise fall back to [] gracefully.
+      // The bot being unreachable should never prevent the dashboard from loading.
+      installedGuildIds = BOT_INSTALL_CACHE.get(cacheKey) ?? [];
     }
 
     return {
@@ -154,7 +158,8 @@ export const getManageableGuilds = cache(async () => {
       installedGuildIds,
     };
   } catch (error) {
-    console.error("[Server] Failed to fetch manageable guilds:", error);
+    const err = error ?? new Error("Unknown error");
+    console.error("[Server] Failed to fetch manageable guilds:", err);
 
     // If the entire thing fails, but we have some fallback we can try to recover
     const fallbackGuilds =

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { botFetch } from "@/lib/bot-fetch";
+import { botFetch, isBotUnavailableError } from "@/lib/bot-fetch";
 
 /**
  * Real-time Core balance for the authenticated user.
@@ -52,7 +52,7 @@ export async function GET() {
       };
     }
 
-    if (data.status === "success" && data.user) {
+    if ((data.status === "success" || data.success === true) && data.user) {
       const rawCredits = data.user.currentCredits;
       const fixedCredits = rawCredits
         ? Number(Number(rawCredits).toFixed(2))
@@ -75,7 +75,14 @@ export async function GET() {
       { success: false, error: "Invalid response format" },
       { status: 500 }
     );
-  } catch {
+  } catch (error) {
+    const err = error as Error;
+    if (isBotUnavailableError(err)) {
+      return NextResponse.json(
+        { success: false, error: "Bot service unreachable" },
+        { status: 503 }
+      );
+    }
     return NextResponse.json(
       { success: false, error: "Failed to fetch balance" },
       { status: 500 }

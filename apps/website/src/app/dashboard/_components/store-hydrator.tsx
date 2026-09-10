@@ -19,11 +19,10 @@ export function StoreHydrator({
   const hasHydrated = useRef(false);
 
   useEffect(() => {
-    // We use this pattern to hydrate the store as soon as possible
     if (!hasHydrated.current) {
-      // Only update if we actually have data to avoid clearing persisted state
-      // if the server fetch failed/returned empty for some reason
+      hasHydrated.current = true;
       if (guilds.length > 0) {
+        // Server pre-fetched data — hydrate the store immediately
         useServerStore.setState({
           guilds,
           installedGuildIds,
@@ -31,8 +30,11 @@ export function StoreHydrator({
           isFetching: false,
           lastFetched: Date.now(),
         });
+      } else {
+        // Server returned nothing (bot offline / no guilds) — mark loading done
+        // so the client's fetchServers can take over
+        useServerStore.setState({ isLoading: false, isFetching: false });
       }
-      hasHydrated.current = true;
     }
   }, [guilds, installedGuildIds]);
 

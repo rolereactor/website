@@ -8,6 +8,7 @@ import {
   Save,
   Loader2,
   Send,
+  AlertTriangle,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -17,7 +18,7 @@ import { useProEngineStore } from "@/store/use-pro-engine-store";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PageHeader } from "@/app/dashboard/_components/page-header";
-import { ErrorView } from "@/components/common/error-view";
+import { StatePanel } from "@/components/common/state-panel";
 import { Button } from "@/components/ui/button";
 
 import { NodeLoader } from "@/components/common/node-loader";
@@ -120,15 +121,17 @@ export default function WelcomePage({ params }: WelcomePageProps) {
           description="Configure automatic welcome messages for new members in"
           serverName={guildName}
         />
-        <ErrorView
+        <StatePanel
+          variant="error"
+          icon={AlertTriangle}
           title={isBotOffline ? "Bot Service Offline" : "System Alert"}
-          message={
+          description={
             isBotOffline
               ? "The bot service is currently unavailable. Please ensure the bot is running and try again."
               : isError.message || "Failed to load welcome data."
           }
-          onRetry={() => fetchWelcomeData(guildId, true)}
-          showHome={false}
+          actionLabel="Try Again"
+          onAction={() => fetchWelcomeData(guildId, true)}
         />
       </div>
     );

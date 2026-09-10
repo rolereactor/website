@@ -24,20 +24,35 @@ import { Cards, Card } from "fumadocs-ui/components/card";
 
 <Tabs items={["Create Poll", "List Polls", "Manage Polls"]}>
   <Tab value="Create Poll">
-    Create a new poll: ```bash /poll create ``` This opens an interactive modal
-    where you can: - Select poll duration (1 hour to 7 days) - Choose single or
-    multiple choice voting - Enter poll question and options (2-10 options) -
-    Add custom emojis to options
+    Create a new poll:
+    ```bash
+    /poll create
+    ```
+    This opens an interactive modal form where you can:
+    - Select poll duration (1 hour to 7 days)
+    - Choose single or multiple choice voting
+    - Enter poll question and options (2 to 10 options)
+    - Add custom emojis to options
   </Tab>
   <Tab value="List Polls">
-    List all polls in the server: ```bash /poll list /poll list page:2 /poll
-    list show-ended:true ``` Options: - `page`: Page number to display (default:
-    1) - `show-ended`: Include ended polls in the list (default: false)
+    List all active polls in the server:
+    ```bash
+    /poll list
+    /poll list page:2
+    /poll list show-ended:true
+    ```
+    Options:
+    - `page`: Page number to display (default: 1)
+    - `show-ended`: Include ended polls in the list (`true`/`false`)
   </Tab>
   <Tab value="Manage Polls">
-    Manage existing polls: ```bash /poll end poll-id:1234567890 /poll delete
-    poll-id:1234567890 ``` - **End**: End an active poll early (creator or admin
-    only) - **Delete**: Delete a poll permanently (creator or admin only)
+    Manage existing polls:
+    ```bash
+    /poll end poll-id:1234567890
+    /poll delete poll-id:1234567890
+    ```
+    - **End**: End an active poll early (creator or staff only)
+    - **Delete**: Delete a poll permanently (creator or staff only)
   </Tab>
 </Tabs>
 
@@ -64,61 +79,9 @@ import { Cards, Card } from "fumadocs-ui/components/card";
 - **Single Choice**: Users select one option
 - **Multiple Choice**: Users can select multiple options
 
-**Poll Limits:**
-
-- **Options**: 2-10 options maximum
-- **Characters**: 55 characters per option
-- **Duration**: 1 hour to 7 days maximum
-
 ## Permissions Required
 
 <Callout type="info">
-  - **Create Polls:** Anyone can create polls
-  - **Manage Polls:** Poll creators and admins can close or delete polls
-</Callout>
-
-## What You'll See
-
-<Callout type="info">
-  Interactive poll creation form, real-time voting with progress bars, and
-  automatic closing. Great for community decisions and feedback collection!
-</Callout>
-
-## Troubleshooting
-
-<Callout type="warning">
-  - **Poll not creating:** Ensure the bot is online and try again.
-  <br />
-  - **Cannot end/delete poll:** Only the poll creator or users with Manage
-  Messages permission can end/delete polls.
-  <br />- **Poll not showing:** Check that the poll message hasn't been deleted.
-  Use `/poll list` to find the poll ID.
-</Callout>
-
-## Related Commands
-
-<Cards>
-  <Card
-    title="/help"
-    description="Get help and command information"
-    href="./help"
-  />
-  <Card
-    title="/role-reactions"
-    description="Create role selection messages"
-    href="../admin/role-reactions"
-  />
-</Cards>
-
-## Best Practices
-
-<Callout type="success">
-  - Use clear, concise poll questions for better engagement.
-  <br />
-  - Choose appropriate duration based on the importance of the decision.
-  <br />
-  - Consider using multiple choice for preference polls.
-  <br />
-  - End polls early if you have enough responses for a decision.
-  <br />- Keep poll options under 55 characters for better readability.
+  - Anyone can create or list polls (`/poll create`, `/poll list`).
+  - Poll creators and administrators with **Manage Messages** permission can end or delete polls early.
 </Callout>

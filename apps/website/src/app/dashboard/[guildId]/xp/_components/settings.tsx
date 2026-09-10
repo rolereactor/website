@@ -12,6 +12,7 @@ import {
   Globe,
   ExternalLink,
   Copy,
+  AlertTriangle,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -24,7 +25,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ErrorView } from "@/components/common/error-view";
+import { StatePanel } from "@/components/common/state-panel";
 import {
   Card,
   CardContent,
@@ -208,13 +209,15 @@ export const XPSettingsTab = forwardRef<
 
   if (isError && !localSettings) {
     return (
-      <ErrorView
-        title="CORE SYNC FAILED"
-        message={
+      <StatePanel
+        variant="error"
+        icon={AlertTriangle}
+        title="Core Sync Failed"
+        description={
           isError.message || "Failed to load settings. Please try again later."
         }
-        onRetry={() => fetchXPData(guildId, true)}
-        showHome={false}
+        actionLabel="Try Again"
+        onAction={() => fetchXPData(guildId, true)}
       />
     );
   }

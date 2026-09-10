@@ -23,10 +23,15 @@ import { StoreHydrator } from "./_components/store-hydrator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 async function ServerStoreData() {
-  const { guilds, installedGuildIds } = await getManageableGuilds();
-  return (
-    <StoreHydrator guilds={guilds} installedGuildIds={installedGuildIds} />
-  );
+  try {
+    const { guilds, installedGuildIds } = await getManageableGuilds();
+    return (
+      <StoreHydrator guilds={guilds} installedGuildIds={installedGuildIds} />
+    );
+  } catch {
+    // Gracefully render nothing — the client-side fetchServers will handle loading
+    return <StoreHydrator guilds={[]} installedGuildIds={[]} />;
+  }
 }
 
 export default async function DashboardLayout({

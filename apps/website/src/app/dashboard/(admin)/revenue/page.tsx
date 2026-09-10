@@ -20,15 +20,15 @@ import {
   History,
   TrendingUp,
   ArrowUpRight,
-  Bitcoin,
   Coffee,
   CreditCard,
   Wallet,
   Coins,
+  AlertTriangle,
 } from "lucide-react";
+import { StatePanel } from "@/components/common/state-panel";
 import { Badge } from "@/components/ui/badge";
 import { cn, formatCurrency, formatCompactNumber } from "@/lib/utils";
-import { RevenueAreaChart } from "./_components/revenue-chart";
 import { Suspense, lazy } from "react";
 import { NodeLoader } from "@/components/common/node-loader";
 
@@ -137,13 +137,12 @@ async function RevenueContent() {
 
   if (!stats) {
     return (
-      <Card variant="cyberpunk" className="border-red-500/50 bg-red-500/5">
-        <CardContent className="pt-6">
-          <p className="font-mono text-sm text-red-500 font-bold uppercase">
-            Payment Data Unavailable // Connection Error
-          </p>
-        </CardContent>
-      </Card>
+      <StatePanel
+        variant="error"
+        icon={AlertTriangle}
+        title="Payment Data Unavailable"
+        description="Unable to fetch payment statistics from the bot."
+      />
     );
   }
 
