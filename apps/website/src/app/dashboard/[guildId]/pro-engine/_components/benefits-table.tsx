@@ -1,172 +1,19 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Check, X, Crown, Zap, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const benefits = [
-  {
-    name: "Reaction Messages",
-    free: "3",
-    pro: "15",
-    tooltip: "Maximum role reaction messages you can create per server",
-    type: "limit",
-    category: "Role Reactions",
-  },
-  {
-    name: "Emojis per Message",
-    free: "3",
-    pro: "20",
-    tooltip: "Maximum emojis/roles per reaction message",
-    type: "limit",
-    category: "Role Reactions",
-  },
-  {
-    name: "Max Usage Limits",
-    free: true,
-    pro: true,
-    tooltip: "Set maximum number of users who can claim a reaction role",
-    type: "feature",
-    category: "Role Reactions",
-  },
-  {
-    name: "Active Giveaways",
-    free: "3",
-    pro: "20",
-    tooltip: "Maximum concurrent giveaways running at once",
-    type: "limit",
-    category: "Giveaways",
-  },
-  {
-    name: "Max Entries",
-    free: "2,500",
-    pro: "50,000",
-    tooltip: "Maximum participants per giveaway",
-    type: "limit",
-    category: "Giveaways",
-  },
-  {
-    name: "Max Winners",
-    free: "5",
-    pro: "20",
-    tooltip: "Maximum winners per giveaway",
-    type: "limit",
-    category: "Giveaways",
-  },
-  {
-    name: "Level Rewards",
-    free: "5",
-    pro: "Unlimited",
-    tooltip: "Maximum role rewards for level-ups",
-    type: "limit",
-    category: "Leveling",
-  },
-  {
-    name: "Replace Role Mode",
-    free: false,
-    pro: true,
-    tooltip: "Replace lower roles instead of stacking them",
-    type: "feature",
-    category: "Leveling",
-  },
-  {
-    name: "Scheduled Roles",
-    free: "25",
-    pro: "500",
-    tooltip: "Maximum scheduled role assignments",
-    type: "limit",
-    category: "Automation",
-  },
-  {
-    name: "Role Bundles",
-    free: "5",
-    pro: "15",
-    tooltip: "Reusable groups of roles for quick setup",
-    type: "limit",
-    category: "Automation",
-  },
-  {
-    name: "Bulk Actions",
-    free: "25",
-    pro: "250",
-    tooltip: "Maximum users per bulk moderation action",
-    type: "limit",
-    category: "Automation",
-  },
-  {
-    name: "Tickets per Month",
-    free: "50",
-    pro: "500",
-    tooltip: "Monthly ticket creation limit",
-    type: "limit",
-    category: "Ticketing",
-  },
-  {
-    name: "Categories per Panel",
-    free: "3",
-    pro: "20",
-    tooltip: "Maximum ticket categories per panel",
-    type: "limit",
-    category: "Ticketing",
-  },
-  {
-    name: "Transcript Retention",
-    free: "7 days",
-    pro: "Unlimited",
-    tooltip: "How long closed ticket transcripts are stored",
-    type: "limit",
-    category: "Ticketing",
-  },
-  {
-    name: "Export Formats",
-    free: "MD",
-    pro: "HTML, JSON",
-    tooltip: "Transcript export format options",
-    type: "feature",
-    category: "Ticketing",
-  },
-  {
-    name: "Staff Analytics",
-    free: false,
-    pro: true,
-    tooltip: "Track staff ticket handling performance",
-    type: "feature",
-    category: "Ticketing",
-  },
-  {
-    name: "Ticket Automation",
-    free: false,
-    pro: true,
-    tooltip: "Auto-close, reminders, and escalation rules",
-    type: "feature",
-    category: "Ticketing",
-  },
-  {
-    name: "Domain Allowlisting",
-    free: false,
-    pro: true,
-    tooltip: "Whitelist trusted domains while blocking all other links",
-    type: "feature",
-    category: "Auto-Moderation",
-  },
-  {
-    name: "Wildcard Filters",
-    free: false,
-    pro: true,
-    tooltip: "Use wildcard patterns (e.g. *spam*) for flexible word filtering",
-    type: "feature",
-    category: "Auto-Moderation",
-  },
-  {
-    name: "Regex Filters",
-    free: false,
-    pro: true,
-    tooltip: "Advanced regex patterns for precise content moderation",
-    type: "feature",
-    category: "Auto-Moderation",
-  },
-];
+interface Benefit {
+  name: string;
+  category: string;
+  tooltip: string;
+  type: "limit" | "feature";
+  free: string | boolean;
+  pro: string | boolean;
+}
 
 const categoryStyles: Record<
   string,
@@ -209,7 +56,7 @@ function BenefitRow({
   style,
   isFirstOfCategory,
 }: {
-  item: (typeof benefits)[0];
+  item: Benefit;
   style: (typeof categoryStyles)[keyof typeof categoryStyles];
   isFirstOfCategory: boolean;
 }) {
@@ -287,6 +134,24 @@ function BenefitRow({
   );
 }
 
+function LoadingSkeleton() {
+  return (
+    <div className="divide-y divide-white/5">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div key={i} className="grid grid-cols-12 gap-2 px-4 py-3 items-center animate-pulse">
+          <div className="col-span-5 h-4 bg-zinc-800 rounded w-3/4" />
+          <div className="col-span-3 flex justify-center">
+            <div className="h-4 bg-zinc-800 rounded w-8" />
+          </div>
+          <div className="col-span-4 flex justify-center">
+            <div className="h-4 bg-zinc-800 rounded w-8" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 interface ProEngineBenefitsProps {
   isActive?: boolean;
 }
@@ -294,6 +159,26 @@ interface ProEngineBenefitsProps {
 export function ProEngineBenefits({
   isActive = false,
 }: ProEngineBenefitsProps) {
+  const [benefits, setBenefits] = useState<Benefit[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchBenefits() {
+      try {
+        const res = await fetch("/api/premium/benefits");
+        const data = await res.json();
+        if (data.success && data.benefits) {
+          setBenefits(data.benefits);
+        }
+      } catch {
+        // Silently fail — show empty table
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchBenefits();
+  }, []);
+
   return (
     <Card className="border-purple-500/20 bg-zinc-950/50 overflow-hidden">
       {/* Header */}
@@ -348,22 +233,26 @@ export function ProEngineBenefits({
       </div>
 
       {/* Table Body */}
-      <div className="divide-y divide-white/5">
-        {benefits.map((item, index) => {
-          const style = categoryStyles[item.category];
-          const isFirstOfCategory =
-            index === 0 || benefits[index - 1].category !== item.category;
+      {loading ? (
+        <LoadingSkeleton />
+      ) : (
+        <div className="divide-y divide-white/5">
+          {benefits.map((item, index) => {
+            const style = categoryStyles[item.category];
+            const isFirstOfCategory =
+              index === 0 || benefits[index - 1].category !== item.category;
 
-          return (
-            <BenefitRow
-              key={item.name}
-              item={item}
-              style={style}
-              isFirstOfCategory={isFirstOfCategory}
-            />
-          );
-        })}
-      </div>
+            return (
+              <BenefitRow
+                key={item.name}
+                item={item}
+                style={style}
+                isFirstOfCategory={isFirstOfCategory}
+              />
+            );
+          })}
+        </div>
+      )}
 
       {/* Footer */}
       <div className="px-4 py-3 border-t border-white/5 bg-zinc-900/30">
