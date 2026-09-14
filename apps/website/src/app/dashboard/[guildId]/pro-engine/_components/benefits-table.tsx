@@ -266,9 +266,11 @@ function BenefitRow({
           )}
         >
           {typeof item.free === "boolean"
-            ? item.free
-              ? "✅"
-              : "—"
+            ? item.free ? (
+                <Check className="w-4 h-4 text-emerald-400" />
+              ) : (
+                "—"
+              )
             : item.free}
         </span>
       </div>
