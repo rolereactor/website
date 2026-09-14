@@ -39,7 +39,6 @@ import {
   Info,
   Layers,
   MousePointer2,
-  Zap,
   Hash,
   Package,
 } from "lucide-react";
@@ -133,7 +132,7 @@ export function RoleBuilder({
     addReaction,
     removeReaction,
     updateReaction,
-    isPremium,
+    isPremium: _isPremium,
     isActivatingPremium,
     handleActivatePremium,
     isDeploying,
@@ -183,8 +182,6 @@ export function RoleBuilder({
                 <SelectionModePicker
                   mode={selectionMode}
                   setMode={setSelectionMode}
-                  isPremium={isPremium}
-                  setShowPremiumModal={setShowPremiumModal}
                 />
 
                 {/* Hide Role List Toggle */}
@@ -487,15 +484,11 @@ function ChannelSelector({
 interface SelectionModePickerProps {
   mode: string;
   setMode: (val: string) => void;
-  isPremium: boolean;
-  setShowPremiumModal: (val: boolean) => void;
 }
 
 function SelectionModePicker({
   mode,
   setMode,
-  isPremium,
-  setShowPremiumModal,
 }: SelectionModePickerProps) {
   const modes = [
     {
@@ -511,7 +504,6 @@ function SelectionModePicker({
       icon: MousePointer2,
       desc: "Strictly one role allowed. Swaps on click.",
       color: "amber",
-      premium: true,
     },
   ];
 
@@ -519,14 +511,6 @@ function SelectionModePicker({
     <div className="space-y-3 pt-2">
       <div className="flex items-center justify-between px-1">
         <Label className="flex items-center gap-2">Selection Mode</Label>
-        {mode !== "standard" && (
-          <div className="flex items-center gap-1 bg-amber-500/10 px-2 rounded-full border border-amber-500/20">
-            <Zap className="w-2.5 h-2.5 text-amber-400" />
-            <span className="text-[9px] font-black text-amber-400 uppercase tracking-tighter">
-              Premium
-            </span>
-          </div>
-        )}
       </div>
 
       <div className="grid grid-cols-2 gap-3">
@@ -539,13 +523,7 @@ function SelectionModePicker({
             <button
               key={m.id}
               type="button"
-              onClick={() => {
-                if (m.premium && !isPremium) {
-                  setShowPremiumModal(true);
-                  return;
-                }
-                setMode(m.id);
-              }}
+              onClick={() => setMode(m.id)}
               className={cn(
                 "relative h-20 rounded-xl border flex flex-col items-center justify-center gap-1.5 transition-all duration-200 overflow-hidden group/btn cursor-pointer",
                 // Default (inactive)
