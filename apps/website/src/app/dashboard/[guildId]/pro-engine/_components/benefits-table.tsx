@@ -252,27 +252,23 @@ function BenefitRow({
       </div>
 
       {/* Free Value */}
-      <div className="col-span-3 text-center">
-        <span
-          className={cn(
-            "font-mono text-xs",
-            isFeature
-              ? typeof item.free === "boolean"
-                ? item.free
-                  ? "text-emerald-400"
-                  : "text-zinc-700"
-                : "text-zinc-600"
-              : "text-zinc-500"
-          )}
-        >
-          {typeof item.free === "boolean"
-            ? item.free ? (
-                <Check className="w-4 h-4 text-emerald-400" />
-              ) : (
-                "—"
-              )
-            : item.free}
-        </span>
+      <div className="col-span-3 text-center flex items-center justify-center">
+        {typeof item.free === "boolean" ? (
+          item.free ? (
+            <Check className="w-4 h-4 text-emerald-400" />
+          ) : (
+            <span className="font-mono text-xs text-zinc-700">—</span>
+          )
+        ) : (
+          <span
+            className={cn(
+              "font-mono text-xs",
+              isFeature ? "text-zinc-600" : "text-zinc-500"
+            )}
+          >
+            {item.free}
+          </span>
+        )}
       </div>
 
       {/* Pro Value */}
