@@ -9,14 +9,14 @@ const benefits = [
   {
     name: "Reaction Messages",
     free: "3",
-    pro: "20",
+    pro: "15",
     tooltip: "Maximum role reaction messages you can create per server",
     type: "limit",
     category: "Role Reactions",
   },
   {
     name: "Emojis per Message",
-    free: "10",
+    free: "3",
     pro: "20",
     tooltip: "Maximum emojis/roles per reaction message",
     type: "limit",
@@ -24,7 +24,7 @@ const benefits = [
   },
   {
     name: "Max Usage Limits",
-    free: false,
+    free: true,
     pro: true,
     tooltip: "Set maximum number of users who can claim a reaction role",
     type: "feature",
