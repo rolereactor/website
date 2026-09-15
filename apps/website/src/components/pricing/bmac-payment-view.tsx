@@ -68,8 +68,8 @@ export function BmacPaymentView({ onBack, onComplete }: BmacPaymentViewProps) {
         }
 
         const pricingResult = await pricingRes.json();
-        if (pricingResult.success && pricingResult.pricing?.rateCard) {
-          setRateCard(pricingResult.pricing.rateCard);
+        if (pricingResult.success && pricingResult.pricing?.bmacRateCard) {
+          setRateCard(pricingResult.pricing.bmacRateCard);
         }
       } catch (err) {
         setError(
@@ -181,6 +181,9 @@ export function BmacPaymentView({ onBack, onComplete }: BmacPaymentViewProps) {
               </div>
             ))}
           </div>
+          <p className="text-[9px] text-zinc-600 px-1">
+            BMAC rates include platform fees. Crypto payments get full rate.
+          </p>
         </div>
 
         {/* Unique Code */}
