@@ -119,8 +119,12 @@ export function useRoleBuilder(
     isLoading: storeLoading,
   } = useGuildStore();
 
-  const { settings: proSettings, fetchSettings: fetchProSettings } =
-    useProEngineStore();
+  const proSettings = useProEngineStore((state) =>
+    state.currentGuildId === guildId
+      ? state.settingsCache[guildId] ?? null
+      : null,
+  );
+  const fetchProSettings = useProEngineStore((state) => state.fetchSettings);
 
   const serverRoles = useMemo(() => {
     const roles = guildData[guildId]?.roles || [];
