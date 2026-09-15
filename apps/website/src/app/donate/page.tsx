@@ -23,13 +23,12 @@ interface BmacData {
   expiresAt: string;
 }
 
-const rateCard = [
-  { min: 5, max: 9, rate: 15, bonus: 0 },
-  { min: 10, max: 24, rate: 16.5, bonus: 10 },
-  { min: 25, max: 49, rate: 17.4, bonus: 16 },
-  { min: 50, max: 99, rate: 18, bonus: 20 },
-  { min: 100, max: Infinity, rate: 22, bonus: 47 },
-];
+interface RateCardTier {
+  price: number;
+  name: string;
+  totalCores: number;
+  rate: number;
+}
 
 function CodeExpiryTimer({ expiresAt }: { expiresAt: string }) {
   const [timeLeft, setTimeLeft] = useState("");
@@ -80,6 +79,7 @@ export default function DonatePage() {
   const { status } = useSession();
   const router = useRouter();
   const [data, setData] = useState<BmacData | null>(null);
+  const [rateCard, setRateCard] = useState<RateCardTier[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [copiedCode, setCopiedCode] = useState(false);
@@ -100,28 +100,34 @@ export default function DonatePage() {
 
     const generateCode = async () => {
       try {
-        const response = await fetch("/api/payments/buymeacoffee", {
-          method: "POST",
-        });
+        const [codeRes, pricingRes] = await Promise.all([
+          fetch("/api/payments/buymeacoffee", { method: "POST" }),
+          fetch("/api/premium/benefits"),
+        ]);
 
-        if (!response.ok) {
-          const errorData = await response.json();
+        if (!codeRes.ok) {
+          const errorData = await codeRes.json();
           throw new Error(
             errorData.error?.message || "Failed to generate code"
           );
         }
 
-        const result = await response.json();
-        if (result.success && result.data) {
-          setData(result.data);
+        const codeResult = await codeRes.json();
+        if (codeResult.success && codeResult.data) {
+          setData(codeResult.data);
         } else {
           throw new Error("Invalid response from server");
+        }
+
+        const pricingResult = await pricingRes.json();
+        if (pricingResult.success && pricingResult.pricing?.bmacRateCard) {
+          setRateCard(pricingResult.pricing.bmacRateCard);
         }
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "Failed to generate code"
         );
-        toast.error("Failed to generate payment code");
+        toast.error("Failed to load payment data");
       } finally {
         setLoading(false);
       }
@@ -273,24 +279,21 @@ export default function DonatePage() {
               Rate Card
             </h2>
             <div className="space-y-2 relative z-10 bg-black/40 rounded-xl border border-amber-400/5 p-4 mb-4">
-              {rateCard.map((tier, index) => (
+              {rateCard.map((tier) => (
                 <div
-                  key={index}
+                  key={tier.price}
                   className="flex items-center justify-between py-2 border-b border-white/5 last:border-0"
                 >
                   <span className="text-sm text-zinc-300 font-medium">
-                    ${tier.min}
-                    {tier.max !== Infinity ? `–${tier.max}` : "+"}
+                    ${tier.price} {tier.name}
                   </span>
                   <div className="flex items-center gap-3">
                     <span className="text-base font-bold text-cyan-400 drop-shadow-[0_0_5px_rgba(6,182,212,0.3)]">
-                      {tier.rate} cores/$
+                      {tier.totalCores} cores
                     </span>
-                    {tier.bonus > 0 && (
-                      <span className="text-[10px] text-emerald-400 font-bold bg-emerald-400/10 border border-emerald-400/20 px-2 py-0.5 rounded-md drop-shadow-[0_0_5px_rgba(52,211,153,0.3)]">
-                        +{tier.bonus}%
-                      </span>
-                    )}
+                    <span className="text-[10px] text-zinc-500">
+                      ({tier.rate}/$)
+                    </span>
                   </div>
                 </div>
               ))}
@@ -299,7 +302,7 @@ export default function DonatePage() {
             <div className="relative z-10 bg-blue-500/10 border border-blue-500/20 rounded-xl p-4">
               <p className="text-xs text-blue-200/80 leading-relaxed font-medium">
                 <strong className="text-blue-400 font-bold">Note:</strong> Because Buy Me a Coffee handles donations in $5 "Coffee" increments, you won't see your Core amount on their checkout page. 
-                Our system will automatically read your total donation amount and instantly credit your account using the exact rates above! (e.g., 3 Coffees = $15 = 247 Cores).
+                Our system will automatically read your total donation amount and instantly credit your account using the exact rates above!
               </p>
             </div>
           </div>
