@@ -156,10 +156,17 @@ interface ProEngineBenefitsProps {
   isActive?: boolean;
 }
 
+interface ProPricing {
+  cost: number;
+  period: string;
+  periodDays: number;
+}
+
 export function ProEngineBenefits({
   isActive = false,
 }: ProEngineBenefitsProps) {
   const [benefits, setBenefits] = useState<Benefit[]>([]);
+  const [pricing, setPricing] = useState<ProPricing | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -169,6 +176,9 @@ export function ProEngineBenefits({
         const data = await res.json();
         if (data.success && data.benefits) {
           setBenefits(data.benefits);
+        }
+        if (data.pricing?.pro) {
+          setPricing(data.pricing.pro);
         }
       } catch {
         // Silently fail — show empty table
@@ -205,7 +215,7 @@ export function ProEngineBenefits({
                 className="border-purple-500/30 text-purple-400 bg-purple-500/10 text-[10px]"
               >
                 <Zap className="w-3 h-3 mr-1" />
-                20 Cores / week
+                {pricing?.cost ?? 20} Cores / {pricing?.period ?? "week"}
               </Badge>
             )}
           </div>
