@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -20,6 +20,12 @@ import {
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { CyberpunkBackground } from "@/components/common/cyberpunk-background";
+
+interface ProPricing {
+  cost: number;
+  period: string;
+  periodDays: number;
+}
 
 interface PremiumGuardProps {
   isPremium?: boolean;
@@ -50,13 +56,29 @@ export function PremiumGuard({
     "No Restrictions",
     "Early Access",
   ],
-  buttonText = "UNLOCK FOR 50 CORES",
-  subText = "Deducts 50 Cores every 30 days",
+  buttonText,
+  subText,
   open,
   onOpenChange,
 }: PremiumGuardProps) {
   const params = useParams();
   const guildId = params.guildId as string;
+
+  const [pricing, setPricing] = useState<ProPricing | null>(null);
+
+  useEffect(() => {
+    fetch("/api/premium/benefits")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.pricing?.pro) setPricing(data.pricing.pro);
+      })
+      .catch(() => {});
+  }, []);
+
+  const cost = pricing?.cost ?? 20;
+  const periodDays = pricing?.periodDays ?? 7;
+  const displayButtonText = buttonText ?? `UNLOCK FOR ${cost} CORES`;
+  const displaySubText = subText ?? `Deducts ${cost} Cores every ${periodDays} days`;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -138,7 +160,7 @@ export function PremiumGuard({
             <Button
               variant="glitch"
               size="lg"
-              data-text={buttonText}
+              data-text={displayButtonText}
               disabled={isActivating}
               onClick={onActivate}
               className="w-full h-12"
@@ -148,7 +170,7 @@ export function PremiumGuard({
               ) : (
                 <>
                   <Zap className="w-5 h-5 mr-3 fill-current" />
-                  {buttonText}
+                  {displayButtonText}
                 </>
               )}
             </Button>
@@ -157,7 +179,7 @@ export function PremiumGuard({
           <p className="text-[9px] text-zinc-500 text-center tracking-[0.3em] uppercase font-black opacity-60">
             {showTrialOption && onTrial
               ? "7 days free · No cores required · Cancel anytime"
-              : subText}
+              : displaySubText}
           </p>
 
           {/* Learn More Link */}
