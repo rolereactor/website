@@ -36,7 +36,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "@/lib/toast";
 import { useGuildStore } from "@/store/use-guild-store";
-import { BundleSection } from "./bundle-section";
 import useSWR from "swr";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -251,9 +250,6 @@ export function ActiveMenus({
 
   return (
     <>
-      {/* Bundle Section */}
-      <BundleSection guildId={guildId} />
-
       {/* Delete Confirmation Dialog */}
       <Dialog
         open={!!deleteTarget}
@@ -359,7 +355,7 @@ export function ActiveMenus({
                 <p className="text-[11px] text-zinc-500 leading-relaxed">
                   This will{" "}
                   <strong className="text-red-400">permanently delete</strong>{" "}
-                  the role-reaction message from Discord and remove its data.
+                  the role-reaction panel from Discord and remove its data.
                   Members will no longer be able to self-assign roles from this
                   setup.
                 </p>

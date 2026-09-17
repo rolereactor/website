@@ -329,7 +329,7 @@ const Sidebar = forwardRef<
             )}
 
             {/* Subtle grid pattern */}
-            <div className="absolute inset-0 opacity-2 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100" />
+            <div className="absolute inset-0 opacity-2 pointer-events-none bg-[url('https://rolereactor.xyz/noise.svg')] brightness-100" />
 
             <div className="relative z-10 flex flex-col h-full">{children}</div>
           </div>

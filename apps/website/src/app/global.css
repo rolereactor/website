@@ -608,9 +608,16 @@
   }
 
   @keyframes shimmer {
-    100% {
-      transform: translateX(100%);
+    from {
+      transform: translateX(-100%) skewX(-12deg);
     }
+    to {
+      transform: translateX(100%) skewX(-12deg);
+    }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 1s infinite;
   }
 
   /* Glitch Animation for Dialogs */

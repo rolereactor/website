@@ -285,7 +285,7 @@ export default function DonatePage() {
                   className="flex items-center justify-between py-2 border-b border-white/5 last:border-0"
                 >
                   <span className="text-sm text-zinc-300 font-medium">
-                    ${tier.price} {tier.name}
+                    {tier.name}
                   </span>
                   <div className="flex items-center gap-3">
                     <span className="text-base font-bold text-cyan-400 drop-shadow-[0_0_5px_rgba(6,182,212,0.3)]">
@@ -513,8 +513,8 @@ export default function DonatePage() {
               rel="noopener noreferrer"
               className="block group"
             >
-              <Button className="w-full py-6 h-auto rounded-2xl font-black uppercase tracking-widest text-base bg-gradient-to-r from-[#FFDD00] to-[#F5C200] hover:from-[#F5C200] hover:to-[#E0A800] text-black transition-all shadow-[0_0_20px_-5px_rgba(255,221,0,0.5)] border border-[#FFDD00]/50 cursor-pointer relative overflow-hidden">
-                <div className="absolute inset-0 bg-white/20 w-1/2 h-full -skew-x-12 -translate-x-[150%] group-hover:animate-[shimmer_1s_infinite] pointer-events-none" />
+              <Button className="w-full py-6 h-auto rounded-2xl font-black uppercase tracking-widest text-base bg-[#FFDD00] hover:bg-[#E5C800] text-black transition-all shadow-[0_0_20px_0_rgba(255,221,0,0.4)] border border-[#FFDD00]/50 cursor-pointer relative overflow-hidden">
+                <div className="absolute inset-0 w-full bg-white/20 opacity-0 group-hover:opacity-100 group-hover:animate-shimmer pointer-events-none" />
                 <Image
                   src="/bmcbrand/bmc-logo.svg"
                   alt="BMC"

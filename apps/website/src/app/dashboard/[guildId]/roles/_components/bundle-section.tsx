@@ -81,9 +81,25 @@ export function BundleSection({ guildId }: BundleSectionProps) {
     }
   }, [guildId, proSettings, fetchSettings]);
 
-  // Limits based on tier
-  const maxBundles = isPro ? 20 : 5;
-  const maxRolesPerBundle = isPro ? 20 : 5;
+  // Limits based on tier - fetched from API
+  const { data: benefitsData } = useSWR(
+    "/api/premium/benefits",
+    fetcher,
+    { revalidateOnFocus: false }
+  );
+
+  const bundleLimit = benefitsData?.benefits?.find(
+    (b: { name: string }) => b.name === "Bundle Slots"
+  );
+  const rolesPerBundleLimit = benefitsData?.benefits?.find(
+    (b: { name: string }) => b.name === "Roles per Bundle"
+  );
+  const maxBundles = isPro
+    ? Number(bundleLimit?.pro) || 20
+    : Number(bundleLimit?.free) || 5;
+  const maxRolesPerBundle = isPro
+    ? Number(rolesPerBundleLimit?.pro) || 10
+    : Number(rolesPerBundleLimit?.free) || 3;
 
   useEffect(() => {
     if (guildRoles.length === 0) {

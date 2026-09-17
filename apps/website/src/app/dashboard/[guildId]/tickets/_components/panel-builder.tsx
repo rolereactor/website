@@ -6,6 +6,9 @@ import {
   AlertTriangle,
   Hash,
 } from "lucide-react";
+import useSWR from "swr";
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 import {
   Card,
@@ -79,7 +82,20 @@ export function PanelBuilder({
   const { fetchSettings, settingsCache } = useProEngineStore();
   const premiumStatus = settingsCache[guildId] ?? null;
   const isPremium = premiumStatus?.isPremium?.pro || false;
-  const maxPanels = isPremium ? 10 : 3;
+
+  // Fetch limits from API
+  const { data: benefitsData } = useSWR(
+    "/api/premium/benefits",
+    fetcher,
+    { revalidateOnFocus: false }
+  );
+
+  const ticketLimit = benefitsData?.benefits?.find(
+    (b: { name: string }) => b.name === "Categories per Panel"
+  );
+  const maxPanels = isPremium
+    ? Number(ticketLimit?.pro) || 10
+    : Number(ticketLimit?.free) || 3;
   const maxCategories = isPremium ? 20 : 3;
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useWaitForTransactionReceipt } from "wagmi";
 import { toast } from "sonner";
 import { CheckCircle2 } from "lucide-react";
@@ -71,8 +71,11 @@ export function GlobalPaymentRecovery() {
     }
   }, [pendingPayment, isLoading, isSuccess, hasToastTriggered, isVerifying]);
 
+  const hasVerifiedRef = useRef(false);
+
   useEffect(() => {
-    if (isSuccess && pendingPayment && !isVerifying) {
+    if (isSuccess && pendingPayment && !isVerifying && !hasVerifiedRef.current) {
+      hasVerifiedRef.current = true;
       setIsVerifying(true);
 
       fetch("/api/payments/verify-web3", {
@@ -111,13 +114,13 @@ export function GlobalPaymentRecovery() {
         })
         .catch((err) => {
           console.error(err);
+          // Clear pending payment to prevent infinite retry loop
+          localStorage.removeItem("pendingWeb3Payment");
+          setPendingPayment(null);
           toast.error(
             err.message ||
               "Could not verify pending payment. Please contact support."
           );
-        })
-        .finally(() => {
-          setIsVerifying(false);
         });
     }
   }, [isSuccess, pendingPayment, isVerifying, fetchNotifications, fetchUser]);

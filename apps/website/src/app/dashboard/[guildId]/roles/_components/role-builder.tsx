@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { toast } from "@/lib/toast";
 import {
   Select,
   SelectContent,
@@ -139,6 +140,7 @@ export function RoleBuilder({
     isDeploying,
     handleDeploy,
     handleUpdate,
+    maxRolesPerEmoji,
   } = useRoleBuilder(propGuildId, editData);
 
   if (isLoadingRoles) {
@@ -231,6 +233,7 @@ export function RoleBuilder({
                   fetchEmojis={fetchEmojis}
                   guildIconUrl={guildIconUrl}
                   bundles={bundles}
+                  maxRolesPerEmoji={maxRolesPerEmoji}
                 />
                 {reactions.length === 0 && (
                   <div className="py-12 text-center">
@@ -267,8 +270,8 @@ export function RoleBuilder({
               {isDeploying
                 ? "Synchronizing..."
                 : editData
-                  ? "Update Discord Message"
-                  : "Create Discord Message"}
+                  ? "Update Discord Panel"
+                  : "Create Discord Panel"}
             </Button>
             {editData && onCancelEdit && (
               <Button
@@ -649,6 +652,7 @@ interface RoleMappingListProps {
   fetchEmojis: (guildId: string, force?: boolean) => void;
   guildIconUrl: string | null;
   bundles: RoleBundle[];
+  maxRolesPerEmoji: number;
 }
 
 function RoleMappingList({
@@ -668,6 +672,7 @@ function RoleMappingList({
   fetchEmojis,
   guildIconUrl,
   bundles,
+  maxRolesPerEmoji,
 }: RoleMappingListProps) {
   const customEmojis = useMemo(() => {
     return serverEmojis.map((emoji: DiscordEmoji) => ({
@@ -755,6 +760,10 @@ function RoleMappingList({
                 <Select
                   value=""
                   onValueChange={(val) => {
+                    if (selectedRoleIds.length >= maxRolesPerEmoji) {
+                      toast.error(`Maximum ${maxRolesPerEmoji} roles per emoji. Remove a role first.`);
+                      return;
+                    }
                     const role = serverRoles.find(
                       (sr: DiscordRole) => sr.id === val
                     );
@@ -834,13 +843,19 @@ function RoleMappingList({
                         key={bundle._id}
                         className="flex items-center gap-2 cursor-pointer focus:bg-purple-500/10"
                         onSelect={() => {
-                          // Add all bundle roles to this emoji
+                          // Check per-emoji role limit before adding
                           const newRoleIds = [
                             ...selectedRoleIds,
                             ...bundle.roles
                               .map((r) => r.roleId)
                               .filter((id) => !selectedRoleIds.includes(id)),
                           ];
+                          if (newRoleIds.length > maxRolesPerEmoji) {
+                            toast.error(
+                              `Bundle has ${bundle.roles.length} role${bundle.roles.length !== 1 ? "s" : ""}. Adding it would exceed the ${maxRolesPerEmoji} roles per emoji limit (${selectedRoleIds.length} currently). Remove some roles first.`
+                            );
+                            return;
+                          }
                           const newRoleNames = [
                             ...selectedRoleNames,
                             ...bundle.roles

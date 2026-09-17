@@ -34,10 +34,11 @@ export function useCoreBalance() {
     isLoading: isSWRManagerLoading,
     error,
     mutate,
-  } = useSWR(session?.user ? "/api/user/balance" : null, fetcher, {
+  } =   useSWR(session?.user ? "/api/user/balance" : null, fetcher, {
     refreshInterval: 60_000, // Refresh every 60s — staggered from vote-status (45s) and notifications (30s)
     revalidateOnFocus: true, // Refetch when window gains focus
     revalidateOnReconnect: true, // Refetch on reconnect
+    revalidateOnMount: false, // Don't refetch on mount — data is fresh from SWR cache
     dedupingInterval: 5000, // Dedupe requests within 5s
     keepPreviousData: true, // Keep showing old data while fetching new
   });

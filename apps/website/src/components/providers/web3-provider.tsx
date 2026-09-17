@@ -68,6 +68,11 @@ const wagmiAdapter = new WagmiAdapter({
 const queryClient = new QueryClient();
 
 // 3. Create AppKit
+const metadataUrl =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:8080"
+    : "https://rolereactor.xyz";
+
 createAppKit({
   adapters: [wagmiAdapter],
   networks,
@@ -75,7 +80,7 @@ createAppKit({
   metadata: {
     name: "Role Reactor",
     description: "Role Reactor",
-    url: "https://rolereactor.xyz",
+    url: metadataUrl,
     icons: ["https://rolereactor.xyz/logo.png"],
   },
   themeMode: "dark",

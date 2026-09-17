@@ -6,6 +6,7 @@ import { Plus, List, Pencil } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ActiveMenus } from "./active-menus";
+import { BundleSection } from "./bundle-section";
 import { useProEngineStore } from "@/store/use-pro-engine-store";
 import useSWR from "swr";
 
@@ -60,7 +61,22 @@ export function RolesTabs({
     { revalidateOnFocus: false }
   );
 
+  const { data: benefitsData } = useSWR(
+    "/api/premium/benefits",
+    fetcher,
+    { revalidateOnFocus: false }
+  );
+
   const menusCount = menusData?.roleMappings?.length || 0;
+
+  // Check Pro status to use correct limit
+  const { settingsCache, currentGuildId, fetchSettings } = useProEngineStore();
+  const proSettings = settingsCache[currentGuildId ?? guildId] ?? null;
+  const isPro = proSettings?.isPremium?.pro || false;
+
+  const maxPanels = isPro
+    ? (benefitsData?.benefits?.find((b: { name: string }) => b.name === "Reaction Panels")?.pro || "15")
+    : (benefitsData?.benefits?.find((b: { name: string }) => b.name === "Reaction Panels")?.free || "3");
 
   const handleEdit = useCallback(
     (data: EditData) => {
@@ -81,8 +97,6 @@ export function RolesTabs({
     setActiveTab("active");
   }, []);
 
-  const { fetchSettings } = useProEngineStore();
-
   useEffect(() => {
     if (guildId) {
       fetchSettings(guildId);
@@ -92,7 +106,11 @@ export function RolesTabs({
   const isEditing = editData !== null;
 
   return (
-    <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+    <div className="space-y-4">
+      {/* Bundle Section - always visible */}
+      <BundleSection guildId={guildId} />
+
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
       <div className="flex flex-col lg:flex-row items-center justify-between gap-4 mb-5 min-w-0 px-1">
         {/* Usage Display */}
         <div className="flex items-center gap-4 text-sm">
@@ -100,7 +118,7 @@ export function RolesTabs({
             <List className="w-4 h-4 text-cyan-400" />
             <span>
               <span className="text-zinc-200 font-medium">{menusCount}</span>
-              <span className="text-zinc-500">/3 menus</span>
+              <span className="text-zinc-500">/{maxPanels} panels</span>
             </span>
           </div>
         </div>
@@ -153,6 +171,7 @@ export function RolesTabs({
           onSaveComplete={handleSaveComplete}
         />
       </TabsContent>
-    </Tabs>
+      </Tabs>
+    </div>
   );
 }

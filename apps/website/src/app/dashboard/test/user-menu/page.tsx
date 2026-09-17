@@ -70,7 +70,7 @@ export default function UserMenuTestPage() {
         >
           <div className="w-80 h-85 border border-white/10 bg-zinc-950/80 flex flex-col justify-end p-3 relative shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden group/sidebar">
             {/* Grid overlay for sidebar */}
-            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] pointer-events-none" />
+            <div className="absolute inset-0 bg-[url('https://rolereactor.xyz/noise.svg')] opacity-[0.02] pointer-events-none" />
 
             {/* Mock Sidebar Navigation */}
             <div className="absolute inset-x-0 top-0 p-6 space-y-5 opacity-40 group-hover/sidebar:opacity-60 transition-opacity duration-500">

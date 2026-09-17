@@ -12,7 +12,10 @@ import {
   updateReactionRoles,
 } from "@/app/dashboard/_actions/roles";
 import { mutate } from "swr";
+import useSWR from "swr";
 import { useProEngineStore } from "@/store/use-pro-engine-store";
+
+const fetcher = (url: string) => fetch(url).then((r) => r.json());
 import type { EditData } from "@/app/dashboard/[guildId]/roles/_components/roles-tabs";
 
 const EMPTY_EMOJIS: DiscordEmoji[] = [];
@@ -51,6 +54,13 @@ export function useRoleBuilder(
   const currentGuild = useMemo(
     () => guilds.find((g) => g.id === guildId),
     [guilds, guildId]
+  );
+
+  // Fetch benefits for roles per emoji limit
+  const { data: benefitsData } = useSWR(
+    "/api/premium/benefits",
+    fetcher,
+    { revalidateOnFocus: false }
   );
 
   const guildIconUrl = useMemo(() => {
@@ -168,6 +178,16 @@ export function useRoleBuilder(
 
   const isPremium = proSettings?.isPremium?.pro || false;
 
+  const maxRolesPerEmoji = useMemo(() => {
+    const benefit = benefitsData?.benefits?.find(
+      (b: { name: string }) => b.name === "Roles per Emoji"
+    );
+    if (!benefit) return 5; // fallback
+    return isPremium
+      ? Number(benefit.pro) || 10
+      : Number(benefit.free) || 3;
+  }, [benefitsData, isPremium]);
+
   const isLoadingRoles =
     (storeLoading[guildId]?.roles ?? true) &&
     (guildData[guildId]?.roles === null ||
@@ -186,12 +206,16 @@ export function useRoleBuilder(
     const incompleteReactions = reactions.filter(
       (r) => (!r.roleId && !r.roleIds?.length) || !r.emoji
     );
+    const oversizedReactions = reactions.filter(
+      (r) => (r.roleIds?.length || 0) > maxRolesPerEmoji
+    );
     const isReady =
       hasTitle &&
       hasDescription &&
       hasReactions &&
       hasChannel &&
-      incompleteReactions.length === 0;
+      incompleteReactions.length === 0 &&
+      oversizedReactions.length === 0;
 
     return {
       hasTitle,
@@ -199,9 +223,10 @@ export function useRoleBuilder(
       hasReactions,
       hasChannel,
       incompleteReactions,
+      oversizedReactions,
       isReady,
     };
-  }, [title, description, reactions, selectedChannel]);
+  }, [title, description, reactions, selectedChannel, maxRolesPerEmoji]);
 
   useEffect(() => {
     if (!guildId) return;
@@ -436,6 +461,7 @@ export function useRoleBuilder(
     removeReaction,
     updateReaction,
     isPremium,
+    maxRolesPerEmoji,
     proSettings,
     isActivatingPremium,
     handleActivatePremium,

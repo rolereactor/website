@@ -57,7 +57,7 @@ export function Showcase({
           {...props}
         >
           {/* Subtle Grid Pattern */}
-          <div className="absolute inset-0 opacity-3 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150" />
+          <div className="absolute inset-0 opacity-3 pointer-events-none bg-[url('https://rolereactor.xyz/noise.svg')] brightness-100 contrast-150" />
           <div
             className="absolute inset-0 opacity-5 pointer-events-none"
             style={{

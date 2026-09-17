@@ -168,7 +168,7 @@ export function BmacPaymentView({ onBack, onComplete }: BmacPaymentViewProps) {
                 className="flex items-center justify-between"
               >
                 <span className="text-[11px] text-zinc-400 font-medium">
-                  ${tier.price} {tier.name}
+                  {tier.name}
                 </span>
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-bold text-cyan-400">
