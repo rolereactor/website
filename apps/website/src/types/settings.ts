@@ -115,6 +115,7 @@ export const ProEngineSettingsSchema = z
     settings: z
       .object({
         disabledCommands: z.array(z.string()).optional(),
+        autoDeductFromOwner: z.boolean().optional(),
       })
       .catchall(z.unknown()),
     availableCommands: z

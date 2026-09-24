@@ -30,6 +30,10 @@ export function ProEngineSettings({
   onSubscriptionCancelled,
 }: ProEngineSettingsProps) {
   const [, forceUpdate] = useState({});
+  const [autoDeduct, setAutoDeduct] = useState(
+    premiumStatus?.settings?.autoDeductFromOwner ?? false
+  );
+  const [isUpdating, setIsUpdating] = useState(false);
 
   // Real-time countdown update for the remaining time display
   useEffect(() => {
@@ -38,6 +42,11 @@ export function ProEngineSettings({
     }, 60000); // Update every minute
     return () => clearInterval(timer);
   }, []);
+
+  // Sync autoDeduct state with premiumStatus changes
+  useEffect(() => {
+    setAutoDeduct(premiumStatus?.settings?.autoDeductFromOwner ?? false);
+  }, [premiumStatus?.settings?.autoDeductFromOwner]);
 
   // Calculate detailed remaining time using reusable utility
   const subData = calculateSubscriptionProgress(
@@ -55,6 +64,26 @@ export function ProEngineSettings({
 
   // Determine if cancelled
   const showCancelledState = isCancelled;
+
+  const handleAutoDeductToggle = async () => {
+    setIsUpdating(true);
+    try {
+      const newValue = !autoDeduct;
+      const res = await fetch(`/api/guilds/${guildId}/settings`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ autoDeductFromOwner: newValue }),
+      });
+
+      if (res.ok) {
+        setAutoDeduct(newValue);
+      }
+    } catch (error) {
+      console.error("Failed to update auto-deduct setting:", error);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
 
   if (showCancelledState) {
     return null;
@@ -115,6 +144,38 @@ export function ProEngineSettings({
               premiumStatus={premiumStatus}
               onSubscriptionCancelled={onSubscriptionCancelled}
             />
+          </div>
+
+          {/* Auto-Fuel Setting */}
+          <div className="pt-4 border-t border-white/5">
+            <div className="flex items-center justify-between">
+              <div className="space-y-1">
+                <h4 className="text-xs font-black text-white tracking-widest uppercase">
+                  Auto-Fuel
+                </h4>
+                <p className="text-[10px] text-zinc-500 font-mono">
+                  If vault is empty, owner&apos;s balance is used automatically
+                </p>
+              </div>
+              <button
+                onClick={handleAutoDeductToggle}
+                disabled={isUpdating}
+                className={cn(
+                  "relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus:outline-none",
+                  autoDeduct
+                    ? "bg-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.4)]"
+                    : "bg-zinc-700",
+                  isUpdating && "opacity-50 cursor-not-allowed"
+                )}
+              >
+                <span
+                  className={cn(
+                    "inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200",
+                    autoDeduct ? "translate-x-6" : "translate-x-1"
+                  )}
+                />
+              </button>
+            </div>
           </div>
         </CardContent>
       </Card>
