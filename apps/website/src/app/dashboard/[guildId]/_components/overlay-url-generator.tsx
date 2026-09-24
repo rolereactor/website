@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo, useEffect } from "react";
+import Image from "next/image";
 import {
   Zap,
   MessagesSquare,
@@ -327,12 +328,13 @@ const _ROLE_COLORS: Record<string, string> = {
         >
           {roleChip}
           {badge && (
-            <img
+            <Image
+              unoptimized
               src={badge}
               alt=""
+              width={13}
+              height={13}
               style={{
-                width: 13,
-                height: 13,
                 borderRadius: 3,
                 objectFit: "contain",
               }}

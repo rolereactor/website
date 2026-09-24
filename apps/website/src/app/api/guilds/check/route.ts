@@ -2,12 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { botFetch, isBotUnavailableError } from "@/lib/bot-fetch";
 
+type Session = Awaited<ReturnType<typeof auth>>;
+
+type SessionLike = NonNullable<Session> | { user: { id?: string } };
+
 export async function POST(request: NextRequest) {
   try {
     // Check for internal API key first
     const authHeader = request.headers.get("authorization");
     const INTERNAL_API_KEY = process.env.INTERNAL_API_KEY;
-    let session: any = null;
+    let session: SessionLike | null = null;
 
     if (authHeader && authHeader.startsWith("Bearer ")) {
       const token = authHeader.split(" ")[1];

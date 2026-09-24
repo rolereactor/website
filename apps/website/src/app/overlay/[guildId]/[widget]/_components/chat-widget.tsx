@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
+import Image from "next/image";
 import { AnimatePresence, motion } from "motion/react";
 import { KickIcon, TwitchIcon, YouTubeIcon } from "@/components/icons/platform-icons";
 import type { OverlayTheme } from "./theme";
@@ -447,14 +448,15 @@ export function ChatMessageLeft({
           )}
           {showPlatform &&
             message.badges?.map((url, bi) => (
-              <img
+              <Image
                 key={bi}
+                unoptimized
                 src={url}
                 alt=""
                 referrerPolicy="no-referrer"
+                width={chipSize}
+                height={chipSize}
                 style={{
-                  width: chipSize,
-                  height: chipSize,
                   borderRadius: 4,
                   objectFit: "contain",
                 }}
@@ -578,14 +580,15 @@ export function ChatMessageRight({
           )}
           {showPlatform &&
             message.badges?.map((url, bi) => (
-              <img
+              <Image
                 key={bi}
+                unoptimized
                 src={url}
                 alt=""
                 referrerPolicy="no-referrer"
+                width={chipSize}
+                height={chipSize}
                 style={{
-                  width: chipSize,
-                  height: chipSize,
                   borderRadius: 4,
                   objectFit: "contain",
                 }}
