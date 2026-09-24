@@ -99,9 +99,6 @@ export interface TicketSettings {
   notificationChannelId?: string;
   autoCloseDays?: number;
   maxTicketsPerUser?: number;
-  supportCategoryId?: string;
-  allowStaffClaim?: boolean;
-  allowUserClose?: boolean;
   allowUserTranscripts?: boolean;
   welcomeMessage?: string;
   closeMessage?: string;

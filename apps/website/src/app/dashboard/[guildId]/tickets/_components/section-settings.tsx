@@ -10,8 +10,8 @@ import {
   Loader2,
   Save,
   AlertCircle,
-  Shield,
   Ban,
+  Shield,
 } from "lucide-react";
 
 import { useTicketStore, type TicketSettings } from "@/store/use-ticket-store";
@@ -90,8 +90,6 @@ export function SectionSettings({
   const [notificationChannelId, setNotificationChannelId] = useState("");
   const [autoCloseDays, setAutoCloseDays] = useState(0);
   const [maxTicketsPerUser, setMaxTicketsPerUser] = useState(0);
-  const [allowStaffClaim, setAllowStaffClaim] = useState(true);
-  const [allowUserClose, setAllowUserClose] = useState(true);
   const [allowUserTranscripts, setAllowUserTranscripts] = useState(true);
   const [welcomeMessage, setWelcomeMessage] = useState("");
   const [closeMessage, setCloseMessage] = useState("");
@@ -103,8 +101,6 @@ export function SectionSettings({
       setNotificationChannelId(settings.notificationChannelId || "");
       setAutoCloseDays(settings.autoCloseDays || 0);
       setMaxTicketsPerUser(settings.maxTicketsPerUser || 0);
-      setAllowStaffClaim(settings.allowStaffClaim !== false);
-      setAllowUserClose(settings.allowUserClose !== false);
       setAllowUserTranscripts(settings.allowUserTranscripts !== false);
       setWelcomeMessage(settings.welcomeMessage || "");
       setCloseMessage(settings.closeMessage || "");
@@ -128,8 +124,6 @@ export function SectionSettings({
         notificationChannelId,
         autoCloseDays,
         maxTicketsPerUser,
-        allowStaffClaim,
-        allowUserClose,
         allowUserTranscripts,
         welcomeMessage: welcomeMessage || undefined,
         closeMessage: closeMessage || undefined,
@@ -274,14 +268,6 @@ export function SectionSettings({
       <div className="px-4 py-3">
         <FormField label="Access Controls" icon={Shield} hint="Who can interact with tickets.">
           <div className="space-y-3 mt-2">
-            <div className="flex items-center justify-between">
-              <Label className="text-xs text-zinc-400">Staff can claim tickets</Label>
-              <Switch checked={allowStaffClaim} onCheckedChange={setAllowStaffClaim} />
-            </div>
-            <div className="flex items-center justify-between">
-              <Label className="text-xs text-zinc-400">Users can close their own tickets</Label>
-              <Switch checked={allowUserClose} onCheckedChange={setAllowUserClose} />
-            </div>
             <div className="flex items-center justify-between">
               <Label className="text-xs text-zinc-400">Users can self-export transcripts</Label>
               <Switch checked={allowUserTranscripts} onCheckedChange={setAllowUserTranscripts} />
