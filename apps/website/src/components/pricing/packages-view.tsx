@@ -42,7 +42,6 @@ export function PackagesView({
         </div>
       </DialogHeader>
 
-      {/* Benefits Section */}
       <PricingBenefits />
 
       <div className="px-6 pb-6 pt-1 overflow-y-auto max-h-[50vh] [ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">

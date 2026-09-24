@@ -164,7 +164,7 @@ export function ReferralSection() {
             </CardTitle>
             <div className="mt-1">
               <Badge className="bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 font-mono text-xs">
-                Ongoing 15% Bonus
+                Ongoing 15% Bonus ($10+)
               </Badge>
             </div>
             <CardDescription className="text-zinc-400 mt-1">
@@ -288,7 +288,7 @@ export function ReferralSection() {
               <strong className="text-zinc-200">Instant Referee Gift:</strong> Your friend receives <span className="text-amber-400 font-semibold">+25 Sparks welcome bonus</span> instantly upon applying your code, plus <span className="text-emerald-400 font-semibold">+10% bonus Cores</span> on their first purchase of $10+.
             </li>
             <li>
-              <strong className="text-zinc-200">Ongoing Passive Reward:</strong> You earn <span className="text-cyan-400 font-semibold">15% bonus Cores</span> on <em className="not-italic text-white underline">every single purchase</em> your referred friends make in the future!
+              <strong className="text-zinc-200">Ongoing Passive Reward:</strong> You earn <span className="text-cyan-400 font-semibold">15% bonus Cores</span> on every purchase of <span className="text-white underline">$10 or more</span> your referred friends make!
             </li>
           </ul>
         </div>

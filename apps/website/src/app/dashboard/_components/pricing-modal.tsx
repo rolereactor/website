@@ -70,7 +70,6 @@ export function PricingModal({ trigger }: PricingModalProps) {
           </div>
         </DialogHeader>
 
-        {/* Benefits Section */}
         <PricingBenefits />
 
         <div className="px-4 pb-6 pt-2 max-h-[60vh] overflow-y-auto custom-scrollbar">

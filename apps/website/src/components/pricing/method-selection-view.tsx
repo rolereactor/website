@@ -109,7 +109,7 @@ export function MethodSelectionView({
                     Web3 Wallet (Instant)
                   </span>
                   <span className="text-xs text-blue-100/50 group-hover:text-blue-200/70 transition-colors mt-0.5">
-                    Direct 1-click transfer via MetaMask, Phantom, etc.
+                    Direct 1-click transfer via MetaMask
                   </span>
                 </div>
               </div>
