@@ -10,6 +10,7 @@ import {
 } from "wagmi";
 import { parseUnits, formatUnits, erc20Abi } from "viem";
 import { useAppKit } from "@reown/appkit/react";
+import { useSession } from "next-auth/react";
 import { useUserStore } from "@/store/use-user-store";
 import { useNotificationStore } from "@/store/use-notification-store";
 
@@ -102,7 +103,8 @@ export function CryptoCheckout({
   >(null);
   const chainId = useChainId();
   const { open } = useAppKit();
-  const { user, fetchUser } = useUserStore();
+  const { data: session } = useSession();
+  const { fetchUser } = useUserStore();
   const { fetchNotifications } = useNotificationStore();
   const {
     data: hash,
@@ -216,8 +218,8 @@ export function CryptoCheckout({
           setIsFullyComplete(true);
           toast.success("Payment successful!");
           localStorage.removeItem("pendingWeb3Payment");
-          if (user?.userId) {
-            fetchUser(user.userId, true);
+          if (session?.user?.id) {
+            fetchUser(session.user.id, true);
           }
           fetchNotifications();
           onSuccess?.(hash);
@@ -244,7 +246,7 @@ export function CryptoCheckout({
     lastAttemptedHash,
     fetchNotifications,
     fetchUser,
-    user?.userId,
+    session?.user?.id,
     address,
   ]);
 

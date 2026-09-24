@@ -20,22 +20,17 @@ type Props = Omit<
 
 export function UserMenu(props: Partial<Props>) {
   const { data: session, status } = useSession();
-  const { fetchUser, clearUser } = useUserStore();
+  const { clearUser } = useUserStore();
   const [isPricingOpen, setIsPricingOpen] = useState(false);
 
-  // Handle session sync with store
+  // Clear stale store data when signed out. Balance itself is owned by
+  // useCoreBalance (SWR); pricing flows fetch user store on demand.
   useEffect(() => {
-    if (session?.user?.id) {
-      // Delay to avoid overwhelming bot with concurrent requests
-      const timer = setTimeout(() => fetchUser(session.user.id), 500);
-      return () => clearTimeout(timer);
-    } else if (status === "unauthenticated") {
+    if (status === "unauthenticated") {
       clearUser();
     }
-  }, [session, status, fetchUser, clearUser]);
+  }, [status, clearUser]);
 
-  // Determine the actual status
-  // We want to show loading state if it's loading, even if the cookie check is unsure
   const effectiveStatus = status;
 
   return (

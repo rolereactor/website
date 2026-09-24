@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
-import { useCoreBalance } from "@/hooks/use-core-balance";
+import { useCoreBalance, type BalanceData } from "@/hooks/use-core-balance";
 import { PricingDialog } from "@/components/pricing/pricing-dialog";
 import { Button } from "@/components/ui/button";
 
@@ -21,6 +21,8 @@ export interface CoreBalanceProps {
   onClick?: () => void;
   /** Whether to show the plus button */
   showPlusButton?: boolean;
+  /** SSR seed so the chip paints with real numbers before hydration */
+  initialData?: BalanceData | null;
 }
 
 export function CoreBalance({
@@ -29,9 +31,10 @@ export function CoreBalance({
   coreImageUrl = "/images/core_energy.png",
   onClick,
   showPlusButton = true,
+  initialData,
 }: CoreBalanceProps) {
   const { status } = useSession();
-  const { cores, sparks, isLoading } = useCoreBalance();
+  const { cores, sparks, isLoading } = useCoreBalance(initialData);
 
   // Round Cores to 2 decimal places for financial precision, format Sparks as whole integer
   const roundedCores = cores ? Math.round(cores * 100) / 100 : 0;
@@ -40,8 +43,12 @@ export function CoreBalance({
 
   if (status === "unauthenticated") return null;
 
+  // With an SSR seed, show real numbers immediately — don't wait on session hydration.
+  const showSkeleton =
+    !initialData && (status === "loading" || isLoading);
+
   // Loading state skeleton
-  if (status === "loading" || isLoading) {
+  if (showSkeleton) {
     if (variant === "compact") {
       return (
         <div

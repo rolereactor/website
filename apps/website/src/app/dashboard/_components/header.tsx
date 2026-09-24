@@ -1,12 +1,21 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { CoreBalance } from "@/components/common/core-balance";
 import { NotificationBell } from "@/components/notifications/notification-bell";
 import { Search, Command } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export function DashboardHeader() {
+interface DashboardHeaderProps {
+  /**
+   * Server-rendered balance chip (Suspense-wrapped). Falls back to the
+   * client-only CoreBalance when not provided.
+   */
+  balanceSlot?: ReactNode;
+}
+
+export function DashboardHeader({ balanceSlot }: DashboardHeaderProps) {
   const triggerCommandMenu = () => {
     window.dispatchEvent(
       new KeyboardEvent("keydown", { key: "k", metaKey: true })
@@ -34,7 +43,7 @@ export function DashboardHeader() {
           </div>
 
           {/* Keyboard Shortcut Badge (>= md) */}
-          <kbd className="hidden md:flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-mono text-zinc-400 bg-white/5 border border-white/10 shrink-0">
+          <kbd className="hidden md:flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-mono text-zinc-400 bg-white/5 border border-white/10 shrink-0">
             <Command className="w-2.5 h-2.5" />K
           </kbd>
         </Button>
@@ -43,7 +52,7 @@ export function DashboardHeader() {
       {/* Right: Notifications + Core & Spark Balance */}
       <div className="flex items-center gap-2 shrink-0">
         <NotificationBell />
-        <CoreBalance />
+        {balanceSlot ?? <CoreBalance />}
       </div>
     </header>
   );

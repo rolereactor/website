@@ -2,6 +2,7 @@ import { type ReactNode, Suspense } from "react";
 import type { Metadata } from "next";
 import { DashboardSidebar } from "@/app/dashboard/_components/sidebar";
 import { DashboardHeader } from "@/app/dashboard/_components/header";
+import { BalanceSlot } from "@/app/dashboard/_components/balance-slot";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { PageTransition } from "@/components/common/page-transition";
 import { NavigationProgress } from "@/components/common/navigation-progress";
@@ -57,7 +58,13 @@ export default async function DashboardLayout({
       <CommandMenu />
       <DashboardSidebar user={session.user} developerAccess={developerAccess} />
       <SidebarInset className="relative flex flex-col flex-1 min-w-0 md:my-2 md:mr-2 md:rounded-xl md:shadow-2xl border border-white/5 bg-background/50 backdrop-blur-sm overflow-hidden h-dvh pb-14 md:pb-0">
-        <DashboardHeader />
+        <DashboardHeader
+          balanceSlot={
+            <Suspense fallback={null}>
+              <BalanceSlot userId={session.user.id} />
+            </Suspense>
+          }
+        />
         <main className="flex-1 overflow-hidden relative">
           <GlobalStateLoader />
           <ScrollArea className="h-full">

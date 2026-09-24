@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type { Metadata, Viewport } from "next";
+import { SWRConfig } from "swr";
 
 import { FumadocsProvider } from "@/components/providers/fumadocs-provider";
 import { MobileNavClose } from "@/components/common/mobile-nav-close";
@@ -172,23 +173,32 @@ export default function Layout({ children }: { children: ReactNode }) {
         <PWAMeta />
         <PWAProvider />
         <SessionProvider>
-          <Web3Provider>
-            <FumadocsProvider>
-              {children}
-              <Toaster
-                position="top-center"
-                expand={false}
-                theme="dark"
-                className="toaster group"
-                toastOptions={{
-                  unstyled: true,
-                  classNames: {
-                    toast: "w-full flex justify-center",
-                  },
-                }}
-              />
-            </FumadocsProvider>
-          </Web3Provider>
+          <SWRConfig
+            value={{
+              revalidateOnFocus: true,
+              revalidateOnReconnect: true,
+              dedupingInterval: 10_000,
+              errorRetryCount: 2,
+            }}
+          >
+            <Web3Provider>
+              <FumadocsProvider>
+                {children}
+                <Toaster
+                  position="top-center"
+                  expand={false}
+                  theme="dark"
+                  className="toaster group"
+                  toastOptions={{
+                    unstyled: true,
+                    classNames: {
+                      toast: "w-full flex justify-center",
+                    },
+                  }}
+                />
+              </FumadocsProvider>
+            </Web3Provider>
+          </SWRConfig>
         </SessionProvider>
         {/* Only load analytics in production to prevent development errors */}
         {process.env.NODE_ENV === "production" && <Analytics />}

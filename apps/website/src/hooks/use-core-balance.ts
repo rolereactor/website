@@ -23,33 +23,38 @@ const fetcher = async (url: string): Promise<BalanceData> => {
 };
 
 /**
- * Custom hook to fetch and cache user's core balance & sparks
- * Uses SWR for automatic caching, revalidation, and deduplication
+ * Custom hook to fetch and cache user's core balance & sparks.
+ * Pass `initialData` (from an SSR seed) to render immediately on first paint.
  */
-export function useCoreBalance() {
+export function useCoreBalance(initialData?: BalanceData | null) {
   const { data: session, status } = useSession();
 
   const {
     data: balanceData,
     isLoading: isSWRManagerLoading,
+    isValidating,
     error,
     mutate,
-  } =   useSWR(session?.user ? "/api/user/balance" : null, fetcher, {
+  } = useSWR(session?.user ? "/api/user/balance" : null, fetcher, {
+    fallbackData: initialData ?? undefined,
     refreshInterval: 60_000, // Refresh every 60s — staggered from vote-status (45s) and notifications (30s)
-    revalidateOnFocus: true, // Refetch when window gains focus
-    revalidateOnReconnect: true, // Refetch on reconnect
-    revalidateOnMount: false, // Don't refetch on mount — data is fresh from SWR cache
-    dedupingInterval: 5000, // Dedupe requests within 5s
-    keepPreviousData: true, // Keep showing old data while fetching new
+    revalidateOnFocus: true,
+    revalidateOnReconnect: true,
+    revalidateOnMount: initialData ? false : true,
+    dedupingInterval: 10_000,
+    keepPreviousData: true,
   });
 
-  const isLoading = status === "loading" || isSWRManagerLoading;
+  // With SSR fallbackData, first paint is ready immediately — only wait on session.
+  const isLoading =
+    status === "loading" || (isSWRManagerLoading && !balanceData);
 
   return {
     balance: balanceData?.cores ?? 0,
     cores: balanceData?.cores ?? 0,
     sparks: balanceData?.sparks ?? 0,
     isLoading,
+    isValidating,
     error,
     mutate, // Allows manual revalidation
   };

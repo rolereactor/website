@@ -14,6 +14,7 @@ import { toast } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useCoreBalance } from "@/hooks/use-core-balance";
 
 import { UploadZone } from "./upload-zone";
 import { ToolOptions } from "./tool-options";
@@ -62,8 +63,11 @@ export function ToolPageClient({ tool }: ToolPageClientProps) {
   const [resultBlob, setResultBlob] = useState<Blob | null>(null);
   const [resultFilename, setResultFilename] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [userBalance, setUserBalance] = useState<number | null>(null);
-  const [isLoadingBalance, setIsLoadingBalance] = useState(true);
+  const {
+    balance: userBalance,
+    isLoading: isLoadingBalance,
+    mutate: mutateBalance,
+  } = useCoreBalance();
   const [toolInfo, setToolInfo] = useState<
     Record<string, { cost: number; freeDaily: boolean }>
   >({});
@@ -123,23 +127,6 @@ export function ToolPageClient({ tool }: ToolPageClientProps) {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const fetchBalance = async () => {
-      try {
-        const res = await fetch("/api/user/balance");
-        if (res.ok) {
-          const data = await res.json();
-          setUserBalance(data.credits ?? null);
-        }
-      } catch {
-        // Silently fail — balance is optional
-      } finally {
-        setIsLoadingBalance(false);
-      }
-    };
-    fetchBalance();
-  }, []);
-
   const handleFileSelect = (file: File) => {
     setSelectedFile(file);
     setResultBlob(null);
@@ -187,10 +174,8 @@ export function ToolPageClient({ tool }: ToolPageClientProps) {
       );
 
       // Update balances optimistically
-      if (creditsDeducted && creditsDeducted !== "0" && userBalance !== null) {
-        setUserBalance((prev) =>
-          prev !== null ? prev - parseFloat(creditsDeducted) : null
-        );
+      if (creditsDeducted && creditsDeducted !== "0") {
+        await mutateBalance();
       }
       if (freeRemaining !== null) {
         setFreeQuotaRemaining(parseInt(freeRemaining, 10));
@@ -235,7 +220,7 @@ export function ToolPageClient({ tool }: ToolPageClientProps) {
 
   // Fix #1: Check if balance is sufficient (only if it's not currently free)
   const hasInsufficientBalance =
-    !isCurrentlyFree && userBalance !== null && userBalance < cost;
+    !isCurrentlyFree && !isLoadingBalance && userBalance < cost;
 
   // Process button is disabled if: no file, processing, or insufficient balance
   const isProcessDisabled =
@@ -276,7 +261,7 @@ export function ToolPageClient({ tool }: ToolPageClientProps) {
           {/* Balance */}
           {isLoadingBalance ? (
             <Skeleton className="h-4 w-full rounded bg-white/10" />
-          ) : userBalance !== null ? (
+          ) : (
             <div className="flex items-center justify-between text-sm">
               <span className="flex items-center gap-1.5 text-white/40">
                 <Coins className="h-3.5 w-3.5" />
@@ -291,7 +276,7 @@ export function ToolPageClient({ tool }: ToolPageClientProps) {
                 {userBalance} cores
               </span>
             </div>
-          ) : null}
+          )}
 
           {/* Cost row */}
           {isLoadingCosts ? (

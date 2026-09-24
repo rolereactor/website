@@ -35,6 +35,13 @@ export function PaymentPendingView({
   const [elapsed, setElapsed] = useState(0);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const startTimeRef = useRef(Date.now());
+  // Keep latest balance without re-creating the poll interval on every update.
+  const balanceRef = useRef(balance);
+  balanceRef.current = balance;
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
+  const pendingRef = useRef(pendingPayment);
+  pendingRef.current = pendingPayment;
 
   useEffect(() => {
     setElapsed(0);
@@ -51,26 +58,33 @@ export function PaymentPendingView({
   useEffect(() => {
     if (!pendingPayment || status !== "pending") return;
 
-    const checkBalance = async () => {
-      await mutate();
+    let cancelled = false;
 
-      if (balance !== null && pendingPayment) {
-        const balanceIncrease = balance - pendingPayment.initialBalance;
-        if (balanceIncrease >= pendingPayment.expectedCores * 0.9) {
+    const checkBalance = async () => {
+      const fresh = await mutate();
+      if (cancelled) return;
+
+      const latest = fresh?.cores ?? balanceRef.current;
+      const pending = pendingRef.current;
+      if (pending && latest > 0) {
+        const balanceIncrease = latest - pending.initialBalance;
+        if (balanceIncrease >= pending.expectedCores * 0.9) {
           setStatus("confirmed");
           if (pollRef.current) clearInterval(pollRef.current);
-          setTimeout(() => onComplete(), 1500);
-          return;
+          setTimeout(() => onCompleteRef.current(), 1500);
         }
       }
     };
 
     pollRef.current = setInterval(checkBalance, 5000);
+    void checkBalance();
 
     return () => {
+      cancelled = true;
       if (pollRef.current) clearInterval(pollRef.current);
     };
-  }, [pendingPayment, status, balance, mutate, onComplete]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- pendingPayment identity changes every render; orderId is the real key
+  }, [pendingPayment?.orderId, status, mutate]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);

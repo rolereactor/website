@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useWaitForTransactionReceipt } from "wagmi";
+import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { CheckCircle2 } from "lucide-react";
 import { useUserStore } from "@/store/use-user-store";
@@ -21,6 +22,7 @@ export function GlobalPaymentRecovery() {
   );
   const [isVerifying, setIsVerifying] = useState(false);
   const [hasToastTriggered, setHasToastTriggered] = useState(false);
+  const { data: session } = useSession();
   const fetchUser = useUserStore((state) => state.fetchUser);
   const fetchNotifications = useNotificationStore(
     (state) => state.fetchNotifications
@@ -105,9 +107,8 @@ export function GlobalPaymentRecovery() {
             duration: 5000,
           });
           localStorage.removeItem("pendingWeb3Payment");
-          const currentUser = useUserStore.getState().user;
-          if (currentUser?.userId) {
-            fetchUser(currentUser.userId, true);
+          if (session?.user?.id) {
+            fetchUser(session.user.id, true);
           }
           fetchNotifications();
           setPendingPayment(null);
@@ -123,7 +124,14 @@ export function GlobalPaymentRecovery() {
           );
         });
     }
-  }, [isSuccess, pendingPayment, isVerifying, fetchNotifications, fetchUser]);
+  }, [
+    isSuccess,
+    pendingPayment,
+    isVerifying,
+    fetchNotifications,
+    fetchUser,
+    session?.user?.id,
+  ]);
 
   // This component doesn't render anything visible directly
   return null;
