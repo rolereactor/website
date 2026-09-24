@@ -16,6 +16,7 @@ import {
   Command,
 } from "lucide-react";
 import { useServerStore } from "@/store/use-server-store";
+import { cn } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
@@ -32,6 +33,7 @@ interface CommandItem {
   href: string;
   category: "navigation" | "tools" | "admin";
   badge?: string;
+  comingSoon?: boolean;
 }
 
 export function CommandMenu() {
@@ -95,7 +97,8 @@ export function CommandMenu() {
           icon: Radio,
           href: `/dashboard/${activeGuildId}/live-reactor`,
           category: "tools",
-          badge: "PRO",
+          badge: "SOON",
+          comingSoon: true,
         },
         {
           id: "commands",
@@ -205,8 +208,18 @@ export function CommandMenu() {
                   return (
                     <button
                       key={cmd.id}
-                      onClick={() => handleSelect(cmd.href)}
-                      className="w-full flex items-center justify-between p-2.5 rounded-xl text-left transition-all duration-150 group hover:bg-cyan-500/10 hover:border-cyan-500/30 border border-transparent"
+                      type="button"
+                      disabled={cmd.comingSoon}
+                      onClick={() => {
+                        if (cmd.comingSoon) return;
+                        handleSelect(cmd.href);
+                      }}
+                      className={cn(
+                        "w-full flex items-center justify-between p-2.5 rounded-xl text-left transition-all duration-150 group border",
+                        cmd.comingSoon
+                          ? "opacity-40 cursor-not-allowed border-transparent"
+                          : "hover:bg-cyan-500/10 hover:border-cyan-500/30 border-transparent"
+                      )}
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         <div className="flex items-center justify-center size-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 group-hover:border-cyan-500/40 shrink-0">
@@ -214,11 +227,25 @@ export function CommandMenu() {
                         </div>
                         <div className="truncate">
                           <div className="flex items-center gap-2">
-                            <span className="text-xs font-semibold text-zinc-200 group-hover:text-cyan-300">
+                            <span
+                              className={cn(
+                                "text-xs font-semibold",
+                                cmd.comingSoon
+                                  ? "text-zinc-400"
+                                  : "text-zinc-200 group-hover:text-cyan-300"
+                              )}
+                            >
                               {cmd.title}
                             </span>
                             {cmd.badge && (
-                              <Badge className="text-[9px] h-3.5 bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 px-1">
+                              <Badge
+                                className={cn(
+                                  "text-[9px] h-3.5 border px-1",
+                                  cmd.comingSoon
+                                    ? "bg-zinc-800/60 text-zinc-400 border-zinc-700/60"
+                                    : "bg-cyan-500/20 text-cyan-400 border-cyan-500/40"
+                                )}
+                              >
                                 {cmd.badge}
                               </Badge>
                             )}
@@ -228,7 +255,9 @@ export function CommandMenu() {
                           </p>
                         </div>
                       </div>
-                      <Command className="w-3.5 h-3.5 text-zinc-600 group-hover:text-cyan-400 shrink-0" />
+                      {!cmd.comingSoon && (
+                        <Command className="w-3.5 h-3.5 text-zinc-600 group-hover:text-cyan-400 shrink-0" />
+                      )}
                     </button>
                   );
                 })}

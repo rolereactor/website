@@ -1,25 +1,15 @@
 "use client";
 
-import { useState, use, useEffect, useCallback } from "react";
-import { Radio } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { use } from "react";
+import { Radio, Sparkles } from "lucide-react";
 
-import { useStreamingStore } from "@/store/use-streaming-store";
 import { useServerStore } from "@/store/use-server-store";
 
 import { PageHeader } from "@/app/dashboard/_components/page-header";
-import { NodeLoader } from "@/components/common/node-loader";
-
-import { LiveReactorNav } from "./_components/live-reactor-nav";
-import { ConnectionPanel } from "./_components/connection-panel";
-import { ConfigPanel } from "./_components/config-panel";
-import { CommandsPanel } from "./_components/commands-panel";
-import { FiltersPanel } from "./_components/filters-panel";
-import { QuotesPanel } from "./_components/quotes-panel";
-import { TimersPanel } from "./_components/timers-panel";
-import { DiagnosticsPanel } from "./_components/diagnostics-panel";
-import { OverlaysPanel } from "./_components/overlays-panel";
-import { LiveActivityFeed } from "./_components/live-activity-feed";
+import {
+  Card,
+  CardContent,
+} from "@/components/ui/card";
 
 interface StreamingPageProps {
   params: Promise<{ guildId: string }>;
@@ -27,107 +17,9 @@ interface StreamingPageProps {
 
 export default function StreamingPage({ params }: StreamingPageProps) {
   const { guildId } = use(params);
-  const searchParams = useSearchParams();
-  const tabParam = searchParams.get("tab");
-  const [activeTab, setActiveTab] = useState(tabParam || "connection");
-  const [isInitialized, setIsInitialized] = useState(false);
-
-  const handleTabChange = useCallback(
-    (tab: string) => {
-      setActiveTab(tab);
-      window.history.replaceState(
-        null,
-        "",
-        `/dashboard/${guildId}/live-reactor?tab=${tab}`
-      );
-    },
-    [guildId]
-  );
-
-  const {
-    isLoading,
-    statusCache,
-    fetchStatus,
-    fetchConfig,
-    fetchCommands,
-    fetchFilters,
-    fetchQuotes,
-    fetchTimers,
-    fetchDiag,
-  } = useStreamingStore();
-
   const { guilds } = useServerStore();
   const activeGuild = guilds.find((g) => g.id === guildId);
   const guildName = activeGuild?.name || "this server";
-
-  const isAnyLoading = Object.entries(isLoading).some(
-    ([k, v]) => k.endsWith(`:${guildId}`) && v
-  );
-
-  useEffect(() => {
-    if (!guildId) return;
-
-    // Fetch primary status and config; non-critical items fetch in background
-    Promise.allSettled([
-      fetchStatus(guildId),
-      fetchConfig(guildId),
-      fetchCommands(guildId),
-      fetchFilters(guildId),
-      fetchQuotes(guildId),
-      fetchTimers(guildId),
-      fetchDiag(guildId),
-    ]).finally(() => setIsInitialized(true));
-  }, [
-    guildId,
-    fetchStatus,
-    fetchConfig,
-    fetchCommands,
-    fetchFilters,
-    fetchQuotes,
-    fetchTimers,
-    fetchDiag,
-  ]);
-
-  const isInitialLoading = !isInitialized && isAnyLoading;
-  const connections = statusCache[guildId] || [];
-  const isConnected = connections.some((c) => c.isConnected);
-  const isLive = connections.some((c) => c.isConnected && c.isLive);
-
-  if (isInitialLoading) {
-    return (
-      <div className="absolute inset-0 z-40 flex items-center justify-center bg-background">
-        <NodeLoader
-          title="Loading Live Reactor"
-          subtitle="Connecting to streaming services..."
-        />
-      </div>
-    );
-  }
-
-  const renderPanel = () => {
-    switch (activeTab) {
-      case "connection":
-        return <ConnectionPanel guildId={guildId} />;
-      case "config":
-        return <ConfigPanel guildId={guildId} connections={connections} />;
-      case "commands":
-        return <CommandsPanel guildId={guildId} />;
-      case "filters":
-        return <FiltersPanel guildId={guildId} />;
-      case "quotes":
-        return <QuotesPanel guildId={guildId} />;
-      case "timers":
-        return <TimersPanel guildId={guildId} />;
-      case "overlays":
-        return <OverlaysPanel guildId={guildId} />;
-      case "activity":
-        return <LiveActivityFeed guildId={guildId} />;
-      case "diagnostics":
-        return <DiagnosticsPanel guildId={guildId} />;
-      default:
-        return <ConnectionPanel guildId={guildId} />;
-    }
-  };
 
   return (
     <div className="space-y-6 w-full">
@@ -135,21 +27,35 @@ export default function StreamingPage({ params }: StreamingPageProps) {
         category="Engagement Management"
         categoryIcon={Radio}
         title="Live Reactor"
-        description="Manage your streaming integration and chat features for"
+        description="Twitch stream alerts and chat features for"
         serverName={guildName}
       />
 
-      <div className="flex flex-col lg:flex-row gap-6">
-        <LiveReactorNav
-          activeTab={activeTab}
-          onTabChange={handleTabChange}
-          isConnected={isConnected}
-          isLive={isLive}
-          connections={connections}
-        />
-
-        <div className="flex-1 min-w-0">{renderPanel()}</div>
-      </div>
+      <Card className="border-white/6 bg-white/2">
+        <CardContent className="flex flex-col items-center justify-center gap-4 py-16 text-center">
+          <div className="flex items-center justify-center size-14 rounded-xl bg-rose-500/10 border border-rose-500/25">
+            <Radio className="size-7 text-rose-400" />
+          </div>
+          <div className="space-y-2">
+            <div className="flex items-center justify-center gap-2">
+              <h2 className="text-lg font-black text-white tracking-widest uppercase">
+                Live Reactor
+              </h2>
+              <span className="rounded-md border border-zinc-700/60 bg-zinc-800/80 px-2 py-0.5 text-[10px] font-black uppercase tracking-widest text-zinc-400">
+                Coming Soon
+              </span>
+            </div>
+            <p className="max-w-md text-sm text-zinc-500 leading-relaxed">
+              Stream alerts, live notifications, and a real-time chat bot are
+              on the way. Stay tuned — this feature isn&apos;t released yet.
+            </p>
+          </div>
+          <div className="flex items-center gap-2 rounded-lg border border-white/6 bg-white/2 px-3 py-1.5 text-[11px] text-zinc-500">
+            <Sparkles className="size-3.5 text-cyan-400/70" />
+            Early access coming for PRO servers
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

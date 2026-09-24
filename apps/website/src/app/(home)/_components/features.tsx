@@ -81,6 +81,7 @@ const features = [
       "Twitch stream alerts, live notifications, and a real-time chat bot for your community.",
     color: "rose",
     pro: true,
+    comingSoon: true,
   },
   {
     icon: ImageIcon,
@@ -204,11 +205,15 @@ export function Features() {
                   >
                     <feature.icon className={`w-5 h-5 ${colors.text}`} />
                   </div>
-                  {feature.pro && (
+                  {feature.comingSoon ? (
+                    <span className="text-[9px] font-black px-1.5 py-0.5 rounded-md bg-zinc-800/80 text-zinc-400 border border-zinc-700/60 uppercase tracking-widest">
+                      Coming Soon
+                    </span>
+                  ) : feature.pro ? (
                     <span className="text-[9px] font-black px-1.5 py-0.5 rounded-md bg-rose-500/15 text-rose-400 border border-rose-500/25 uppercase tracking-widest">
                       PRO
                     </span>
-                  )}
+                  ) : null}
                 </div>
                 <h3 className="text-sm font-semibold text-white mb-1.5 flex items-center gap-1.5">
                   {feature.title}

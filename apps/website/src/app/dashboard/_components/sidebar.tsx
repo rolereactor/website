@@ -156,11 +156,6 @@ export function DashboardSidebar({
     contextId
       ? [
           {
-            title: "Reaction Roles",
-            href: getHref("/dashboard/roles", true),
-            icon: ShieldCheck,
-          },
-          {
             title: "Welcome System",
             href: getHref("/dashboard/welcome", true),
             icon: UserPlus,
@@ -173,16 +168,14 @@ export function DashboardSidebar({
             badgeActive: true,
           },
           {
+            title: "Reaction Roles",
+            href: getHref("/dashboard/roles", true),
+            icon: ShieldCheck,
+          },
+          {
             title: "XP & Levels",
             href: getHref("/dashboard/xp", true),
             icon: Trophy,
-          },
-          {
-            title: "Live Reactor",
-            href: getHref("/dashboard/live-reactor", true),
-            icon: Radio,
-            badge: "NEW",
-            badgeActive: true,
           },
           {
             title: "Tickets",
@@ -190,6 +183,12 @@ export function DashboardSidebar({
             icon: Ticket,
             badge: "NEW",
             badgeActive: true,
+          },
+          {
+            title: "Live Reactor",
+            href: getHref("/dashboard/live-reactor", true),
+            icon: Radio,
+            isComingSoon: true,
           },
         ]
       : [];
