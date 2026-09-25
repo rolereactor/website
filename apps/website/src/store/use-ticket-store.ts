@@ -103,6 +103,8 @@ export interface TicketSettings {
   welcomeMessage?: string;
   closeMessage?: string;
   categories?: TicketCategory[];
+  csatEnabled?: boolean;
+  csatRelayChannelId?: string | null;
 }
 
 export interface StaffMember {
@@ -110,6 +112,8 @@ export interface StaffMember {
   staffName: string;
   ticketsClosed: number;
   avgCloseTimeMinutes: number;
+  avgRating?: number | null;
+  ratingCount?: number;
 }
 
 interface GuildTicketData {

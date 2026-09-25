@@ -372,6 +372,11 @@ function StaffRow({ member, rank }: { member: StaffMember; rank: number }) {
         <User className="w-4 h-4 text-zinc-500 shrink-0" />
         <span className="text-sm text-zinc-200 truncate">{member.staffName}</span>
       </div>
+      {member.avgRating != null && member.avgRating > 0 && (
+        <span className="text-xs text-amber-400 font-mono" title={`${member.ratingCount ?? 0} rating(s)`}>
+          ★ {member.avgRating.toFixed(1)}
+        </span>
+      )}
       <div className="flex items-center gap-1 text-xs text-zinc-400">
         <CheckCircle2 className="w-3 h-3 text-emerald-400" />
         {member.ticketsClosed} closed
@@ -716,6 +721,11 @@ function TicketsPageContent({ params }: TicketsPageProps) {
                           <span className="text-xs text-zinc-200 font-medium truncate">{member.staffName}</span>
                         </div>
                         <div className="flex items-center gap-3">
+                          {member.avgRating != null && member.avgRating > 0 && (
+                            <span className="text-[10px] text-amber-400 font-mono">
+                              ★ {member.avgRating.toFixed(1)}
+                            </span>
+                          )}
                           <Badge variant="success" className="text-[10px]">
                             {member.ticketsClosed} closed
                           </Badge>
@@ -905,9 +915,10 @@ function TicketsPageContent({ params }: TicketsPageProps) {
               />
             ) : (
               <>
-                <div className="grid grid-cols-[auto_1fr_auto_auto] items-center gap-4 px-4 py-2 border-b border-white/5 text-[10px] font-black uppercase tracking-wider text-zinc-500">
+                <div className="grid grid-cols-[auto_1fr_auto_auto_auto] items-center gap-4 px-4 py-2 border-b border-white/5 text-[10px] font-black uppercase tracking-wider text-zinc-500">
                   <span className="w-6 text-center">#</span>
                   <span>Staff Member</span>
+                  <span>Rating</span>
                   <span>Tickets Closed</span>
                   <span>Avg Close Time</span>
                 </div>

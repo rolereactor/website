@@ -12,6 +12,7 @@ import {
   AlertCircle,
   Ban,
   Shield,
+  Star,
 } from "lucide-react";
 
 import { useTicketStore, type TicketSettings } from "@/store/use-ticket-store";
@@ -93,6 +94,8 @@ export function SectionSettings({
   const [allowUserTranscripts, setAllowUserTranscripts] = useState(true);
   const [welcomeMessage, setWelcomeMessage] = useState("");
   const [closeMessage, setCloseMessage] = useState("");
+  const [csatEnabled, setCsatEnabled] = useState(true);
+  const [csatRelayChannelId, setCsatRelayChannelId] = useState("");
 
   useEffect(() => {
     if (settings) {
@@ -104,6 +107,8 @@ export function SectionSettings({
       setAllowUserTranscripts(settings.allowUserTranscripts !== false);
       setWelcomeMessage(settings.welcomeMessage || "");
       setCloseMessage(settings.closeMessage || "");
+      setCsatEnabled(settings.csatEnabled !== false);
+      setCsatRelayChannelId(settings.csatRelayChannelId || "");
     }
   }, [settings]);
 
@@ -127,6 +132,8 @@ export function SectionSettings({
         allowUserTranscripts,
         welcomeMessage: welcomeMessage || undefined,
         closeMessage: closeMessage || undefined,
+        csatEnabled,
+        csatRelayChannelId: csatRelayChannelId || null,
       });
 
       if (ok) {
@@ -272,6 +279,43 @@ export function SectionSettings({
               <Label className="text-xs text-zinc-400">Users can self-export transcripts</Label>
               <Switch checked={allowUserTranscripts} onCheckedChange={setAllowUserTranscripts} />
             </div>
+          </div>
+        </FormField>
+      </div>
+
+      {/* Feedback (CSAT) */}
+      <div className="px-4 py-3">
+        <FormField label="Ticket Ratings" icon={Star} hint="Members get a 1–5 star rating prompt via DM after their ticket closes. Ratings appear in Staff Analytics (Pro).">
+          <div className="space-y-3 mt-2">
+            <div className="flex items-center justify-between">
+              <Label className="text-xs text-zinc-400">Ask for a rating when a ticket closes</Label>
+              <Switch checked={csatEnabled} onCheckedChange={setCsatEnabled} />
+            </div>
+            {csatEnabled && (
+              <div className="grid grid-cols-2 gap-4">
+                <FormField label="Relay Channel" icon={Hash} hint="Post each new rating here (optional).">
+                  <Select
+                    value={csatRelayChannelId || "none"}
+                    onValueChange={(v) => setCsatRelayChannelId(v === "none" ? "" : v)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Off" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">Off</SelectItem>
+                      {textChannels.map((ch) => (
+                        <SelectItem key={ch.id} value={ch.id}>
+                          <div className="flex items-center gap-2">
+                            <Hash className="w-3 h-3 text-zinc-500" />
+                            {ch.name}
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormField>
+              </div>
+            )}
           </div>
         </FormField>
       </div>
