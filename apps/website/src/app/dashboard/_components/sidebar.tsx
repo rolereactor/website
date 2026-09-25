@@ -65,7 +65,6 @@ import { useServerStore } from "@/store/use-server-store";
 import { useProEngineStore } from "@/store/use-pro-engine-store";
 import { Suspense, useEffect, useState } from "react";
 
-// Helper to get avatar URL
 function getAvatarUrl(user: { id?: string; image?: string | null }): string {
   if (user.image) return user.image;
   if (user.id) {
@@ -142,6 +141,7 @@ export function DashboardSidebar({
             icon: Zap,
             badge: "PRO",
             badgeActive: isPremium,
+            badgeTone: "pro" as const,
           },
           {
             title: "Analytics",
@@ -166,6 +166,7 @@ export function DashboardSidebar({
             icon: DoorOpen,
             badge: "NEW",
             badgeActive: true,
+            badgeExpiresAt: "2026-11-01",
           },
           {
             title: "Reaction Roles",
@@ -181,8 +182,9 @@ export function DashboardSidebar({
             title: "Tickets",
             href: getHref("/dashboard/tickets", true),
             icon: Ticket,
-            badge: "NEW",
+            badge: "BETA",
             badgeActive: true,
+            badgeTone: "beta" as const,
           },
           {
             title: "Live Reactor",
@@ -374,9 +376,20 @@ export function DashboardSidebar({
       isComingSoon?: boolean;
       badge?: string;
       badgeActive?: boolean;
+      badgeTone?: "new" | "beta" | "pro";
+      /** Hide badge after this date (ISO, e.g. "2026-10-01") */
+      badgeExpiresAt?: string;
     }[];
   }) => {
     if (items.length === 0) return null;
+
+    const activeBadgeTone = {
+      new: "bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/10 hover:text-cyan-400",
+      beta:
+        "bg-amber-500/10 text-amber-400 hover:bg-amber-500/10 hover:text-amber-400",
+      pro: "bg-violet-500/10 text-violet-400 hover:bg-violet-500/10 hover:text-violet-400",
+    };
+
     return (
       <SidebarGroup className="group-data-[collapsible=icon]:px-0 py-2">
         {label && (
@@ -391,7 +404,12 @@ export function DashboardSidebar({
         )}
         <SidebarGroupContent>
           <SidebarMenu className="gap-0.5 px-2 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:items-center">
-            {items.map((item) => (
+            {items.map((item) => {
+              const badgeVisible =
+                item.badge &&
+                (!item.badgeExpiresAt ||
+                  Date.now() < Date.parse(item.badgeExpiresAt));
+              return (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
                   asChild
@@ -455,26 +473,27 @@ export function DashboardSidebar({
                       >
                         {item.title}
                       </span>
-                      {item.badge && (
-                        <Badge
-                          className={cn(
-                            "ml-auto text-[9px] h-4 px-1.5 py-0 border-none group-data-[collapsible=icon]:hidden font-medium uppercase flex items-center justify-center gap-1",
-                            item.badgeActive
-                              ? "bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/10 hover:text-cyan-400"
-                              : "bg-zinc-800/50 text-zinc-500 hover:bg-zinc-800/50 hover:text-zinc-500 ring-1 ring-inset ring-zinc-700/50"
+                          {badgeVisible && (
+                            <Badge
+                              className={cn(
+                                "ml-auto text-[9px] h-4 px-1.5 py-0 border-none group-data-[collapsible=icon]:hidden font-medium uppercase flex items-center justify-center gap-1",
+                                item.badgeActive
+                                  ? activeBadgeTone[item.badgeTone ?? "new"]
+                                  : "bg-zinc-800/50 text-zinc-500 hover:bg-zinc-800/50 hover:text-zinc-500 ring-1 ring-inset ring-zinc-700/50"
+                              )}
+                            >
+                              {!item.badgeActive && (
+                                <Lock className="size-2.5 -ml-0.5 opacity-80" />
+                              )}
+                              {item.badge}
+                            </Badge>
                           )}
-                        >
-                          {!item.badgeActive && (
-                            <Lock className="size-2.5 -ml-0.5 opacity-80" />
-                          )}
-                          {item.badge}
-                        </Badge>
-                      )}
                     </Link>
                   )}
                 </SidebarMenuButton>
               </SidebarMenuItem>
-            ))}
+              );
+            })}
           </SidebarMenu>
         </SidebarGroupContent>
       </SidebarGroup>
