@@ -39,7 +39,7 @@ export function ProEngineSettings({
   useEffect(() => {
     const timer = setInterval(() => {
       forceUpdate({});
-    }, 60000); // Update every minute
+    }, 60000);
     return () => clearInterval(timer);
   }, []);
 
@@ -48,7 +48,6 @@ export function ProEngineSettings({
     setAutoDeduct(premiumStatus?.settings?.autoDeductFromOwner ?? false);
   }, [premiumStatus?.settings?.autoDeductFromOwner]);
 
-  // Calculate detailed remaining time using reusable utility
   const subData = calculateSubscriptionProgress(
     premiumStatus?.subscription?.expiresAt ?? undefined,
     premiumStatus?.subscription?.lastDeductionDate ?? undefined,
@@ -62,7 +61,6 @@ export function ProEngineSettings({
     progress: progressPercent,
   } = subData;
 
-  // Determine if cancelled
   const showCancelledState = isCancelled;
 
   const handleAutoDeductToggle = async () => {

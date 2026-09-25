@@ -18,7 +18,6 @@ import { inter } from "@/lib/fonts";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || links.home;
 
-// Initialize performance monitoring
 if (typeof window !== "undefined") {
   initPerformanceMonitoring();
 }

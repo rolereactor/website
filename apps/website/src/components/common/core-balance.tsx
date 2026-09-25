@@ -36,7 +36,6 @@ export function CoreBalance({
   const { status } = useSession();
   const { cores, sparks, isLoading } = useCoreBalance(initialData);
 
-  // Round Cores to 2 decimal places for financial precision, format Sparks as whole integer
   const roundedCores = cores ? Math.round(cores * 100) / 100 : 0;
   const displayCores = roundedCores.toFixed(2);
   const displaySparks = Math.floor(sparks ?? 0).toLocaleString();
@@ -47,7 +46,6 @@ export function CoreBalance({
   const showSkeleton =
     !initialData && (status === "loading" || isLoading);
 
-  // Loading state skeleton
   if (showSkeleton) {
     if (variant === "compact") {
       return (

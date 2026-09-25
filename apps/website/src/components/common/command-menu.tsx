@@ -44,7 +44,6 @@ export function CommandMenu() {
 
   const activeGuildId = lastActiveGuildId || guilds[0]?.id || "";
 
-  // Keyboard shortcut listener (⌘K / Ctrl+K)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {

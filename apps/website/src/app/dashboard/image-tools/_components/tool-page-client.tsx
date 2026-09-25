@@ -36,7 +36,6 @@ const TOOL_DEFAULT_OPTIONS: Record<ImageToolName, Record<string, unknown>> = {
   upscale: { multiplier: "2" },
 };
 
-// Human-readable button label per tool
 const TOOL_ACTION_LABEL: Record<ImageToolName, string> = {
   resize: "Resize Image",
   compress: "Compress Image",
@@ -77,15 +76,13 @@ export function ToolPageClient({ tool }: ToolPageClientProps) {
   const [freeQuotaTotal, setFreeQuotaTotal] = useState<number | null>(null);
   const [isLoadingCosts, setIsLoadingCosts] = useState(true);
 
-  // Reset options and result when tool changes (fix #2)
+  // Keep the selected file so user doesn't lose their upload when switching tools
   useEffect(() => {
     setOptions(TOOL_DEFAULT_OPTIONS[tool]);
     setResultBlob(null);
     setError(null);
-    // Keep the selected file so user doesn't lose their upload when switching tools
   }, [tool]);
 
-  // Fetch live tool config and free quota
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -119,7 +116,6 @@ export function ToolPageClient({ tool }: ToolPageClientProps) {
           }
         }
       } catch {
-        // Silently fall back
       } finally {
         setIsLoadingCosts(false);
       }
@@ -173,7 +169,6 @@ export function ToolPageClient({ tool }: ToolPageClientProps) {
           : "Image processed successfully for free!"
       );
 
-      // Update balances optimistically
       if (creditsDeducted && creditsDeducted !== "0") {
         await mutateBalance();
       }
@@ -218,11 +213,9 @@ export function ToolPageClient({ tool }: ToolPageClientProps) {
     isFreeEligible && freeQuotaRemaining !== null && freeQuotaRemaining > 0;
   const isUpscale = tool === "upscale";
 
-  // Fix #1: Check if balance is sufficient (only if it's not currently free)
   const hasInsufficientBalance =
     !isCurrentlyFree && !isLoadingBalance && userBalance < cost;
 
-  // Process button is disabled if: no file, processing, or insufficient balance
   const isProcessDisabled =
     isProcessing || !selectedFile || hasInsufficientBalance;
 
@@ -302,7 +295,6 @@ export function ToolPageClient({ tool }: ToolPageClientProps) {
             </div>
           )}
 
-          {/* Fix #1: Insufficient balance warning */}
           {hasInsufficientBalance && selectedFile && (
             <div className="flex items-start gap-2 rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-2 text-xs text-red-400">
               <AlertTriangle className="h-3.5 w-3.5 mt-0.5 shrink-0" />
@@ -314,7 +306,6 @@ export function ToolPageClient({ tool }: ToolPageClientProps) {
             </div>
           )}
 
-          {/* Fix #3: Upscale time estimate */}
           {isUpscale && selectedFile && !resultBlob && (
             <div className="flex items-start gap-2 rounded-lg border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-xs text-amber-400/80">
               <Clock className="h-3.5 w-3.5 mt-0.5 shrink-0" />
@@ -322,7 +313,6 @@ export function ToolPageClient({ tool }: ToolPageClientProps) {
             </div>
           )}
 
-          {/* Fix #6: File info in sidebar */}
           {selectedFile && !resultBlob && !isProcessing && (
             <div className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs">
               <FileImage className="h-3.5 w-3.5 shrink-0 text-white/30" />
@@ -337,7 +327,6 @@ export function ToolPageClient({ tool }: ToolPageClientProps) {
             </div>
           )}
 
-          {/* Fix #5: Dynamic process button label */}
           <Button
             onClick={handleProcess}
             disabled={isProcessDisabled}

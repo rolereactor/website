@@ -8,7 +8,6 @@ type SessionLike = NonNullable<Session> | { user: { id?: string } };
 
 export async function POST(request: NextRequest) {
   try {
-    // Check for internal API key first
     const authHeader = request.headers.get("authorization");
     const INTERNAL_API_KEY = process.env.INTERNAL_API_KEY;
     let session: SessionLike | null = null;
@@ -19,14 +18,12 @@ export async function POST(request: NextRequest) {
         // Authorized via internal key, create dummy session
         session = { user: {} };
       } else {
-        // Invalid token, reject request
         return NextResponse.json(
           { success: false, error: "Unauthorized" },
           { status: 401 }
         );
       }
     } else {
-      // No bearer token, use NextAuth session
       session = await auth();
       if (!session) {
         return NextResponse.json(

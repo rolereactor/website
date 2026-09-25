@@ -9,12 +9,10 @@ import {
 import { PricingDialog } from "@/components/pricing/pricing-dialog";
 import { useUserStore } from "@/store/use-user-store";
 
-// Omit the props we are overriding/handling internally
 type Props = Omit<
   SharedUserMenuProps,
   "onLogin" | "onLogout" | "onAddCredits"
 > & {
-  // Add any specific props if needed, but for now we just pass through
   hideUserInfo?: boolean;
 };
 

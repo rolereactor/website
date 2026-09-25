@@ -9,7 +9,6 @@ export interface BalanceData {
   sparks: number;
 }
 
-// Fetcher function for SWR
 const fetcher = async (url: string): Promise<BalanceData> => {
   const res = await fetch(url);
   const data = await res.json();
@@ -56,6 +55,6 @@ export function useCoreBalance(initialData?: BalanceData | null) {
     isLoading,
     isValidating,
     error,
-    mutate, // Allows manual revalidation
+    mutate,
   };
 }
