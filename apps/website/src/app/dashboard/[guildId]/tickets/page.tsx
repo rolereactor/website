@@ -29,6 +29,7 @@ import {
 } from "@/store/use-ticket-store";
 import { useServerStore } from "@/store/use-server-store";
 import { useGuildStore } from "@/store/use-guild-store";
+import { useProEngineStore } from "@/store/use-pro-engine-store";
 import { audiowide, orbitron } from "@/lib/fonts";
 
 import { Card } from "@/components/ui/card";
@@ -427,13 +428,25 @@ function TicketsPageContent({ params }: TicketsPageProps) {
   const guildChannels = guildData[guildId]?.channels;
   const guildRoles = guildData[guildId]?.roles;
 
+  const { fetchSettings, settingsCache } = useProEngineStore();
+  const premiumStatus = settingsCache[guildId] ?? null;
+  const isPro = premiumStatus?.isPremium?.pro || false;
+
   useEffect(() => {
     if (guildId) {
       fetchTicketData(guildId);
       fetchRoles(guildId);
       fetchChannels(guildId);
+      fetchSettings(guildId);
     }
-  }, [guildId, fetchTicketData, fetchRoles, fetchChannels]);
+  }, [guildId, fetchTicketData, fetchRoles, fetchChannels, fetchSettings]);
+
+  // Staff analytics is Pro-only — kick free servers off a staff deep-link
+  useEffect(() => {
+    if (premiumStatus && !isPro && activeSection === "staff") {
+      setActiveSection("overview");
+    }
+  }, [premiumStatus, isPro, activeSection]);
 
   const toggleExpand = useCallback((id: string) => {
     setExpandedTicket((prev) => (prev === id ? null : id));
@@ -563,6 +576,7 @@ function TicketsPageContent({ params }: TicketsPageProps) {
         <TicketsNav
           activeSection={activeSection}
           onSectionChange={handleSectionChange}
+          showStaff={isPro}
           badges={{
             tickets: stats?.openCount,
             panels: panels.filter((p) => p.enabled).length,
@@ -666,7 +680,8 @@ function TicketsPageContent({ params }: TicketsPageProps) {
                 )}
               </Card>
 
-              {/* Card 3: Top Staff Leaderboard */}
+              {/* Card 3: Top Staff Leaderboard (Pro-only benefit) */}
+              {isPro && (
               <Card variant="glass" className="p-5 flex flex-col h-full">
                 <div className="flex items-center justify-between mb-4 h-7">
                   <div className="flex items-center gap-2 min-w-0">
@@ -713,6 +728,7 @@ function TicketsPageContent({ params }: TicketsPageProps) {
                   </div>
                 )}
               </Card>
+              )}
 
               {/* Card 4: System Health & Quick Config Status */}
               <Card variant="glass" className="p-5 flex flex-col h-full">
@@ -878,7 +894,7 @@ function TicketsPageContent({ params }: TicketsPageProps) {
           </Card>
         )}
 
-        {activeSection === "staff" && (
+        {activeSection === "staff" && isPro && (
           <Card variant="glass" className="overflow-hidden">
             {staffStats.length === 0 ? (
               <EmptyState

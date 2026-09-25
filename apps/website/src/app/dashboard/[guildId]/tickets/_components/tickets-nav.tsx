@@ -35,15 +35,21 @@ interface TicketsNavProps {
   activeSection: string;
   onSectionChange: (section: string) => void;
   badges?: Partial<Record<string, number>>;
+  /** Staff analytics is a Pro-only benefit */
+  showStaff?: boolean;
 }
 
 export function TicketsNav({
   activeSection,
   onSectionChange,
   badges = {},
+  showStaff = true,
 }: TicketsNavProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const items = showStaff
+    ? navItems
+    : navItems.filter((item) => item.id !== "staff");
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -59,7 +65,7 @@ export function TicketsNav({
   }, []);
 
   const currentItem =
-    navItems.find((item) => item.id === activeSection) || navItems[0];
+    items.find((item) => item.id === activeSection) || items[0];
   const CurrentIcon = currentItem.icon;
 
   const renderBadge = (id: string, compact = false) => {
@@ -119,7 +125,7 @@ export function TicketsNav({
               transition={{ duration: 0.15, ease: "easeOut" }}
               className="absolute left-0 right-0 top-full z-50 p-1.5 rounded-2xl bg-zinc-950/95 backdrop-blur-2xl border border-cyan-500/30 shadow-[0_12px_40px_-5px_rgba(0,0,0,0.85),0_0_25px_-5px_rgba(6,182,212,0.25)] space-y-1 max-h-72 overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-800"
             >
-              {navItems.map((item) => {
+              {items.map((item) => {
                 const isActive = activeSection === item.id;
                 const Icon = item.icon;
 
@@ -168,7 +174,7 @@ export function TicketsNav({
       {/* Desktop: Vertical sidebar */}
       <div className="sticky top-4 max-h-[calc(100vh-200px)] overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent hidden lg:block">
         <div className="space-y-1">
-          {navItems.map((item) => {
+          {items.map((item) => {
             const isActive = activeSection === item.id;
             const Icon = item.icon;
 

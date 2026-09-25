@@ -90,13 +90,18 @@ export function PanelBuilder({
     { revalidateOnFocus: false }
   );
 
-  const ticketLimit = benefitsData?.benefits?.find(
+  const panelsLimit = benefitsData?.benefits?.find(
+    (b: { name: string }) => b.name === "Panels per Server"
+  );
+  const categoriesLimit = benefitsData?.benefits?.find(
     (b: { name: string }) => b.name === "Categories per Panel"
   );
   const maxPanels = isPremium
-    ? Number(ticketLimit?.pro) || 10
-    : Number(ticketLimit?.free) || 3;
-  const maxCategories = isPremium ? 20 : 3;
+    ? Number(panelsLimit?.pro) || 10
+    : Number(panelsLimit?.free) || 3;
+  const maxCategories = isPremium
+    ? Number(categoriesLimit?.pro) || 10
+    : Number(categoriesLimit?.free) || 3;
 
   useEffect(() => {
     if (guildId) {
